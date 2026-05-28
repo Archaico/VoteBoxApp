@@ -4,8 +4,8 @@ import { View, Text, StyleSheet } from 'react-native';
 const App = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>TEST CHANGE</Text>
-      <Text style={styles.subtitle}>{new Date().toLocaleTimeString()}</Text>
+      <Text style={styles.title}>VoteBoxApp</Text>
+      <Text style={styles.subtitle}>Direct democracy on Cardano</Text>
     </View>
   );
 };
@@ -13,18 +13,19 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'red',
+    backgroundColor: '#1a1a2e',
     alignItems: 'center',
     justifyContent: 'center',
   },
   title: {
-    fontSize: 30,
-    color: 'white',
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#ffffff',
   },
   subtitle: {
-    fontSize: 20,
-    color: 'white',
-    marginTop: 10,
+    fontSize: 16,
+    color: '#a0a0c0',
+    marginTop: 8,
   },
 });
 

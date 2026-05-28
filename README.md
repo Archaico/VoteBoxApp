@@ -4,8 +4,7 @@
 
 VoteBoxApp is a mobile governance platform built on Cardano and IPFS that enables
 communities to create proposals and vote on them transparently — one person, one
-vote, no token-weighting, no corporate platform dependency. It is the technical
-realisation of [*The Seed — Blueprint for a Better Society*](https://voteboxapp.com).
+vote, no token-weighting, no corporate platform dependency.
 
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 
@@ -22,6 +21,7 @@ realisation of [*The Seed — Blueprint for a Better Society*](https://voteboxap
 - [Funding](#funding)
 - [Contributing](#contributing)
 - [License](#license)
+- [Background](#background)
 - [Contact](#contact)
 
 ---
@@ -43,7 +43,7 @@ realisation of [*The Seed — Blueprint for a Better Society*](https://voteboxap
 
 | Layer | Technology |
 |---|---|
-| Mobile | React Native + Expo SDK 52 (TypeScript) |
+| Mobile | React Native + Expo SDK 54 (TypeScript) |
 | Blockchain | Cardano (preprod testnet → mainnet at launch) |
 | Smart Contracts | Aiken (Cardano validator language) — in development |
 | Content Storage | IPFS via Storacha REST API |
@@ -66,7 +66,7 @@ VoteBoxApp/
 │   └── utils/            # Shared utilities
 ├── contracts/            # Aiken smart contracts (in development)
 ├── assets/               # Images and fonts
-├── App.tsx               # Application entry point
+├── App.jsx               # Application entry point
 ├── app.json              # Expo configuration
 └── package.json
 ```
@@ -166,6 +166,14 @@ service is also published under AGPLv3.
 See [LICENSE](LICENSE) for the full legal text.  
 See [LICENSE-EXCEPTIONS.md](LICENSE-EXCEPTIONS.md) for documentation licensing
 and protocol fee transparency notes.
+
+---
+
+## Background
+
+VoteBoxApp is the technical realisation of
+[*The Seed — Blueprint for a Better Society*](https://www.amazon.com/dp/B0CW1JHN26),
+a framework for community-led governance written by the project founder.
 
 ---
 
