@@ -1,30 +1,32 @@
-import React, { FC, useEffect } from 'react';  // Add useEffect to imports
-import { View, StyleSheet, Image } from 'react-native';
-import { Text } from 'react-native-paper';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../types/navigation';
+// src/screens/SplashScreen.tsx
+import React, { useEffect } from 'react';
+import { View, Text, StyleSheet, Image } from 'react-native';
 
-type Props = {
-  navigation: NativeStackNavigationProp<RootStackParamList>;
-};
+interface SplashScreenProps {
+  onFinish: () => void;
+}
 
-const SplashScreen: FC<Props> = ({ navigation }) => {
+const SplashScreen = ({ onFinish }: SplashScreenProps) => {
   useEffect(() => {
-    setTimeout(() => {
-      navigation.replace('Auth');
-    }, 4000);
-  }, []);
+    const timer = setTimeout(() => {
+      onFinish();
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, [onFinish]);
 
   return (
     <View style={styles.container}>
       <Image
-        source={require('../../assets/lgc-logo.png')}
+        source={require('../assets/icon.png')}
         style={styles.logo}
         resizeMode="contain"
       />
       <Text style={styles.title}>VoteBox</Text>
       <Text style={styles.subtitle}>
-        Made by the LifeGround Community (LGC), with love.
+        Decentralized Democratic Voting
+      </Text>
+      <Text style={styles.footer}>
+        Made by LifeGround Community (LGC) with ❤️
       </Text>
     </View>
   );
@@ -38,19 +40,28 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   logo: {
-    width: 160,
-    height: 160,
-    marginBottom: 32,
+    width: 120,
+    height: 120,
+    marginBottom: 24,
   },
   title: {
     fontSize: 48,
     fontWeight: 'bold',
     color: 'white',
-    marginBottom: 16,
+    marginBottom: 8,
   },
   subtitle: {
-    fontSize: 18,
+    fontSize: 16,
     color: 'white',
+    opacity: 0.95,
+    marginBottom: 40,
+  },
+  footer: {
+    position: 'absolute',
+    bottom: 40,
+    fontSize: 14,
+    color: 'white',
+    opacity: 0.9,
   },
 });
 

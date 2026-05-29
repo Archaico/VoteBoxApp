@@ -1,43 +1,52 @@
-# Node.js dependencies
+# VoteBox .gitignore
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Environment variables (contains sensitive webhook)
+.env
+.env.local
+
+# Keep template (safe to commit)
+!.env.example
+
+# Node modules
 node_modules/
-npm-debug.log
-yarn-debug.log
-yarn-error.log
 
 # Expo
 .expo/
+.expo-shared/
 dist/
 web-build/
 
-# React Native
-.idea
-.gradle
-local.properties
-*.iml
-android/app/build/
-ios/Pods/
-ios/build/
+# Native builds
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
 
 # macOS
 .DS_Store
 
-# Environment variables
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+# Android
+*.apk
+*.aab
+android/app/build/
+android/.gradle/
 
-# TypeScript
-*.tsbuildinfo
+# iOS
+*.ipa
+ios/Pods/
+ios/build/
 
-# Coverage
-coverage/
+# Logs
+npm-debug.*
+yarn-debug.*
+yarn-error.*
 
-# Build directories
-/build/
-/android/app/release/
-
-# Temporary files
+# Editor directories
+.vscode/
+.idea/
 *.swp
 *.swo
+*~
