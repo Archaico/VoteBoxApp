@@ -1,0 +1,46 @@
+# EAS build ignore — mirrors .gitignore but ALLOWS .env
+# .env contains EXPO_PUBLIC_* vars needed at build time (Blockfrost, Pinata, Discord, Firebase).
+# These are testnet/non-production keys. At mainnet, migrate to EAS Secrets instead.
+
+# Node modules
+node_modules/
+
+# Expo
+.expo/
+.expo-shared/
+dist/
+web-build/
+
+# Native builds
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+
+# macOS
+.DS_Store
+
+# Android
+*.apk
+*.aab
+android/app/build/
+android/.gradle/
+
+# iOS
+*.ipa
+ios/Pods/
+ios/build/
+
+# Logs
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# Editor directories
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

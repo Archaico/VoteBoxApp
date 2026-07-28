@@ -1,0 +1,52 @@
+# VoteBox .gitignore
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Environment variables (contains sensitive webhook)
+.env
+.env.local
+
+# Keep template (safe to commit)
+!.env.example
+
+# Node modules
+node_modules/
+
+# Expo
+.expo/
+.expo-shared/
+dist/
+web-build/
+
+# Native builds
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+
+# macOS
+.DS_Store
+
+# Android
+*.apk
+*.aab
+android/app/build/
+android/.gradle/
+
+# iOS
+*.ipa
+ios/Pods/
+ios/build/
+
+# Logs
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# Editor directories
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
