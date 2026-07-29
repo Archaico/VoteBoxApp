@@ -4,10 +4,12 @@ import { StatusBar } from 'expo-status-bar';
 import { View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import * as Linking from 'expo-linking';
+import { WalletConnectModal } from '@walletconnect/modal-react-native';
 import { notificationService } from './services/NotificationService';
 import { registerBackgroundSync } from './services/BackgroundSyncService';
 import { offlineQueueService } from './services/OfflineQueueService';
 import { discussionService } from './services/DiscussionService';
+import { CIP34_NAMESPACE } from './services/WalletConnectService';
 import SplashScreen from './screens/SplashScreen';
 import AuthScreen from './screens/AuthScreen';
 import ProposalListScreen from './screens/ProposalListScreen';
@@ -16,7 +18,9 @@ import CreateProposalScreen from './screens/CreateProposalScreen';
 
 type AppScreen = 'splash' | 'auth' | 'main' | 'voting' | 'create';
 
-// Extract proposalId from https://voteboxapp.com/proposal/{id}
+const WALLETCONNECT_PROJECT_ID = process.env.EXPO_PUBLIC_WALLETCONNECT_PROJECT_ID ?? '';
+
+// Extract proposalId from https://vote.voteboxapp.org/proposal/{id}
 function extractProposalId(url: string): string | null {
   try {
     const match = url.match(/\/proposal\/(prop_[^/?#]+)/);
@@ -154,6 +158,20 @@ export default function App() {
         <CreateProposalScreen
           onBack={handleBackToMain}
           onProposalCreated={handleProposalCreated}
+        />
+      )}
+
+      {WALLETCONNECT_PROJECT_ID !== '' && (
+        <WalletConnectModal
+          projectId={WALLETCONNECT_PROJECT_ID}
+          providerMetadata={{
+            name: 'VoteBoxApp',
+            description: 'Direct democracy on Cardano',
+            url: 'https://voteboxapp.org',
+            icons: ['https://voteboxapp.org/images/voteboxapp-logo.png'],
+            redirect: { native: 'voteboxapp://' },
+          }}
+          sessionParams={{ namespaces: CIP34_NAMESPACE }}
         />
       )}
     </View>

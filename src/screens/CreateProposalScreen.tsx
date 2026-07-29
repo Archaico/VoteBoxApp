@@ -1,5 +1,5 @@
 // src/screens/CreateProposalScreen.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -18,9 +18,11 @@ import * as Clipboard from 'expo-clipboard';
 import * as Haptics from 'expo-haptics';
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
+import { useWalletConnectModal } from '@walletconnect/modal-react-native';
 import { blockchainService, FeeEstimate } from '../services/BlockchainService';
 import { notificationService } from '../services/NotificationService';
 import { shareService } from '../services/ShareService';
+import { verifyWalletOwnership } from '../services/WalletConnectService';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface CreateProposalScreenProps {
@@ -37,7 +39,7 @@ const VOTER_PRESETS = [
   { label: '1M', value: 1000000 },
 ];
 
-const FOUNDATION_FEE_PERCENTAGE = 0.25;
+const FOUNDATION_FEE_PERCENTAGE = 0.30;
 const ADA_TO_USD_RATE = 0.35;
 const MAX_ATTACHMENTS = 2;
 const ATTACHMENT_MAX_DIMENSION = 1280;
@@ -80,7 +82,7 @@ const CARDANO_WALLETS = [
   },
 ];
 
-type WalletFlowState = 'select' | 'no-wallet-guide' | 'manual-entry' | 'connected';
+type WalletFlowState = 'select' | 'no-wallet-guide' | 'manual-entry' | 'verifying' | 'connected';
 
 export default function CreateProposalScreen({
   onBack,
@@ -110,32 +112,58 @@ export default function CreateProposalScreen({
   // Wallet connection flow state
   const [walletFlow, setWalletFlow] = useState<WalletFlowState>('select');
   const [selectedWallet, setSelectedWallet] = useState<string | null>(null);
-  const [showManualAfterWallet, setShowManualAfterWallet] = useState(false);
+  // True only when walletAddress came from a real WalletConnect session +
+  // signed ownership proof. False for manually-typed addresses (fallback
+  // path — kept because WalletConnect support across Cardano mobile
+  // wallets is still maturing; see WalletConnectService.ts).
+  const [isWalletVerified, setIsWalletVerified] = useState(false);
+
+  const { open: openWalletConnect, isConnected: wcIsConnected, address: wcAddress, provider: wcProvider } =
+    useWalletConnectModal();
+
+  // Once WalletConnect reports a connected session, prove ownership via a
+  // signed challenge before treating the wallet as "connected" in our flow.
+  useEffect(() => {
+    if (!wcIsConnected || !wcAddress || walletFlow === 'connected') return;
+
+    setWalletFlow('verifying');
+    verifyWalletOwnership(wcProvider!, wcAddress)
+      .then(() => {
+        setWalletAddress(wcAddress);
+        setIsWalletVerified(true);
+        setWalletFlow('connected');
+      })
+      .catch((error) => {
+        Alert.alert(
+          'Verification Failed',
+          `Connected to your wallet, but could not verify ownership: ${
+            error instanceof Error ? error.message : 'Unknown error'
+          }`
+        );
+        setWalletFlow('select');
+        setSelectedWallet(null);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [wcIsConnected, wcAddress]);
 
   // ─── Wallet Flow Handlers ────────────────────────────────────────────
 
+  // Triggers the real WalletConnect modal — it shows its own wallet picker
+  // (using WalletConnect's maintained registry) and handles deep-linking to
+  // whichever wallet the user picks. Which of our 3 recommended wallets
+  // actually completes a session depends on their real-world WalletConnect
+  // support, which varies — see WalletConnectService.ts.
   const handleWalletSelect = async (wallet: typeof CARDANO_WALLETS[0]) => {
     setSelectedWallet(wallet.id);
-    Alert.alert(
-      `Open ${wallet.name}?`,
-      `This will open the ${wallet.name} wallet app (or take you to download it).\n\nAfter connecting, copy your Cardano address (starts with addr1...) and come back here to paste it.`,
-      [
-        { text: 'Cancel', style: 'cancel', onPress: () => setSelectedWallet(null) },
-        {
-          text: `Open ${wallet.name}`,
-          onPress: async () => {
-            try {
-              await Linking.openURL(wallet.playStoreUrl);
-            } catch {
-              Alert.alert('Could not open link', 'Please search for the wallet in the Play Store manually.');
-            }
-            // After returning, show manual entry to paste their address
-            setShowManualAfterWallet(true);
-            setWalletFlow('manual-entry');
-          },
-        },
-      ]
-    );
+    try {
+      await openWalletConnect();
+    } catch (error) {
+      Alert.alert(
+        'Could Not Open Wallet Connect',
+        error instanceof Error ? error.message : 'Unknown error'
+      );
+      setSelectedWallet(null);
+    }
   };
 
   const handleConfirmManualAddress = () => {
@@ -148,6 +176,7 @@ export default function CreateProposalScreen({
       return;
     }
     setWalletAddress(cleaned);
+    setIsWalletVerified(false); // manual entry is never cryptographically verified
     setWalletFlow('connected');
   };
 
@@ -161,10 +190,11 @@ export default function CreateProposalScreen({
           text: 'Remove',
           style: 'destructive',
           onPress: () => {
+            wcProvider?.disconnect().catch(() => {});
             setWalletAddress('');
             setManualAddressInput('');
             setSelectedWallet(null);
-            setShowManualAfterWallet(false);
+            setIsWalletVerified(false);
             setWalletFlow('select');
           },
         },
@@ -298,7 +328,7 @@ export default function CreateProposalScreen({
         'Voting (' + batchCount + ' ' + batchWord + '): ' + votingADA + ' ADA',
         '---',
         'Gas costs: ' + gasADA + ' ADA',
-        'Foundation fee (25%): ' + foundationADA + ' ADA',
+        'Foundation fee (30%): ' + foundationADA + ' ADA',
         '---',
         'TOTAL: ' + totalADA + ' ADA (~$' + totalUSD + ' USD)',
         '',
@@ -388,7 +418,7 @@ export default function CreateProposalScreen({
         'Verify on preprod.cardanoscan.io',
         '',
         'Total: ' + totalADA + ' ADA (~$' + totalUSD + ' USD)',
-        '   (includes 25% foundation fee)',
+        '   (includes 30% foundation fee)',
         '',
         'Configured for ' + expectedVoters.toLocaleString() + ' voters',
         'Gas-optimized with ' + batchCount + ' ' + batchWord,
@@ -441,17 +471,36 @@ export default function CreateProposalScreen({
     // STATE: Connected
     if (walletFlow === 'connected') {
       return (
-        <View style={styles.walletConnectedBox}>
+        <View style={[styles.walletConnectedBox, !isWalletVerified && styles.walletConnectedBoxUnverified]}>
           <View style={styles.walletConnectedHeader}>
-            <View style={styles.walletConnectedDot} />
-            <Text style={styles.walletConnectedLabel}>Wallet Connected</Text>
+            <View style={[styles.walletConnectedDot, !isWalletVerified && styles.walletConnectedDotUnverified]} />
+            <Text style={styles.walletConnectedLabel}>
+              {isWalletVerified ? '✓ Wallet Verified' : '⚠️ Address Entered Manually (Unverified)'}
+            </Text>
           </View>
           <Text style={styles.walletConnectedAddress}>
             {truncateAddress(walletAddress)}
           </Text>
+          {!isWalletVerified && (
+            <Text style={styles.walletUnverifiedNote}>
+              This address was typed in, not confirmed by a real wallet connection. Use "Connect Wallet" above for a verified connection when your wallet supports it.
+            </Text>
+          )}
           <TouchableOpacity onPress={handleDisconnectWallet} style={styles.walletDisconnectBtn}>
             <Text style={styles.walletDisconnectText}>Remove & Change Wallet</Text>
           </TouchableOpacity>
+        </View>
+      );
+    }
+
+    // STATE: Verifying (connected via WalletConnect, awaiting signature)
+    if (walletFlow === 'verifying') {
+      return (
+        <View style={styles.walletVerifyingBox}>
+          <ActivityIndicator size="small" color="#22c55e" />
+          <Text style={styles.walletVerifyingText}>
+            Confirming wallet ownership — approve the signature request in your wallet app...
+          </Text>
         </View>
       );
     }
@@ -460,13 +509,11 @@ export default function CreateProposalScreen({
     if (walletFlow === 'manual-entry') {
       return (
         <View style={styles.walletManualContainer}>
-          {showManualAfterWallet && (
-            <View style={styles.walletReturnHint}>
-              <Text style={styles.walletReturnHintText}>
-                👋 Welcome back! Open your wallet app, copy your address (addr1...), and paste it below.
-              </Text>
-            </View>
-          )}
+          <View style={styles.walletReturnHint}>
+            <Text style={styles.walletReturnHintText}>
+              ⚠️ Manual entry is a fallback, not a verified connection — use "Connect Wallet" instead when your wallet supports it.
+            </Text>
+          </View>
           <Text style={styles.label}>Your Cardano Address</Text>
           <TextInput
             style={styles.walletManualInput}
@@ -487,7 +534,6 @@ export default function CreateProposalScreen({
               style={styles.walletManualBack}
               onPress={() => {
                 setWalletFlow('select');
-                setShowManualAfterWallet(false);
                 setManualAddressInput('');
                 setSelectedWallet(null);
               }}
@@ -546,7 +592,7 @@ export default function CreateProposalScreen({
           <View style={styles.noWalletStep}>
             <View style={styles.noWalletStepNum}><Text style={styles.noWalletStepNumText}>4</Text></View>
             <Text style={styles.noWalletStepText}>
-              Come back here, tap Vespr, and paste your address.
+              Come back here and tap "Connect Wallet" — your wallet app will open to approve the connection.
             </Text>
           </View>
 
@@ -618,12 +664,9 @@ export default function CreateProposalScreen({
         {/* Secondary options */}
         <TouchableOpacity
           style={styles.walletSecondaryBtn}
-          onPress={() => {
-            setShowManualAfterWallet(false);
-            setWalletFlow('manual-entry');
-          }}
+          onPress={() => setWalletFlow('manual-entry')}
         >
-          <Text style={styles.walletSecondaryText}>📋  Enter address manually</Text>
+          <Text style={styles.walletSecondaryText}>📋  Enter address manually (unverified fallback)</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -839,7 +882,7 @@ export default function CreateProposalScreen({
                   </Text>
                 </View>
                 <View style={[styles.feeBreakdownRow, { paddingTop: 8, borderTopWidth: 1, borderTopColor: '#fde047' }]}>
-                  <Text style={styles.feeBreakdownLabel}>Foundation fee (25%):</Text>
+                  <Text style={styles.feeBreakdownLabel}>Foundation fee (30%):</Text>
                   <Text style={styles.feeBreakdownValue}>
                     {(feeEstimate.foundationFee / 1000000).toFixed(2)} ADA
                   </Text>
@@ -1038,6 +1081,21 @@ const styles = StyleSheet.create({
   },
   walletDisconnectBtn: { alignSelf: 'flex-start' },
   walletDisconnectText: { fontSize: 13, color: '#ef4444', fontWeight: '500' },
+  walletConnectedBoxUnverified: { backgroundColor: '#fffbeb', borderColor: '#f59e0b' },
+  walletConnectedDotUnverified: { backgroundColor: '#f59e0b' },
+  walletUnverifiedNote: { fontSize: 12, color: '#92400e', lineHeight: 17, marginBottom: 12 },
+
+  // ── Wallet Verifying State ──
+  walletVerifyingBox: {
+    padding: 20,
+    borderRadius: 12,
+    backgroundColor: '#f0fdf4',
+    borderWidth: 2,
+    borderColor: '#22c55e',
+    alignItems: 'center',
+    gap: 12,
+  },
+  walletVerifyingText: { fontSize: 13, color: '#15803d', textAlign: 'center', lineHeight: 19 },
 
   // ── Manual Entry State ──
   walletManualContainer: {},

@@ -10,7 +10,7 @@
 //   [TreasuryService] ── routes fees ──▶ Foundation Wallet (multi-sig)
 //        │                                      │
 //        │                              ┌───────┴────────┐
-//        │                          Gas Pool         FounderFee (7%)
+//        │                          Gas Pool         FounderFee (10%)
 //        │                        (operations)     (perpetual, immutable)
 //        ▼
 //   Blockchain Transaction
@@ -33,8 +33,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const TREASURY_CONFIG = {
   // Fee split percentages (must sum to 100)
-  FOUNDATION_FEE_PERCENTAGE: 0.25,    // 25% of gas costs → Foundation wallet
-  FOUNDER_FEE_PERCENTAGE: 0.07,       // 7% of Foundation Fee → Founder (perpetual, immutable)
+  FOUNDATION_FEE_PERCENTAGE: 0.30,    // 30% of gas costs → Foundation wallet
+  FOUNDER_FEE_PERCENTAGE: 0.10,       // 10% of Foundation Fee → Founder (perpetual, immutable)
   
   // Wallet addresses — replace with real addresses before mainnet
   // Foundation wallet will become a multi-sig address (3-of-5 initially)
@@ -64,8 +64,8 @@ export const TREASURY_CONFIG = {
 
 export interface FeeCalculation {
   gasCost: number;           // Raw Cardano transaction cost (lovelace)
-  foundationFee: number;     // 25% of gas cost (lovelace)
-  founderShare: number;      // 7% of foundation fee — routes to founder wallet (immutable, FOUNDER_FEE_PERCENTAGE constant)
+  foundationFee: number;     // 30% of gas cost (lovelace)
+  founderShare: number;      // 10% of foundation fee — routes to founder wallet (immutable, FOUNDER_FEE_PERCENTAGE constant)
   operationsShare: number;   // 93% of foundation fee — routes to foundation wallet
   grandTotal: number;        // Total charged to proposal creator (lovelace)
   
@@ -129,10 +129,10 @@ class TreasuryService {
 
     const gasCost = creationFee + totalVotingCost;
 
-    // Foundation fee (25% of gas — sustains the platform)
+    // Foundation fee (30% of gas — sustains the platform)
     const foundationFee = Math.floor(gasCost * FOUNDATION_FEE_PERCENTAGE);
 
-    // Founder share (7% of foundation fee — perpetual, protocol-encoded)
+    // Founder share (10% of foundation fee — perpetual, protocol-encoded)
     const founderShare = Math.floor(foundationFee * FOUNDER_FEE_PERCENTAGE);
     const operationsShare = foundationFee - founderShare;
 
