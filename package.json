@@ -18,6 +18,7 @@
     "@walletconnect/modal-react-native": "^1.1.0",
     "@walletconnect/react-native-compat": "^2.23.10",
     "@walletconnect/universal-provider": "^2.23.10",
+    "babel-preset-expo": "~54.0.10",
     "bech32": "^2.0.0",
     "blakejs": "^1.2.1",
     "buffer": "^6.0.3",
