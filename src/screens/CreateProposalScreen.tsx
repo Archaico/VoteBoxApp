@@ -23,6 +23,9 @@ import { blockchainService, FeeEstimate } from '../services/BlockchainService';
 import { notificationService } from '../services/NotificationService';
 import { shareService } from '../services/ShareService';
 import { verifyWalletOwnership } from '../services/WalletConnectService';
+import { offlineQueueService, isNetworkError } from '../services/OfflineQueueService';
+import { toastService } from '../services/ToastService';
+import { QueueIndicator } from '../components/QueueIndicator';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface CreateProposalScreenProps {
@@ -456,6 +459,20 @@ export default function CreateProposalScreen({
     } catch (error) {
       setIsSubmitting(false);
       setUploadStatus('');
+
+      if (isNetworkError(error)) {
+        await offlineQueueService.queueProposal({
+          title: title.trim(),
+          description: description.trim(),
+          creator: walletAddress.trim(),
+          duration: parseInt(duration),
+          expectedVoters,
+          attachmentUris: attachments,
+        });
+        toastService.warning('⏳ No connection — proposal queued, will publish when back online');
+        return;
+      }
+
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       Alert.alert(
         'Publication Failed',
@@ -698,7 +715,7 @@ export default function CreateProposalScreen({
           <Text style={styles.backText}>Back</Text>
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Create Proposal</Text>
-        <View style={styles.placeholder} />
+        <QueueIndicator />
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>

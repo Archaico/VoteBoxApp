@@ -376,102 +376,104 @@ class BlockchainService {
   // ── Cardano Transaction Builder ───────────────────────────────────────────
   // Pure-JS tx builder via CardanoTxBuilder.ts — no native dependencies.
 
+  // Same principle as uploadToIPFS above: only simulates when no signing key
+  // is configured at all. A real attempt that fails for any reason (offline,
+  // Blockfrost error, empty wallet) throws instead of silently faking a tx
+  // hash — this was previously masking real submission failures as success.
   private async buildAndSubmitMetadataTx(
     metadataObj: Record<number, Record<string, string>>,
     memo: string
   ): Promise<string> {
     if (!FOUNDATION.PRIVATE_KEY_HEX) {
-      console.warn('[BlockchainService] No private key — simulating tx for:', memo);
+      console.warn('[BlockchainService] No private key — simulating tx for:', memo, '(dev mode)');
       return this.simulateTxHash(memo + Date.now());
     }
 
-    try {
-      const [utxos, protocolParams, latestBlock] = await Promise.all([
-        this.blockfrostGet<any[]>(`/addresses/${FOUNDATION.WALLET_ADDRESS}/utxos`),
-        this.blockfrostGet<any>('/epochs/latest/parameters'),
-        this.blockfrostGet<any>('/blocks/latest'),
-      ]);
+    const [utxos, protocolParams, latestBlock] = await Promise.all([
+      this.blockfrostGet<any[]>(`/addresses/${FOUNDATION.WALLET_ADDRESS}/utxos`),
+      this.blockfrostGet<any>('/epochs/latest/parameters'),
+      this.blockfrostGet<any>('/blocks/latest'),
+    ]);
 
-      if (!utxos || utxos.length === 0) {
-        throw new Error('Foundation wallet has no UTxOs — fund it from the preprod faucet');
-      }
-
-      const utxo = utxos.reduce((best: any, u: any) => {
-        const bestAmt = parseInt(best.amount.find((a: any) => a.unit === 'lovelace')?.quantity ?? '0');
-        const uAmt    = parseInt(u.amount.find((a: any) => a.unit === 'lovelace')?.quantity ?? '0');
-        return uAmt > bestAmt ? u : best;
-      });
-
-      const { txBytes, txHash } = buildSignedTx({
-        utxoTxHash:    utxo.tx_hash,
-        utxoIndex:     utxo.output_index,
-        utxoLovelace:  utxo.amount.find((a: any) => a.unit === 'lovelace')?.quantity ?? '0',
-        changeAddress: FOUNDATION.WALLET_ADDRESS,
-        privateKeyHex: FOUNDATION.PRIVATE_KEY_HEX,
-        metadata:      metadataObj,
-        minFeeA:       protocolParams.min_fee_a,
-        minFeeB:       protocolParams.min_fee_b,
-        currentSlot:   latestBlock.slot,
-      });
-
-      const submitResponse = await this.fetchWithTimeout(
-        `${BLOCKFROST.API_URL}/tx/submit`,
-        {
-          method:  'POST',
-          headers: {
-            'project_id':   BLOCKFROST.PROJECT_ID,
-            'Content-Type': 'application/cbor',
-          },
-          body: txBytes as unknown as BodyInit,
-        },
-        15000
-      );
-
-      if (!submitResponse.ok) {
-        const errText = await submitResponse.text();
-        throw new Error(`Blockfrost submit failed: ${submitResponse.status} ${errText}`);
-      }
-
-      console.log('[BlockchainService] Real tx submitted:', txHash);
-      return txHash;
-    } catch (error) {
-      console.error('[BlockchainService] Tx build/submit failed:', error);
-      return `sim_${this.simulateTxHash(memo + Date.now())}`;
+    if (!utxos || utxos.length === 0) {
+      throw new Error('Foundation wallet has no UTxOs — fund it from the preprod faucet');
     }
+
+    const utxo = utxos.reduce((best: any, u: any) => {
+      const bestAmt = parseInt(best.amount.find((a: any) => a.unit === 'lovelace')?.quantity ?? '0');
+      const uAmt    = parseInt(u.amount.find((a: any) => a.unit === 'lovelace')?.quantity ?? '0');
+      return uAmt > bestAmt ? u : best;
+    });
+
+    const { txBytes, txHash } = buildSignedTx({
+      utxoTxHash:    utxo.tx_hash,
+      utxoIndex:     utxo.output_index,
+      utxoLovelace:  utxo.amount.find((a: any) => a.unit === 'lovelace')?.quantity ?? '0',
+      changeAddress: FOUNDATION.WALLET_ADDRESS,
+      privateKeyHex: FOUNDATION.PRIVATE_KEY_HEX,
+      metadata:      metadataObj,
+      minFeeA:       protocolParams.min_fee_a,
+      minFeeB:       protocolParams.min_fee_b,
+      currentSlot:   latestBlock.slot,
+    });
+
+    const submitResponse = await this.fetchWithTimeout(
+      `${BLOCKFROST.API_URL}/tx/submit`,
+      {
+        method:  'POST',
+        headers: {
+          'project_id':   BLOCKFROST.PROJECT_ID,
+          'Content-Type': 'application/cbor',
+        },
+        body: txBytes as unknown as BodyInit,
+      },
+      15000
+    );
+
+    if (!submitResponse.ok) {
+      const errText = await submitResponse.text();
+      throw new Error(`Blockfrost submit failed: ${submitResponse.status} ${errText}`);
+    }
+
+    console.log('[BlockchainService] Real tx submitted:', txHash);
+    return txHash;
   }
 
   // ── IPFS ──────────────────────────────────────────────────────────────────
 
+  // Only simulates when credentials are genuinely absent (local dev without
+  // API keys configured). A real upload attempt that fails — network down,
+  // Pinata error, timeout — throws instead of silently faking success, so
+  // callers (and the offline queue) can tell the difference. Previously this
+  // caught everything and always returned a fake CID, which meant a proposal
+  // created while genuinely offline looked identical to one that succeeded —
+  // it got cached locally and shown as "published" even though nothing was
+  // ever really uploaded.
   private async uploadToIPFS(data: any): Promise<string> {
     if (!PINATA.JWT) {
-      console.warn('[BlockchainService] No Pinata JWT — using fallback CID');
+      console.warn('[BlockchainService] No Pinata JWT — using fallback CID (dev mode)');
       return `bafyrei${this.simpleHash(JSON.stringify(data)).slice(0, 32)}`;
     }
 
-    try {
-      const response = await this.fetchWithTimeout(
-        PINATA.UPLOAD_URL,
-        {
-          method:  'POST',
-          headers: {
-            'Authorization': `Bearer ${PINATA.JWT}`,
-            'Content-Type':  'application/json',
-          },
-          body: JSON.stringify({
-            pinataContent:  data,
-            pinataMetadata: { name: 'votebox-data' },
-          }),
+    const response = await this.fetchWithTimeout(
+      PINATA.UPLOAD_URL,
+      {
+        method:  'POST',
+        headers: {
+          'Authorization': `Bearer ${PINATA.JWT}`,
+          'Content-Type':  'application/json',
         },
-        15000
-      );
+        body: JSON.stringify({
+          pinataContent:  data,
+          pinataMetadata: { name: 'votebox-data' },
+        }),
+      },
+      15000
+    );
 
-      if (!response.ok) throw new Error(`Pinata upload failed: ${response.status}`);
-      const result = await response.json();
-      return result.IpfsHash;
-    } catch (error) {
-      console.warn('[BlockchainService] Pinata upload failed:', error);
-      return `bafyrei${this.simpleHash(JSON.stringify(data)).slice(0, 32)}`;
-    }
+    if (!response.ok) throw new Error(`Pinata upload failed: ${response.status}`);
+    const result = await response.json();
+    return result.IpfsHash;
   }
 
   // Uploads a local image file (already compressed by the caller) to Pinata.

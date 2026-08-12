@@ -15,7 +15,7 @@ import * as Haptics from 'expo-haptics';
 import { blockchainService } from '../services/BlockchainService';
 import { notificationService } from '../services/NotificationService';
 import { shareService } from '../services/ShareService';
-import { offlineQueueService } from '../services/OfflineQueueService';
+import { offlineQueueService, isNetworkError } from '../services/OfflineQueueService';
 import { toastService } from '../services/ToastService';
 import { discussionService } from '../services/DiscussionService';
 import { voterIdentityService } from '../services/VoterIdentityService';
@@ -156,7 +156,7 @@ export default function VotingScreen({
     } catch (error: any) {
       console.error('Vote submission error:', error);
 
-      if (error.message?.includes('network')) {
+      if (isNetworkError(error)) {
         toastService.warning('⚠️ Vote queued - will submit when online');
         await offlineQueueService.queueVote({
           proposalId: proposal.id,

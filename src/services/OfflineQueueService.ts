@@ -38,6 +38,7 @@ export interface QueuedProposal {
   creator: string;
   duration: number;
   expectedVoters: number;
+  attachmentUris?: string[];
   timestamp: number;
   attempts: number;
   lastAttempt?: number;
@@ -45,6 +46,16 @@ export interface QueuedProposal {
 }
 
 type QueuedItem = QueuedVote | QueuedProposal;
+
+// React Native's fetch throws "Network request failed" (capital N) on no
+// connectivity, and AbortController-driven timeouts throw abort-flavoured
+// messages — neither contains a lowercase "network" substring, so a naive
+// `.includes('network')` check misses real offline conditions. Used to
+// decide whether a failure should be queued for retry vs. shown as an error.
+export function isNetworkError(error: unknown): boolean {
+  const message = error instanceof Error ? error.message : String(error ?? '');
+  return /network|fetch|abort|timeout/i.test(message);
+}
 
 interface QueueStatus {
   votes: number;
@@ -121,6 +132,7 @@ class OfflineQueueService {
     creator: string;
     duration: number;
     expectedVoters: number;
+    attachmentUris?: string[];
   }): Promise<void> {
     const queuedProposal: QueuedProposal = {
       id: `proposal_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
@@ -129,6 +141,7 @@ class OfflineQueueService {
       creator: proposalData.creator,
       duration: proposalData.duration,
       expectedVoters: proposalData.expectedVoters,
+      attachmentUris: proposalData.attachmentUris,
       timestamp: Date.now(),
       attempts: 0,
     };
@@ -204,6 +217,7 @@ class OfflineQueueService {
         creator: item.creator,
         duration: item.duration,
         expectedVoters: item.expectedVoters,
+        attachmentUris: item.attachmentUris,
       });
     }
   }
