@@ -183,6 +183,17 @@ export default function CreateProposalScreen({
     setWalletFlow('connected');
   };
 
+  // Escape hatch for the 'verifying' state — some wallets pair successfully
+  // but never respond to the signature request at all (no error, no
+  // timeout on their end). verifyWalletOwnership() has its own 30s timeout
+  // as a backstop, but the user shouldn't have to wait that long if they
+  // can see it's not going anywhere.
+  const handleCancelVerification = () => {
+    wcProvider?.disconnect().catch(() => {});
+    setSelectedWallet(null);
+    setWalletFlow('select');
+  };
+
   const handleDisconnectWallet = () => {
     Alert.alert(
       'Remove Wallet',
@@ -518,6 +529,9 @@ export default function CreateProposalScreen({
           <Text style={styles.walletVerifyingText}>
             Confirming wallet ownership — approve the signature request in your wallet app...
           </Text>
+          <TouchableOpacity onPress={handleCancelVerification} style={styles.walletVerifyingCancelBtn}>
+            <Text style={styles.walletVerifyingCancelText}>Cancel</Text>
+          </TouchableOpacity>
         </View>
       );
     }
@@ -1113,6 +1127,8 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   walletVerifyingText: { fontSize: 13, color: '#15803d', textAlign: 'center', lineHeight: 19 },
+  walletVerifyingCancelBtn: { padding: 8 },
+  walletVerifyingCancelText: { fontSize: 13, color: '#ef4444', fontWeight: '600' },
 
   // ── Manual Entry State ──
   walletManualContainer: {},

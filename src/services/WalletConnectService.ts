@@ -48,10 +48,20 @@ interface RequestCapableProvider {
   request: (args: { method: string; params?: any }, chainId?: string) => Promise<unknown>;
 }
 
+const VERIFY_TIMEOUT_MS = 30000;
+
 // Requests a signature over a fresh challenge message, proving the
 // connected wallet actually holds the signing key for `address` — a
 // random/fake address could never produce this, since it requires the
 // real wallet app to cooperate and the user to approve in-app.
+//
+// Guarded with a timeout: a wallet that pairs successfully but doesn't
+// actually implement cardano_signData can otherwise leave this pending
+// forever with no error and no response — confirmed in real testing
+// (paired, then stuck indefinitely with no way out except force-closing
+// the app). The Cardano WalletConnect ecosystem is young enough that
+// partial/incomplete method support is a real, expected case, not an edge
+// case to ignore.
 export async function verifyWalletOwnership(
   provider: RequestCapableProvider,
   address: string
@@ -59,16 +69,28 @@ export async function verifyWalletOwnership(
   const challenge = `VoteBoxApp wallet verification\naddress: ${address}\nnonce: ${Date.now()}`;
   const payloadHex = Buffer.from(challenge, 'utf8').toString('hex');
 
-  const result = await provider.request(
-    {
-      method: 'cardano_signData',
-      params: { address, payload: payloadHex },
-    },
-    CARDANO_PREPROD
-  );
+  let timer: ReturnType<typeof setTimeout>;
+  const timeout = new Promise<never>((_, reject) => {
+    timer = setTimeout(
+      () => reject(new Error('Wallet did not respond — it may not support this connection method yet')),
+      VERIFY_TIMEOUT_MS
+    );
+  });
 
-  const signature = (result as any)?.signature ?? (result as string);
-  if (!signature) throw new Error('Wallet did not return a signature');
+  try {
+    const result = await Promise.race([
+      provider.request(
+        { method: 'cardano_signData', params: { address, payload: payloadHex } },
+        CARDANO_PREPROD
+      ),
+      timeout,
+    ]);
 
-  return { address, signature };
+    const signature = (result as any)?.signature ?? (result as string);
+    if (!signature) throw new Error('Wallet did not return a signature');
+
+    return { address, signature };
+  } finally {
+    clearTimeout(timer!);
+  }
 }
