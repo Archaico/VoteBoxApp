@@ -1,5 +1,5 @@
 // src/screens/CreateProposalScreen.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -18,11 +18,9 @@ import * as Clipboard from 'expo-clipboard';
 import * as Haptics from 'expo-haptics';
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
-import { useWalletConnectModal } from '@walletconnect/modal-react-native';
 import { blockchainService, FeeEstimate } from '../services/BlockchainService';
 import { notificationService } from '../services/NotificationService';
 import { shareService } from '../services/ShareService';
-import { verifyWalletOwnership } from '../services/WalletConnectService';
 import { offlineQueueService, isNetworkError } from '../services/OfflineQueueService';
 import { toastService } from '../services/ToastService';
 import { QueueIndicator } from '../components/QueueIndicator';
@@ -79,13 +77,13 @@ const CARDANO_WALLETS = [
     badgeColor: '#0891b2',
     description: "Built by Cardano's founders. All-in-one Web3 hub.",
     emoji: '🔵',
-    playStoreUrl: 'https://play.google.com/store/apps/details?id=io.lacewallet',
+    playStoreUrl: 'https://play.google.com/store/apps/details?id=io.lace.mobilewallet',
     accentColor: '#0e7490',
     accentBg: '#ecfeff',
   },
 ];
 
-type WalletFlowState = 'select' | 'no-wallet-guide' | 'manual-entry' | 'verifying' | 'connected';
+type WalletFlowState = 'select' | 'no-wallet-guide' | 'manual-entry' | 'connected';
 
 export default function CreateProposalScreen({
   onBack,
@@ -115,58 +113,39 @@ export default function CreateProposalScreen({
   // Wallet connection flow state
   const [walletFlow, setWalletFlow] = useState<WalletFlowState>('select');
   const [selectedWallet, setSelectedWallet] = useState<string | null>(null);
-  // True only when walletAddress came from a real WalletConnect session +
-  // signed ownership proof. False for manually-typed addresses (fallback
-  // path — kept because WalletConnect support across Cardano mobile
-  // wallets is still maturing; see WalletConnectService.ts).
-  const [isWalletVerified, setIsWalletVerified] = useState(false);
-
-  const { open: openWalletConnect, isConnected: wcIsConnected, address: wcAddress, provider: wcProvider } =
-    useWalletConnectModal();
-
-  // Once WalletConnect reports a connected session, prove ownership via a
-  // signed challenge before treating the wallet as "connected" in our flow.
-  useEffect(() => {
-    if (!wcIsConnected || !wcAddress || walletFlow === 'connected') return;
-
-    setWalletFlow('verifying');
-    verifyWalletOwnership(wcProvider!, wcAddress)
-      .then(() => {
-        setWalletAddress(wcAddress);
-        setIsWalletVerified(true);
-        setWalletFlow('connected');
-      })
-      .catch((error) => {
-        Alert.alert(
-          'Verification Failed',
-          `Connected to your wallet, but could not verify ownership: ${
-            error instanceof Error ? error.message : 'Unknown error'
-          }`
-        );
-        setWalletFlow('select');
-        setSelectedWallet(null);
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [wcIsConnected, wcAddress]);
+  const [showManualAfterWallet, setShowManualAfterWallet] = useState(false);
 
   // ─── Wallet Flow Handlers ────────────────────────────────────────────
+  // Real WalletConnect integration exists (see WalletConnectService.ts,
+  // App.tsx's <WalletConnectModal> mount) but is deliberately not wired up
+  // here — tested 2026-08-13, none of the 3 recommended wallets connected
+  // reliably (WalletConnect's Cardano registry is currently empty; see
+  // memory). Kept dormant rather than deleted so it's ready to re-enable
+  // once wallet support matures. This screen uses the original
+  // Play-Store-then-manual-paste flow.
 
-  // Triggers the real WalletConnect modal — it shows its own wallet picker
-  // (using WalletConnect's maintained registry) and handles deep-linking to
-  // whichever wallet the user picks. Which of our 3 recommended wallets
-  // actually completes a session depends on their real-world WalletConnect
-  // support, which varies — see WalletConnectService.ts.
   const handleWalletSelect = async (wallet: typeof CARDANO_WALLETS[0]) => {
     setSelectedWallet(wallet.id);
-    try {
-      await openWalletConnect();
-    } catch (error) {
-      Alert.alert(
-        'Could Not Open Wallet Connect',
-        error instanceof Error ? error.message : 'Unknown error'
-      );
-      setSelectedWallet(null);
-    }
+    Alert.alert(
+      `Open ${wallet.name}?`,
+      `This will open the ${wallet.name} wallet app (or take you to download it).\n\nAfter connecting, copy your Cardano address (starts with addr1...) and come back here to paste it.`,
+      [
+        { text: 'Cancel', style: 'cancel', onPress: () => setSelectedWallet(null) },
+        {
+          text: `Open ${wallet.name}`,
+          onPress: async () => {
+            try {
+              await Linking.openURL(wallet.playStoreUrl);
+            } catch {
+              Alert.alert('Could not open link', 'Please search for the wallet in the Play Store manually.');
+            }
+            // After returning, show manual entry to paste their address
+            setShowManualAfterWallet(true);
+            setWalletFlow('manual-entry');
+          },
+        },
+      ]
+    );
   };
 
   const handleConfirmManualAddress = () => {
@@ -179,19 +158,7 @@ export default function CreateProposalScreen({
       return;
     }
     setWalletAddress(cleaned);
-    setIsWalletVerified(false); // manual entry is never cryptographically verified
     setWalletFlow('connected');
-  };
-
-  // Escape hatch for the 'verifying' state — some wallets pair successfully
-  // but never respond to the signature request at all (no error, no
-  // timeout on their end). verifyWalletOwnership() has its own 30s timeout
-  // as a backstop, but the user shouldn't have to wait that long if they
-  // can see it's not going anywhere.
-  const handleCancelVerification = () => {
-    wcProvider?.disconnect().catch(() => {});
-    setSelectedWallet(null);
-    setWalletFlow('select');
   };
 
   const handleDisconnectWallet = () => {
@@ -204,11 +171,10 @@ export default function CreateProposalScreen({
           text: 'Remove',
           style: 'destructive',
           onPress: () => {
-            wcProvider?.disconnect().catch(() => {});
             setWalletAddress('');
             setManualAddressInput('');
             setSelectedWallet(null);
-            setIsWalletVerified(false);
+            setShowManualAfterWallet(false);
             setWalletFlow('select');
           },
         },
@@ -499,38 +465,16 @@ export default function CreateProposalScreen({
     // STATE: Connected
     if (walletFlow === 'connected') {
       return (
-        <View style={[styles.walletConnectedBox, !isWalletVerified && styles.walletConnectedBoxUnverified]}>
+        <View style={styles.walletConnectedBox}>
           <View style={styles.walletConnectedHeader}>
-            <View style={[styles.walletConnectedDot, !isWalletVerified && styles.walletConnectedDotUnverified]} />
-            <Text style={styles.walletConnectedLabel}>
-              {isWalletVerified ? '✓ Wallet Verified' : '⚠️ Address Entered Manually (Unverified)'}
-            </Text>
+            <View style={styles.walletConnectedDot} />
+            <Text style={styles.walletConnectedLabel}>Wallet Connected</Text>
           </View>
           <Text style={styles.walletConnectedAddress}>
             {truncateAddress(walletAddress)}
           </Text>
-          {!isWalletVerified && (
-            <Text style={styles.walletUnverifiedNote}>
-              This address was typed in, not confirmed by a real wallet connection. Use "Connect Wallet" above for a verified connection when your wallet supports it.
-            </Text>
-          )}
           <TouchableOpacity onPress={handleDisconnectWallet} style={styles.walletDisconnectBtn}>
             <Text style={styles.walletDisconnectText}>Remove & Change Wallet</Text>
-          </TouchableOpacity>
-        </View>
-      );
-    }
-
-    // STATE: Verifying (connected via WalletConnect, awaiting signature)
-    if (walletFlow === 'verifying') {
-      return (
-        <View style={styles.walletVerifyingBox}>
-          <ActivityIndicator size="small" color="#22c55e" />
-          <Text style={styles.walletVerifyingText}>
-            Confirming wallet ownership — approve the signature request in your wallet app...
-          </Text>
-          <TouchableOpacity onPress={handleCancelVerification} style={styles.walletVerifyingCancelBtn}>
-            <Text style={styles.walletVerifyingCancelText}>Cancel</Text>
           </TouchableOpacity>
         </View>
       );
@@ -540,11 +484,13 @@ export default function CreateProposalScreen({
     if (walletFlow === 'manual-entry') {
       return (
         <View style={styles.walletManualContainer}>
-          <View style={styles.walletReturnHint}>
-            <Text style={styles.walletReturnHintText}>
-              ⚠️ Manual entry is a fallback, not a verified connection — use "Connect Wallet" instead when your wallet supports it.
-            </Text>
-          </View>
+          {showManualAfterWallet && (
+            <View style={styles.walletReturnHint}>
+              <Text style={styles.walletReturnHintText}>
+                👋 Welcome back! Open your wallet app, copy your address (addr1...), and paste it below.
+              </Text>
+            </View>
+          )}
           <Text style={styles.label}>Your Cardano Address</Text>
           <TextInput
             style={styles.walletManualInput}
@@ -565,6 +511,7 @@ export default function CreateProposalScreen({
               style={styles.walletManualBack}
               onPress={() => {
                 setWalletFlow('select');
+                setShowManualAfterWallet(false);
                 setManualAddressInput('');
                 setSelectedWallet(null);
               }}
@@ -623,7 +570,7 @@ export default function CreateProposalScreen({
           <View style={styles.noWalletStep}>
             <View style={styles.noWalletStepNum}><Text style={styles.noWalletStepNumText}>4</Text></View>
             <Text style={styles.noWalletStepText}>
-              Come back here and tap "Connect Wallet" — your wallet app will open to approve the connection.
+              Come back here, tap Vespr, and paste your address.
             </Text>
           </View>
 
@@ -695,9 +642,12 @@ export default function CreateProposalScreen({
         {/* Secondary options */}
         <TouchableOpacity
           style={styles.walletSecondaryBtn}
-          onPress={() => setWalletFlow('manual-entry')}
+          onPress={() => {
+            setShowManualAfterWallet(false);
+            setWalletFlow('manual-entry');
+          }}
         >
-          <Text style={styles.walletSecondaryText}>📋  Enter address manually (unverified fallback)</Text>
+          <Text style={styles.walletSecondaryText}>📋  Enter address manually</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -1047,34 +997,39 @@ const styles = StyleSheet.create({
   attachmentAddText: { fontSize: 12, color: '#22c55e', fontWeight: '700', textAlign: 'center' },
 
   // ── Wallet Select State ──
-  walletSectionTitle: { fontSize: 15, fontWeight: '700', color: '#111827', marginBottom: 4 },
-  walletSectionSubtitle: { fontSize: 12, color: '#6b7280', marginBottom: 16, lineHeight: 18 },
+  walletSectionTitle: { fontSize: 16, fontWeight: '700', color: '#111827', marginBottom: 4, letterSpacing: -0.2 },
+  walletSectionSubtitle: { fontSize: 12.5, color: '#6b7280', marginBottom: 18, lineHeight: 18 },
   walletOption: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: 14,
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: '#e5e7eb',
+    padding: 16,
+    borderRadius: 14,
+    borderWidth: 1.5,
+    borderColor: '#eef1f4',
     marginBottom: 10,
     backgroundColor: 'white',
+    shadowColor: '#0f172a',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+    elevation: 1,
   },
   walletOptionLeft: { flexDirection: 'row', alignItems: 'center', flex: 1 },
   walletOptionEmoji: { fontSize: 24, marginRight: 12 },
   walletOptionInfo: { flex: 1 },
   walletOptionNameRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 4, flexWrap: 'wrap' },
   walletOptionName: { fontSize: 16, fontWeight: '700', color: '#111827' },
-  walletBadge: { paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4 },
+  walletBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 20 },
   walletBadgeText: { fontSize: 9, fontWeight: '800', color: 'white', letterSpacing: 0.5 },
   walletOptionDesc: { fontSize: 12, color: '#6b7280', lineHeight: 17 },
-  walletOptionArrow: { fontSize: 24, fontWeight: '300', marginLeft: 8 },
-  walletDivider: { flexDirection: 'row', alignItems: 'center', marginVertical: 16, gap: 10 },
+  walletOptionArrow: { fontSize: 22, fontWeight: '300', marginLeft: 8 },
+  walletDivider: { flexDirection: 'row', alignItems: 'center', marginVertical: 18, gap: 12 },
   walletDividerLine: { flex: 1, height: 1, backgroundColor: '#e5e7eb' },
-  walletDividerText: { fontSize: 13, color: '#9ca3af' },
+  walletDividerText: { fontSize: 11, color: '#9ca3af', fontWeight: '600', letterSpacing: 1, textTransform: 'uppercase' },
   walletSecondaryBtn: {
-    padding: 13,
-    borderRadius: 10,
+    padding: 14,
+    borderRadius: 12,
     borderWidth: 1,
     borderColor: '#e5e7eb',
     backgroundColor: '#f9fafb',
@@ -1082,103 +1037,100 @@ const styles = StyleSheet.create({
   },
   walletSecondaryText: { fontSize: 14, color: '#374151', fontWeight: '500' },
   walletFutureNote: {
-    marginTop: 14,
-    padding: 10,
-    backgroundColor: '#f0f9ff',
-    borderRadius: 8,
+    marginTop: 16,
+    padding: 12,
+    backgroundColor: '#f0fdf4',
+    borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#bae6fd',
+    borderColor: '#bbf7d0',
   },
-  walletFutureText: { fontSize: 11, color: '#0369a1', textAlign: 'center', lineHeight: 16 },
+  walletFutureText: { fontSize: 11, color: '#15803d', textAlign: 'center', lineHeight: 16, fontWeight: '500' },
 
   // ── Wallet Connected State ──
   walletConnectedBox: {
-    padding: 16,
-    borderRadius: 12,
+    padding: 18,
+    borderRadius: 14,
     backgroundColor: '#f0fdf4',
-    borderWidth: 2,
-    borderColor: '#22c55e',
+    borderWidth: 1.5,
+    borderColor: '#86efac',
+    shadowColor: '#15803d',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 6,
+    elevation: 1,
   },
-  walletConnectedHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 8 },
+  walletConnectedHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 10 },
   walletConnectedDot: {
-    width: 8, height: 8, borderRadius: 4,
-    backgroundColor: '#22c55e', marginRight: 8,
+    width: 9, height: 9, borderRadius: 5,
+    backgroundColor: '#22c55e', marginRight: 9,
+    shadowColor: '#22c55e', shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.5, shadowRadius: 4, elevation: 2,
   },
-  walletConnectedLabel: { fontSize: 13, fontWeight: '700', color: '#15803d' },
+  walletConnectedLabel: { fontSize: 13, fontWeight: '700', color: '#15803d', letterSpacing: 0.1 },
   walletConnectedAddress: {
     fontSize: 15, fontWeight: '600', color: '#111827',
     fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
-    marginBottom: 12,
+    marginBottom: 14,
   },
   walletDisconnectBtn: { alignSelf: 'flex-start' },
   walletDisconnectText: { fontSize: 13, color: '#ef4444', fontWeight: '500' },
-  walletConnectedBoxUnverified: { backgroundColor: '#fffbeb', borderColor: '#f59e0b' },
-  walletConnectedDotUnverified: { backgroundColor: '#f59e0b' },
-  walletUnverifiedNote: { fontSize: 12, color: '#92400e', lineHeight: 17, marginBottom: 12 },
-
-  // ── Wallet Verifying State ──
-  walletVerifyingBox: {
-    padding: 20,
-    borderRadius: 12,
-    backgroundColor: '#f0fdf4',
-    borderWidth: 2,
-    borderColor: '#22c55e',
-    alignItems: 'center',
-    gap: 12,
-  },
-  walletVerifyingText: { fontSize: 13, color: '#15803d', textAlign: 'center', lineHeight: 19 },
-  walletVerifyingCancelBtn: { padding: 8 },
-  walletVerifyingCancelText: { fontSize: 13, color: '#ef4444', fontWeight: '600' },
 
   // ── Manual Entry State ──
   walletManualContainer: {},
   walletReturnHint: {
-    backgroundColor: '#fefce8',
-    padding: 12,
-    borderRadius: 8,
+    backgroundColor: '#f0fdf4',
+    padding: 13,
+    borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#fde047',
+    borderColor: '#bbf7d0',
     marginBottom: 16,
   },
-  walletReturnHintText: { fontSize: 13, color: '#713f12', lineHeight: 20 },
+  walletReturnHintText: { fontSize: 13, color: '#15803d', lineHeight: 20 },
   walletManualInput: {
     backgroundColor: '#f9fafb',
-    borderWidth: 2,
+    borderWidth: 1.5,
     borderColor: '#22c55e',
-    borderRadius: 8,
-    padding: 12,
+    borderRadius: 10,
+    padding: 13,
     fontSize: 14,
     color: '#111827',
     fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
     marginBottom: 4,
   },
-  walletManualButtons: { flexDirection: 'row', gap: 10, marginTop: 14 },
+  walletManualButtons: { flexDirection: 'row', gap: 10, marginTop: 16 },
   walletManualBack: {
-    flex: 1, padding: 12, borderRadius: 8,
+    flex: 1, padding: 13, borderRadius: 10,
     borderWidth: 1, borderColor: '#e5e7eb',
     alignItems: 'center',
   },
   walletManualBackText: { fontSize: 14, color: '#6b7280', fontWeight: '500' },
   walletManualConfirm: {
-    flex: 2, padding: 12, borderRadius: 8,
+    flex: 2, padding: 13, borderRadius: 10,
     backgroundColor: '#22c55e', alignItems: 'center',
+    shadowColor: '#22c55e', shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.18, shadowRadius: 5, elevation: 2,
   },
-  walletManualConfirmDisabled: { backgroundColor: '#d1d5db' },
+  walletManualConfirmDisabled: { backgroundColor: '#d1d5db', shadowOpacity: 0 },
   walletManualConfirmText: { fontSize: 14, color: 'white', fontWeight: '700' },
 
   // ── No Wallet Guide State ──
   noWalletGuide: {
     backgroundColor: '#fafafa',
-    borderRadius: 12,
+    borderRadius: 14,
     borderWidth: 1,
-    borderColor: '#e5e7eb',
-    padding: 16,
+    borderColor: '#eef1f4',
+    padding: 18,
+    shadowColor: '#0f172a',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.04,
+    shadowRadius: 3,
+    elevation: 1,
   },
   noWalletGuideTitle: {
-    fontSize: 16, fontWeight: '700', color: '#111827', marginBottom: 10,
+    fontSize: 16, fontWeight: '700', color: '#111827', marginBottom: 10, letterSpacing: -0.2,
   },
   noWalletGuideBody: {
-    fontSize: 13, color: '#4b5563', lineHeight: 20, marginBottom: 16,
+    fontSize: 13, color: '#4b5563', lineHeight: 20, marginBottom: 18,
   },
   noWalletStep: {
     flexDirection: 'row', alignItems: 'flex-start', marginBottom: 14, gap: 12,
@@ -1192,8 +1144,10 @@ const styles = StyleSheet.create({
   noWalletStepText: { fontSize: 13, color: '#374151', lineHeight: 20, flex: 1 },
   noWalletDownloadBtn: {
     backgroundColor: '#8b5cf6',
-    padding: 14, borderRadius: 10,
+    padding: 15, borderRadius: 12,
     alignItems: 'center', marginTop: 6, marginBottom: 12,
+    shadowColor: '#7c3aed', shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.16, shadowRadius: 5, elevation: 2,
   },
   noWalletDownloadText: { fontSize: 15, fontWeight: '700', color: 'white' },
   noWalletBack: { alignItems: 'center', padding: 8 },
