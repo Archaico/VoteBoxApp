@@ -1,0 +1,13 @@
+{
+  "name": "functions",
+  "description": "VoteBoxApp Cloud Functions — new-comment push notification relay",
+  "main": "index.js",
+  "engines": {
+    "node": "22"
+  },
+  "dependencies": {
+    "firebase-admin": "^14.3.0",
+    "firebase-functions": "^7.3.2"
+  },
+  "private": true
+}
