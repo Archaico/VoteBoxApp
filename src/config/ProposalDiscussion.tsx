@@ -71,7 +71,7 @@ export default function ProposalDiscussion({ proposalId, userAddress, proposalTi
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
         const deadline = proposalDeadline ?? 0;
         notificationService.subscribeToProposal(proposalId, 'commenter', deadline, proposalTitle).catch(() => {});
-        notificationService.notifyCommentPosted(proposalTitle).catch(() => {});
+        notificationService.notifyCommentPosted(proposalId, proposalTitle).catch(() => {});
       }
     } catch (error) {
       console.error('Failed to post comment:', error);

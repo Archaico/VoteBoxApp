@@ -149,7 +149,7 @@ export default function VotingScreen({
       setVotedChoice(selectedVote);
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       notificationService.subscribeToProposal(proposalId, 'voter', proposal.deadline, proposal.title).catch(() => {});
-      notificationService.notifyVoteSubmitted(proposal.title).catch(() => {});
+      notificationService.notifyVoteSubmitted(proposalId, proposal.title).catch(() => {});
 
       setSubmittedTxHash(txHash || '');
       setShowSuccessModal(true);

@@ -153,13 +153,13 @@ class NotificationService {
       if (h24 > now) {
         ids.h24 = await Notifications.scheduleNotificationAsync({
           content: { title: 'Voting closes in 24 hours', body, data: { proposalId, type: 'deadline_24h' } },
-          trigger: { date: new Date(h24) } as any,
+          trigger: { type: Notifications.SchedulableTriggerInputTypes.DATE, date: new Date(h24) },
         });
       }
       if (h1 > now) {
         ids.h1 = await Notifications.scheduleNotificationAsync({
           content: { title: 'Voting closes in 1 hour', body, data: { proposalId, type: 'deadline_1h' } },
-          trigger: { date: new Date(h1) } as any,
+          trigger: { type: Notifications.SchedulableTriggerInputTypes.DATE, date: new Date(h1) },
         });
       }
     } catch (e) {
@@ -178,30 +178,30 @@ class NotificationService {
 
   // ── Immediate Notifications ────────────────────────────────────────────
 
-  async notifyVoteSubmitted(proposalTitle: string): Promise<void> {
+  async notifyVoteSubmitted(proposalId: string, proposalTitle: string): Promise<void> {
     if (!(await this.isEnabled('voteConfirmations'))) return;
-    await this.send('Vote submitted', proposalTitle, { type: 'vote_submitted' });
+    await this.send('Vote submitted', proposalTitle, { type: 'vote_submitted', proposalId });
   }
 
-  async notifyVoteConfirmed(proposalTitle: string, txHash: string): Promise<void> {
+  async notifyVoteConfirmed(proposalId: string, proposalTitle: string, txHash: string): Promise<void> {
     if (!(await this.isEnabled('voteConfirmations'))) return;
     const short = proposalTitle.length > 35 ? proposalTitle.slice(0, 32) + '...' : proposalTitle;
-    await this.send('Vote confirmed on-chain', `${short} · TX: ${txHash.slice(0, 12)}...`, { type: 'vote_confirmed' });
+    await this.send('Vote confirmed on-chain', `${short} · TX: ${txHash.slice(0, 12)}...`, { type: 'vote_confirmed', proposalId });
   }
 
-  async notifyProposalLive(proposalTitle: string): Promise<void> {
+  async notifyProposalLive(proposalId: string, proposalTitle: string): Promise<void> {
     if (!(await this.isEnabled())) return;
-    await this.send('Your proposal is live', proposalTitle, { type: 'proposal_live' });
+    await this.send('Your proposal is live', proposalTitle, { type: 'proposal_live', proposalId });
   }
 
-  async notifyCommentPosted(proposalTitle: string): Promise<void> {
+  async notifyCommentPosted(proposalId: string, proposalTitle: string): Promise<void> {
     if (!(await this.isEnabled('comments'))) return;
-    await this.send('Comment posted', proposalTitle, { type: 'comment_posted' });
+    await this.send('Comment posted', proposalTitle, { type: 'comment_posted', proposalId });
   }
 
-  async notifyNewComment(proposalTitle: string): Promise<void> {
+  async notifyNewComment(proposalId: string, proposalTitle: string): Promise<void> {
     if (!(await this.isEnabled('comments'))) return;
-    await this.send('New comment on proposal', proposalTitle, { type: 'new_comment' });
+    await this.send('New comment on proposal', proposalTitle, { type: 'new_comment', proposalId });
   }
 
   async notifyProposalFinalised(

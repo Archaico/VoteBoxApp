@@ -373,7 +373,7 @@ export default function CreateProposalScreen({
       const proposalDeadline = Date.now() + (parseInt(duration) * 24 * 60 * 60 * 1000);
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       notificationService.subscribeToProposal(result.proposalId, 'creator', proposalDeadline, title.trim()).catch(() => {});
-      notificationService.notifyProposalLive(title.trim()).catch(() => {});
+      notificationService.notifyProposalLive(result.proposalId, title.trim()).catch(() => {});
 
       const minFeeA = 44;
       const minFeeB = 155381;
