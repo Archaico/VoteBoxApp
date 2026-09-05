@@ -148,7 +148,7 @@ async function runSync(): Promise<void> {
         // subscribeToProposal() seeds a baseline CID at subscribe time, so by
         // the time this runs, prevCid reflects "what existed when I joined" —
         // any difference from that is a genuinely new comment, first check or not.
-        await notificationService.notifyNewComment(sub.title);
+        await notificationService.notifyNewComment(proposalId, sub.title);
         lastCids[proposalId] = newCid;
         cidsChanged = true;
       }
