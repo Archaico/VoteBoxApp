@@ -2,7 +2,15 @@
 import * as Notifications from 'expo-notifications';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
+import Constants from 'expo-constants';
+import { getApps } from 'firebase/app';
+import { getFirestore, doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { cidRegistryService } from './CIDRegistryService';
+
+// Reuses the Firebase app CIDRegistryService.ts already initializes on import
+// (guaranteed loaded first — imported below).
+const db = getFirestore(getApps()[0]);
+const EAS_PROJECT_ID = Constants.expoConfig?.extra?.eas?.projectId;
 
 const SUBS_KEY   = '@subscribed_proposals';
 const PREFS_KEY  = '@notification_prefs';
@@ -116,6 +124,28 @@ class NotificationService {
     subs[proposalId] = { role, title, deadline, notifIds };
     await this.saveSubs(subs);
     await this.seedCommentBaseline(proposalId);
+    await this.registerPushToken(proposalId, role, title);
+  }
+
+  // Registers this device's Expo push token against the proposal in Firestore,
+  // so the "new comment" Cloud Function (functions/index.js) knows who to
+  // notify. Best-effort — a failure here shouldn't block local subscription.
+  private async registerPushToken(
+    proposalId: string,
+    role: 'creator' | 'voter' | 'commenter',
+    title: string
+  ): Promise<void> {
+    if (!EAS_PROJECT_ID) return;
+    try {
+      const { data: token } = await Notifications.getExpoPushTokenAsync({ projectId: EAS_PROJECT_ID });
+      await setDoc(doc(db, 'proposal_subscribers', proposalId), { title }, { merge: true });
+      await setDoc(doc(db, 'proposal_subscribers', proposalId, 'tokens', token), {
+        role,
+        addedAt: serverTimestamp(),
+      });
+    } catch (error) {
+      console.warn('[NotificationService] Push token registration failed (non-fatal):', error);
+    }
   }
 
   // Records whatever comment CID exists right now as the baseline for this
