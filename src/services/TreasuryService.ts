@@ -38,8 +38,8 @@ export const TREASURY_CONFIG = {
   
   // Wallet addresses — replace with real addresses before mainnet
   // Foundation wallet will become a multi-sig address (3-of-5 initially)
-  FOUNDATION_WALLET: 'addr_test1vrdzjlmvrckuxln6ux8spst2e4qmlckrzncvqtnmvy3t54ganc74z',
-  FOUNDER_WALLET:    'addr1qyl3j2sk6swz9t9922cl5tugckp6wfk952smz8zx5gy2quqcdkvqlrxkg9fjlp0qavtjchhmy7p4k0xhxhhrmd6afl7q03d0qv',
+  FOUNDATION_WALLET: 'addr_test1vqfrwehprdjvxrv3kmnz7axek2jkg4sjcl5fxtwecevh74ge4rmhd',
+  FOUNDER_WALLET:    'addr_test1qz8zqndgltd6v6ke2yyx4m2slfv6y8uzla5n2vszgl2n3xflp87cuc8wy3r59x3zdgw76japc2fuz7ulhmag4cs57tds8lzen3',
   
   // Cardano protocol parameters (testnet)
   MIN_FEE_A: 44,         // lovelace per byte
