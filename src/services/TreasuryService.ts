@@ -10,7 +10,7 @@
 //   [TreasuryService] ── routes fees ──▶ Foundation Wallet (multi-sig)
 //        │                                      │
 //        │                              ┌───────┴────────┐
-//        │                          Gas Pool         FounderFee (10%)
+//        │                          Gas Pool         FounderFee (13%)
 //        │                        (operations)     (perpetual, immutable)
 //        ▼
 //   Blockchain Transaction
@@ -34,7 +34,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export const TREASURY_CONFIG = {
   // Fee split percentages (must sum to 100)
   FOUNDATION_FEE_PERCENTAGE: 0.30,    // 30% of gas costs → Foundation wallet
-  FOUNDER_FEE_PERCENTAGE: 0.10,       // 10% of Foundation Fee → Founder (perpetual, immutable)
+  FOUNDER_FEE_PERCENTAGE: 0.13,       // 13% of Foundation Fee → Founder (perpetual, immutable)
   
   // Wallet addresses — replace with real addresses before mainnet
   // Foundation wallet will become a multi-sig address (3-of-5 initially)
@@ -65,8 +65,8 @@ export const TREASURY_CONFIG = {
 export interface FeeCalculation {
   gasCost: number;           // Raw Cardano transaction cost (lovelace)
   foundationFee: number;     // 30% of gas cost (lovelace)
-  founderShare: number;      // 10% of foundation fee — routes to founder wallet (immutable, FOUNDER_FEE_PERCENTAGE constant)
-  operationsShare: number;   // 93% of foundation fee — routes to foundation wallet
+  founderShare: number;      // 13% of foundation fee — routes to founder wallet (immutable, FOUNDER_FEE_PERCENTAGE constant)
+  operationsShare: number;   // 87% of foundation fee — routes to foundation wallet
   grandTotal: number;        // Total charged to proposal creator (lovelace)
   
   // Human-readable
