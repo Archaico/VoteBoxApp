@@ -118,6 +118,11 @@ export interface CardanoTxResult {
   txHash:  string;     // hex blake2b-256 of tx body — use as on-chain identifier
 }
 
+export interface CardanoTxPaymentOutput {
+  address:  string;   // bech32 recipient address
+  lovelace: bigint;   // amount to pay this recipient
+}
+
 export interface CardanoTxParams {
   utxoTxHash:        string;   // hex-encoded 32-byte tx id
   utxoIndex:         number;
@@ -128,6 +133,7 @@ export interface CardanoTxParams {
   minFeeA:           number;   // lovelace per byte (from Blockfrost /epochs/latest/parameters)
   minFeeB:           number;   // base fee in lovelace
   currentSlot:       number;   // latest block slot (for TTL calculation)
+  paymentOutputs?:   CardanoTxPaymentOutput[]; // extra value-carrying outputs (e.g. founder payout), paid before change
 }
 
 // Builds a signed Cardano metadata transaction.
@@ -137,6 +143,7 @@ export function buildSignedTx(params: CardanoTxParams): CardanoTxResult {
     utxoTxHash, utxoIndex, utxoLovelace,
     changeAddress, privateKeyHex,
     metadata, minFeeA, minFeeB, currentSlot,
+    paymentOutputs = [],
   } = params;
 
   // ── Key pair from 32-byte seed ───────────────────────────────────────────
@@ -147,11 +154,18 @@ export function buildSignedTx(params: CardanoTxParams): CardanoTxResult {
   const auxDataCbor    = encodeAuxData(metadata);
   const auxDataHash    = blakejs.blake2b(auxDataCbor, undefined, 32) as Uint8Array;
 
+  // ── Payment outputs (paid before change) ──────────────────────────────────
+  const encodedPaymentOutputs = paymentOutputs.map(p =>
+    cborArray([cborBytes(decodeAddress(p.address)), cborUint(p.lovelace)])
+  );
+  const paymentTotal = paymentOutputs.reduce((sum, p) => sum + p.lovelace, 0n);
+
   // ── Fee estimate (over-estimates by ~200 bytes as safety margin) ─────────
   const changeAddrBytes = decodeAddress(changeAddress);
   const estimatedBytes  = 60                      // tx overhead
     + 45                                          // 1 input
-    + (changeAddrBytes.length + 12)               // 1 output (addr + value header)
+    + (changeAddrBytes.length + 12)               // 1 change output (addr + value header)
+    + paymentOutputs.length * 57                  // each extra output (~45-byte addr + 12-byte value header)
     + auxDataCbor.length                          // metadata
     + 105                                         // vkey witness (pubkey 32 + sig 64 + headers)
     + 200;                                        // safety buffer
@@ -159,20 +173,21 @@ export function buildSignedTx(params: CardanoTxParams): CardanoTxResult {
 
   // ── Change output ────────────────────────────────────────────────────────
   const inputLovelace  = BigInt(utxoLovelace);
-  if (inputLovelace <= fee) {
-    throw new Error(`Foundation wallet insufficient: ${inputLovelace} lovelace ≤ fee ${fee}. Fund from preprod faucet.`);
+  if (inputLovelace <= fee + paymentTotal) {
+    throw new Error(`Foundation wallet insufficient: ${inputLovelace} lovelace ≤ fee ${fee} + payments ${paymentTotal}. Fund from preprod faucet.`);
   }
-  const changeLovelace = inputLovelace - fee;
+  const changeLovelace = inputLovelace - fee - paymentTotal;
 
   // ── Transaction body ─────────────────────────────────────────────────────
   const txHashBytes  = hexToBytes(utxoTxHash);
   const encodedInput = cborArray([cborBytes(txHashBytes), cborUint(BigInt(utxoIndex))]);
-  const encodedOutput = cborArray([cborBytes(changeAddrBytes), cborUint(changeLovelace)]);
+  const encodedChangeOutput = cborArray([cborBytes(changeAddrBytes), cborUint(changeLovelace)]);
+  const encodedOutputs = [...encodedPaymentOutputs, encodedChangeOutput];
   const ttl           = currentSlot + 7200; // 2 hours
 
   const txBodyCbor = cborMap([
     [cborUint(0n), cborArray([encodedInput])],   // inputs
-    [cborUint(1n), cborArray([encodedOutput])],  // outputs
+    [cborUint(1n), cborArray(encodedOutputs)],   // outputs
     [cborUint(2n), cborUint(fee)],               // fee
     [cborUint(3n), cborUint(BigInt(ttl))],       // ttl
     [cborUint(7n), cborBytes(auxDataHash)],      // auxiliary_data_hash
