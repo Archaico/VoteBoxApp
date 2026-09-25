@@ -370,9 +370,12 @@ class TreasuryService {
 
   // Derives the unpaid founder balance FROM THE LEDGER ITSELF (not a separately
   // incremented counter) so there's a single source of truth that can't drift.
+  // Only entries backed by a verified creator payment count — older
+  // accounting-only entries (no paymentTxHash) were never actually paid.
   async getPendingFounderPayout(): Promise<PendingFounderPayout> {
     const log = await this.getTransactionLog();
-    const pending = log.filter(t => t.type === 'proposal_fee' && t.status === 'confirmed' && !t.payoutBatchTxHash);
+    const pending = log.filter(t =>
+      t.type === 'proposal_fee' && t.status === 'confirmed' && !!t.paymentTxHash && !t.payoutBatchTxHash);
     return {
       lovelace: pending.reduce((sum, t) => sum + t.founderAmount, 0),
       transactionIds: pending.map(t => t.id),
