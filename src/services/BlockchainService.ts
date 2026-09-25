@@ -353,7 +353,7 @@ class BlockchainService {
     await this.cacheNewProposal(fullProposal);
 
     // Fire-and-forget — never let a payout hiccup block a proposal from publishing.
-    this.maybeTriggerFounderPayout().catch(e =>
+    this.maybeTriggerFounderPayout(metadataTxHash).catch(e =>
       console.warn('[BlockchainService] Founder payout check failed (non-fatal):', e));
 
     return {
@@ -384,17 +384,24 @@ class BlockchainService {
   // app instance these can never actually interleave.
   private payoutMutex: Promise<unknown> = Promise.resolve();
 
-  maybeTriggerFounderPayout(): Promise<{ triggered: boolean; payoutTxHash?: string; reason?: string }> {
-    const run = () => this.maybeTriggerFounderPayoutAttempt();
+  maybeTriggerFounderPayout(afterTxHash?: string): Promise<{ triggered: boolean; payoutTxHash?: string; reason?: string }> {
+    const run = () => this.maybeTriggerFounderPayoutAttempt(afterTxHash);
     const result = this.payoutMutex.then(run, run);
     this.payoutMutex = result.catch(() => {});
     return result;
   }
 
-  private async maybeTriggerFounderPayoutAttempt(): Promise<{ triggered: boolean; payoutTxHash?: string; reason?: string }> {
+  private async maybeTriggerFounderPayoutAttempt(afterTxHash?: string): Promise<{ triggered: boolean; payoutTxHash?: string; reason?: string }> {
     const pending = await treasuryService.getPendingFounderPayout();
     if (pending.lovelace < TREASURY_CONFIG.FOUNDER_PAYOUT_THRESHOLD_LOVELACE) {
       return { triggered: false, reason: 'below_threshold' };
+    }
+
+    // The preceding tx (e.g. the proposal just published) spent the Foundation
+    // UTxO; Blockfrost keeps listing it until that tx is in a block, so paying
+    // out right away would reuse a spent input. Wait for it to confirm first.
+    if (afterTxHash && !(await this.waitForTxConfirmation(afterTxHash))) {
+      return { triggered: false, reason: 'prior_tx_unconfirmed' };
     }
 
     const gotLock = await treasuryService.acquirePayoutLock();
@@ -419,6 +426,21 @@ class BlockchainService {
     } finally {
       await treasuryService.releasePayoutLock();
     }
+  }
+
+  // Polls Blockfrost until the tx is indexed (i.e. in a block).
+  private async waitForTxConfirmation(txHash: string, maxWaitMs = 180_000, intervalMs = 10_000): Promise<boolean> {
+    const deadline = Date.now() + maxWaitMs;
+    while (Date.now() < deadline) {
+      try {
+        await this.blockfrostGet(`/txs/${txHash}`, 5000);
+        return true;
+      } catch {
+        // 404 until confirmed, or a transient network error — keep polling
+      }
+      await new Promise(resolve => setTimeout(resolve, intervalMs));
+    }
+    return false;
   }
 
   // Builds and submits the itemized batch payout tx. CardanoTxBuilder's
