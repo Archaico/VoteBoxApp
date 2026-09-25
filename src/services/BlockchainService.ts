@@ -41,9 +41,10 @@ const IPFS_FALLBACKS = [
 const MAX_ATTACHMENTS = 2;
 
 const METADATA_LABELS = {
-  PROPOSAL:    674,
-  VOTE:        1337,
-  COMMENT_CID: 1338,
+  PROPOSAL:       674,
+  VOTE:           1337,
+  COMMENT_CID:    1338,
+  FOUNDER_PAYOUT: 1339,
 };
 
 const CACHE_KEY = '@cached_proposals';
@@ -351,6 +352,10 @@ class BlockchainService {
     const fullProposal = { ...proposal, cid, txHash: metadataTxHash } as Proposal;
     await this.cacheNewProposal(fullProposal);
 
+    // Fire-and-forget — never let a payout hiccup block a proposal from publishing.
+    this.maybeTriggerFounderPayout().catch(e =>
+      console.warn('[BlockchainService] Founder payout check failed (non-fatal):', e));
+
     return {
       proposalId: proposal.id!,
       cid,
@@ -363,6 +368,80 @@ class BlockchainService {
         founderShareADA: fees.founderShareADA,
       },
     };
+  }
+
+  // ── Founder Payout ──────────────────────────────────────────────────────────
+  // Automatic, checked right after every proposal fee collection — deliberately
+  // NOT tied to expo-background-fetch (BackgroundSyncService.ts), which was
+  // proven structurally unreliable by Android's Doze/WorkManager.
+
+  // treasuryService.acquirePayoutLock() is a non-atomic AsyncStorage
+  // read-then-write — it only guards against a crashed-prior-attempt, not
+  // two same-process calls racing each other (e.g. a manual publish
+  // overlapping the offline queue draining a proposal at the same moment,
+  // both firing this method). Serialize the whole check-and-pay operation
+  // in-process first, same pattern as txMutex above, so within one running
+  // app instance these can never actually interleave.
+  private payoutMutex: Promise<unknown> = Promise.resolve();
+
+  maybeTriggerFounderPayout(): Promise<{ triggered: boolean; payoutTxHash?: string; reason?: string }> {
+    const run = () => this.maybeTriggerFounderPayoutAttempt();
+    const result = this.payoutMutex.then(run, run);
+    this.payoutMutex = result.catch(() => {});
+    return result;
+  }
+
+  private async maybeTriggerFounderPayoutAttempt(): Promise<{ triggered: boolean; payoutTxHash?: string; reason?: string }> {
+    const pending = await treasuryService.getPendingFounderPayout();
+    if (pending.lovelace < TREASURY_CONFIG.FOUNDER_PAYOUT_THRESHOLD_LOVELACE) {
+      return { triggered: false, reason: 'below_threshold' };
+    }
+
+    const gotLock = await treasuryService.acquirePayoutLock();
+    if (!gotLock) return { triggered: false, reason: 'locked' };
+
+    try {
+      // Safety cap — generous headroom under Cardano's metadata size limit at
+      // realistic per-proposal amounts; any excess just waits for the next check.
+      const batch = pending.proposalAmounts.slice(0, 50);
+      const batchIds = pending.transactionIds.slice(0, batch.length);
+      const totalLovelace = batch.reduce((sum, p) => sum + p.founderAmountLovelace, 0);
+
+      const payoutTxHash = await this.payFounderBatch(batch, totalLovelace);
+      await treasuryService.markPayoutSettled(batchIds, payoutTxHash);
+      await treasuryService.logFounderPayout(totalLovelace, payoutTxHash, batch.length);
+
+      console.log('[BlockchainService] Founder payout settled:', payoutTxHash, `(${batch.length} proposals)`);
+      return { triggered: true, payoutTxHash };
+    } catch (e) {
+      console.warn('[BlockchainService] Founder payout failed (non-fatal, retried next check):', e);
+      return { triggered: false, reason: 'payout_failed' };
+    } finally {
+      await treasuryService.releasePayoutLock();
+    }
+  }
+
+  // Builds and submits the itemized batch payout tx. CardanoTxBuilder's
+  // metadata encoder only supports a flat Record<string,string> per label, so
+  // itemization is "proposalId → lovelace amount" pairs rather than nested JSON.
+  private async payFounderBatch(
+    contributingProposals: Array<{ proposalId: string; founderAmountLovelace: number }>,
+    totalLovelace: number,
+  ): Promise<string> {
+    const batchId = `payout_${Date.now()}`;
+    return this.buildAndSubmitMetadataTx(
+      {
+        [METADATA_LABELS.FOUNDER_PAYOUT]: {
+          type:         'founder_payout',
+          batchId,
+          count:        String(contributingProposals.length),
+          totalLovelace: String(totalLovelace),
+          ...Object.fromEntries(contributingProposals.map(p => [p.proposalId, String(p.founderAmountLovelace)])),
+        },
+      },
+      `VoteBoxApp founder payout: ${batchId}`,
+      [{ address: TREASURY_CONFIG.FOUNDER_WALLET, lovelace: BigInt(totalLovelace) }],
+    );
   }
 
   // ── Vote Submission ──────────────────────────────────────────────────────────

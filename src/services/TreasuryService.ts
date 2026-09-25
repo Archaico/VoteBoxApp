@@ -41,6 +41,10 @@ export const TREASURY_CONFIG = {
   // stated design principle ("proposal creation costs 1.2+ ADA").
   MIN_PROPOSAL_FEE_LOVELACE: 1_200_000,
 
+  // A single proposal's founder share is far too small to pay out on its own
+  // (below min-UTxO) — earnings accumulate until this threshold, then batch-pay.
+  FOUNDER_PAYOUT_THRESHOLD_LOVELACE: 2_000_000,
+
   // Wallet addresses — replace with real addresses before mainnet
   // Foundation wallet will become a multi-sig address (3-of-5 initially)
   FOUNDATION_WALLET: 'addr_test1vqfrwehprdjvxrv3kmnz7axek2jkg4sjcl5fxtwecevh74ge4rmhd',
@@ -62,6 +66,7 @@ export const TREASURY_CONFIG = {
     PENDING_FEES:      '@treasury_pending_fees',
     TOTAL_COLLECTED:   '@treasury_total_collected',
     FOUNDER_EARNED:    '@treasury_founder_earned',
+    PAYOUT_LOCK:       '@treasury_payout_lock',
   },
 };
 
@@ -98,6 +103,7 @@ export interface TreasuryTransaction {
   paymentTxHash?: string;      // the creator's own verified payment tx (proposal_fee entries)
   metadataTxHash?: string;     // the Foundation's proposal/vote/payout-anchoring tx
   paidLovelace?: number;       // actual verified amount paid (may exceed `amount` on overpayment)
+  payoutBatchTxHash?: string;  // set once this entry's founderAmount has settled in a batch payout
   notes?: string;
 }
 
@@ -120,6 +126,12 @@ export interface PaymentVerificationResult {
     | 'already_used'
     | 'network_error';
   detail?: string;
+}
+
+export interface PendingFounderPayout {
+  lovelace: number;
+  transactionIds: string[];
+  proposalAmounts: Array<{ proposalId: string; founderAmountLovelace: number }>;
 }
 
 // ─── Treasury Service ─────────────────────────────────────────────────────────
@@ -350,6 +362,65 @@ class TreasuryService {
       console.error('[Treasury] Balance check failed:', error);
       return { lovelace: 0, ada: '0.0000' };
     }
+  }
+
+  // ── Founder Payout ──────────────────────────────────────────────────────────
+  // Pure ledger math — no tx building here (that's BlockchainService's job, to
+  // avoid a circular import: BlockchainService already imports this file).
+
+  // Derives the unpaid founder balance FROM THE LEDGER ITSELF (not a separately
+  // incremented counter) so there's a single source of truth that can't drift.
+  async getPendingFounderPayout(): Promise<PendingFounderPayout> {
+    const log = await this.getTransactionLog();
+    const pending = log.filter(t => t.type === 'proposal_fee' && t.status === 'confirmed' && !t.payoutBatchTxHash);
+    return {
+      lovelace: pending.reduce((sum, t) => sum + t.founderAmount, 0),
+      transactionIds: pending.map(t => t.id),
+      proposalAmounts: pending.map(t => ({ proposalId: t.proposalId!, founderAmountLovelace: t.founderAmount })),
+    };
+  }
+
+  // Marks the given local ledger entries as settled by a batch payout tx.
+  async markPayoutSettled(transactionIds: string[], payoutTxHash: string): Promise<void> {
+    try {
+      const log = await this.getTransactionLog();
+      const updated = log.map(t => transactionIds.includes(t.id) ? { ...t, payoutBatchTxHash: payoutTxHash } : t);
+      await AsyncStorage.setItem(TREASURY_CONFIG.STORAGE_KEYS.TRANSACTION_LOG, JSON.stringify(updated));
+    } catch (error) {
+      console.error('[Treasury] Failed to mark payout settled:', error);
+    }
+  }
+
+  async logFounderPayout(totalLovelace: number, payoutTxHash: string, proposalCount: number): Promise<void> {
+    await this.logTransaction({
+      id: `tx_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+      type: 'founder_distribution',
+      creatorAddress: TREASURY_CONFIG.FOUNDER_WALLET,
+      amount: totalLovelace,
+      founderAmount: totalLovelace,
+      foundationAmount: 0,
+      timestamp: Date.now(),
+      status: 'confirmed',
+      metadataTxHash: payoutTxHash,
+      notes: `Batch payout — ${proposalCount} proposal${proposalCount === 1 ? '' : 's'}`,
+    });
+  }
+
+  // Short-lived AsyncStorage mutex so two near-simultaneous payout checks
+  // (e.g. two proposals created back-to-back) don't both try to pay out.
+  async acquirePayoutLock(): Promise<boolean> {
+    const raw = await AsyncStorage.getItem(TREASURY_CONFIG.STORAGE_KEYS.PAYOUT_LOCK);
+    if (raw) {
+      const lock = JSON.parse(raw);
+      if (Date.now() - lock.acquiredAt < 2 * 60 * 1000) return false;
+      // stale lock (>2min, likely a crashed prior attempt) — fall through and reacquire
+    }
+    await AsyncStorage.setItem(TREASURY_CONFIG.STORAGE_KEYS.PAYOUT_LOCK, JSON.stringify({ acquiredAt: Date.now() }));
+    return true;
+  }
+
+  async releasePayoutLock(): Promise<void> {
+    await AsyncStorage.removeItem(TREASURY_CONFIG.STORAGE_KEYS.PAYOUT_LOCK);
   }
 
   // ── Audit & Reporting ───────────────────────────────────────────────────────
