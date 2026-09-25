@@ -20,6 +20,39 @@ const TASK_NAME    = 'VOTEBOX_BACKGROUND_SYNC';
 const SUBS_KEY     = '@subscribed_proposals';
 const LAST_CID_KEY = '@last_comment_cid';
 
+// Diagnostic keys — surfaced in the UI (SyncDiagnosticBadge) so "is the OS
+// actually running my background task at all" is answerable from evidence
+// instead of guesswork. Added 2026-08-23 after ruling out Samsung battery
+// saver as the cause of missing cross-user notifications.
+const REGISTRATION_KEY = '@background_sync_registration';
+const LAST_RUN_KEY     = '@background_sync_last_run';
+
+export interface SyncDiagnostics {
+  registeredAt:       number | null;
+  registrationStatus: string | null; // BackgroundFetch.BackgroundFetchStatus name at registration time
+  lastRunAt:          number | null;
+  lastRunResult:      'success' | 'failed' | null;
+  lastRunError:       string | null;
+  lastRunSubCount:    number | null;
+}
+
+export async function getSyncDiagnostics(): Promise<SyncDiagnostics> {
+  const [regRaw, runRaw] = await Promise.all([
+    AsyncStorage.getItem(REGISTRATION_KEY),
+    AsyncStorage.getItem(LAST_RUN_KEY),
+  ]);
+  const reg = regRaw ? JSON.parse(regRaw) : {};
+  const run = runRaw ? JSON.parse(runRaw) : {};
+  return {
+    registeredAt:       reg.timestamp ?? null,
+    registrationStatus: reg.status ?? null,
+    lastRunAt:          run.timestamp ?? null,
+    lastRunResult:      run.result ?? null,
+    lastRunError:       run.error ?? null,
+    lastRunSubCount:    run.subCount ?? null,
+  };
+}
+
 const BLOCKFROST_URL = TREASURY_CONFIG.BLOCKFROST_API_URL;
 const BLOCKFROST_ID  = TREASURY_CONFIG.BLOCKFROST_PROJECT_ID;
 const FOUNDATION_WALLET = TREASURY_CONFIG.FOUNDATION_WALLET;
@@ -31,24 +64,37 @@ const LABEL_VOTE = 1337;
 
 TaskManager.defineTask(TASK_NAME, async () => {
   try {
-    await runSync();
+    const subCount = await runSync();
+    await recordLastRun({ result: 'success', subCount });
     return BackgroundFetch.BackgroundFetchResult.NewData;
   } catch (e) {
     console.warn('[BackgroundSync] Task failed:', e);
+    await recordLastRun({ result: 'failed', error: e instanceof Error ? e.message : String(e) });
     return BackgroundFetch.BackgroundFetchResult.Failed;
   }
 });
+
+async function recordLastRun(data: { result: 'success' | 'failed'; subCount?: number; error?: string }): Promise<void> {
+  try {
+    await AsyncStorage.setItem(LAST_RUN_KEY, JSON.stringify({ timestamp: Date.now(), ...data }));
+  } catch {
+    // Diagnostic write failure shouldn't crash the background task
+  }
+}
 
 // ── Public API ────────────────────────────────────────────────────────────────
 
 export async function registerBackgroundSync(): Promise<void> {
   try {
     const status = await BackgroundFetch.getStatusAsync();
+    const statusName = statusToName(status);
+    await AsyncStorage.setItem(REGISTRATION_KEY, JSON.stringify({ timestamp: Date.now(), status: statusName }));
+
     if (
       status === BackgroundFetch.BackgroundFetchStatus.Restricted ||
       status === BackgroundFetch.BackgroundFetchStatus.Denied
     ) {
-      console.log('[BackgroundSync] Not available on this device');
+      console.log('[BackgroundSync] Not available on this device:', statusName);
       return;
     }
 
@@ -63,20 +109,33 @@ export async function registerBackgroundSync(): Promise<void> {
     }
   } catch (e) {
     console.warn('[BackgroundSync] Registration failed:', e);
+    await AsyncStorage.setItem(REGISTRATION_KEY, JSON.stringify({
+      timestamp: Date.now(),
+      status: `error: ${e instanceof Error ? e.message : String(e)}`,
+    })).catch(() => {});
+  }
+}
+
+function statusToName(status: BackgroundFetch.BackgroundFetchStatus | null): string {
+  switch (status) {
+    case BackgroundFetch.BackgroundFetchStatus.Available:  return 'Available';
+    case BackgroundFetch.BackgroundFetchStatus.Restricted: return 'Restricted';
+    case BackgroundFetch.BackgroundFetchStatus.Denied:     return 'Denied';
+    default: return `Unknown (${status})`;
   }
 }
 
 // ── Core Sync Logic ───────────────────────────────────────────────────────────
 
-async function runSync(): Promise<void> {
+async function runSync(): Promise<number> {
   // 1. Load subscribed proposals — bail early if none
   const rawSubs = await AsyncStorage.getItem(SUBS_KEY);
-  if (!rawSubs) return;
+  if (!rawSubs) return 0;
 
   const subs: Record<string, { role: string; title: string; deadline: number }> =
     JSON.parse(rawSubs);
   const subIds = Object.keys(subs);
-  if (subIds.length === 0) return;
+  if (subIds.length === 0) return 0;
 
   // 2. Fetch recent foundation wallet transactions (for vote counts).
   //    Comment detection (step 5) uses Firestore, not this, so a Blockfrost
@@ -158,6 +217,8 @@ async function runSync(): Promise<void> {
   if (cidsChanged) {
     await AsyncStorage.setItem(LAST_CID_KEY, JSON.stringify(lastCids));
   }
+
+  return subIds.length;
 }
 
 // ── Blockfrost Helpers ────────────────────────────────────────────────────────

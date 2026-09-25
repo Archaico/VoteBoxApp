@@ -13,6 +13,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { blockchainService } from '../services/BlockchainService';
 import { QueueIndicator } from '../components/QueueIndicator';
+import { SyncDiagnosticBadge } from '../components/SyncDiagnosticBadge';
 
 interface Proposal {
   id: string;
@@ -203,6 +204,7 @@ export default function ProposalListScreen({
           )}
         </View>
         <View style={styles.headerActions}>
+          <SyncDiagnosticBadge />
           <QueueIndicator />
           <TouchableOpacity style={styles.createButton} onPress={onCreateProposal}>
             <Text style={styles.createButtonText}>+ Create</Text>
