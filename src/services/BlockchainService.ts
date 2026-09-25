@@ -8,7 +8,7 @@
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { treasuryService, TREASURY_CONFIG } from './TreasuryService';
-import { buildSignedTx } from '../lib/CardanoTxBuilder';
+import { buildSignedTx, CardanoTxPaymentOutput } from '../lib/CardanoTxBuilder';
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 
@@ -380,9 +380,30 @@ class BlockchainService {
   // is configured at all. A real attempt that fails for any reason (offline,
   // Blockfrost error, empty wallet) throws instead of silently faking a tx
   // hash — this was previously masking real submission failures as success.
-  private async buildAndSubmitMetadataTx(
+  //
+  // Serialized behind `txMutex` — the naive single-largest-UTxO selection
+  // below has no locking, so within one app session two calls firing close
+  // together (e.g. a founder payout overlapping a proposal's own metadata
+  // tx) could otherwise race for the same input. Cross-device races remain
+  // possible (out of scope — would need a real UTxO-reservation backend).
+  private txMutex: Promise<unknown> = Promise.resolve();
+
+  private buildAndSubmitMetadataTx(
     metadataObj: Record<number, Record<string, string>>,
-    memo: string
+    memo: string,
+    paymentOutputs: CardanoTxPaymentOutput[] = [],
+  ): Promise<string> {
+    const run = () => this.buildAndSubmitMetadataTxAttempt(metadataObj, memo, paymentOutputs);
+    const result = this.txMutex.then(run, run);
+    this.txMutex = result.catch(() => {}); // keep the chain alive even if this attempt fails
+    return result;
+  }
+
+  private async buildAndSubmitMetadataTxAttempt(
+    metadataObj: Record<number, Record<string, string>>,
+    memo: string,
+    paymentOutputs: CardanoTxPaymentOutput[],
+    isRetry = false,
   ): Promise<string> {
     if (!FOUNDATION.PRIVATE_KEY_HEX) {
       console.warn('[BlockchainService] No private key — simulating tx for:', memo, '(dev mode)');
@@ -415,6 +436,7 @@ class BlockchainService {
       minFeeA:       protocolParams.min_fee_a,
       minFeeB:       protocolParams.min_fee_b,
       currentSlot:   latestBlock.slot,
+      paymentOutputs,
     });
 
     const submitResponse = await this.fetchWithTimeout(
@@ -432,6 +454,14 @@ class BlockchainService {
 
     if (!submitResponse.ok) {
       const errText = await submitResponse.text();
+      // A stale/already-spent UTxO reference (race with another tx built off
+      // the same input) surfaces as one of these Blockfrost error names —
+      // re-fetch fresh UTxOs and retry exactly once before giving up.
+      const isUtxoConflict = /BadInputsUTxO|ValueNotConservedUTxO/.test(errText);
+      if (isUtxoConflict && !isRetry) {
+        console.warn('[BlockchainService] UTxO conflict, retrying once with fresh UTxOs:', errText);
+        return this.buildAndSubmitMetadataTxAttempt(metadataObj, memo, paymentOutputs, true);
+      }
       throw new Error(`Blockfrost submit failed: ${submitResponse.status} ${errText}`);
     }
 
