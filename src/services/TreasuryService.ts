@@ -35,7 +35,12 @@ export const TREASURY_CONFIG = {
   // Fee split percentages (must sum to 100)
   FOUNDATION_FEE_PERCENTAGE: 0.30,    // 30% of gas costs → Foundation wallet
   FOUNDER_FEE_PERCENTAGE: 0.13,       // 13% of Foundation Fee → Founder (perpetual, immutable)
-  
+
+  // Cardano's ~1 ADA minimum-UTxO rule means a proposal fee below this floor
+  // could produce an output the network would reject. Also matches VoteBoxApp's
+  // stated design principle ("proposal creation costs 1.2+ ADA").
+  MIN_PROPOSAL_FEE_LOVELACE: 1_200_000,
+
   // Wallet addresses — replace with real addresses before mainnet
   // Foundation wallet will become a multi-sig address (3-of-5 initially)
   FOUNDATION_WALLET: 'addr_test1vqfrwehprdjvxrv3kmnz7axek2jkg4sjcl5fxtwecevh74ge4rmhd',
@@ -64,11 +69,12 @@ export const TREASURY_CONFIG = {
 
 export interface FeeCalculation {
   gasCost: number;           // Raw Cardano transaction cost (lovelace)
-  foundationFee: number;     // 30% of gas cost (lovelace)
+  foundationFee: number;     // Foundation's cut (lovelace) — absorbs the floor top-up, if any
   founderShare: number;      // 13% of foundation fee — routes to founder wallet (immutable, FOUNDER_FEE_PERCENTAGE constant)
   operationsShare: number;   // 87% of foundation fee — routes to foundation wallet
   grandTotal: number;        // Total charged to proposal creator (lovelace)
-  
+  isMinimumApplied: boolean; // true if MIN_PROPOSAL_FEE_LOVELACE floor was needed
+
   // Human-readable
   gasCostADA: string;
   foundationFeeADA: string;
@@ -117,7 +123,7 @@ class TreasuryService {
   // Pure calculation — no side effects. Call this to show users costs upfront.
 
   calculateProposalFees(expectedVoters: number): FeeCalculation {
-    const { MIN_FEE_A, MIN_FEE_B, FOUNDATION_FEE_PERCENTAGE, FOUNDER_FEE_PERCENTAGE, ADA_TO_USD_RATE } = TREASURY_CONFIG;
+    const { MIN_FEE_A, MIN_FEE_B, FOUNDATION_FEE_PERCENTAGE, FOUNDER_FEE_PERCENTAGE, MIN_PROPOSAL_FEE_LOVELACE, ADA_TO_USD_RATE } = TREASURY_CONFIG;
 
     // Cardano transaction costs
     const proposalMetadataSize = 500; // bytes
@@ -130,13 +136,23 @@ class TreasuryService {
     const gasCost = creationFee + totalVotingCost;
 
     // Foundation fee (30% of gas — sustains the platform)
-    const foundationFee = Math.floor(gasCost * FOUNDATION_FEE_PERCENTAGE);
+    let foundationFee = Math.floor(gasCost * FOUNDATION_FEE_PERCENTAGE);
+    let grandTotal = gasCost + foundationFee;
+    let isMinimumApplied = false;
 
-    // Founder share (10% of foundation fee — perpetual, protocol-encoded)
+    // Enforce the platform minimum by topping up the foundation fee — gasCost
+    // stays an honest network-cost estimate, and grandTotal = gasCost +
+    // foundationFee remains true. gasCost alone is always well under the
+    // floor at realistic voter counts, so this top-up is always non-negative.
+    if (grandTotal < MIN_PROPOSAL_FEE_LOVELACE) {
+      foundationFee = MIN_PROPOSAL_FEE_LOVELACE - gasCost;
+      grandTotal = MIN_PROPOSAL_FEE_LOVELACE;
+      isMinimumApplied = true;
+    }
+
+    // Founder share (13% of foundation fee — perpetual, protocol-encoded)
     const founderShare = Math.floor(foundationFee * FOUNDER_FEE_PERCENTAGE);
     const operationsShare = foundationFee - founderShare;
-
-    const grandTotal = gasCost + foundationFee;
 
     const toADA = (lovelace: number) => (lovelace / 1_000_000).toFixed(4);
 
@@ -146,6 +162,7 @@ class TreasuryService {
       founderShare,
       operationsShare,
       grandTotal,
+      isMinimumApplied,
       gasCostADA:        toADA(gasCost),
       foundationFeeADA:  toADA(foundationFee),
       founderShareADA:   toADA(founderShare),
