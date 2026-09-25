@@ -84,7 +84,8 @@ export interface FeeEstimate {
 export interface ProposalCreationResult {
   proposalId: string;
   cid: string;
-  txHash: string;
+  metadataTxHash: string;  // the Foundation's own proposal-anchoring tx (was `txHash`)
+  paymentTxHash: string;   // the creator's verified payment tx — a distinct transaction
   treasuryTxId: string;
   feesCollected: {
     totalADA: string;
@@ -284,8 +285,19 @@ class BlockchainService {
     duration: number;
     expectedVoters?: number;
     attachmentUris?: string[];
+    paymentTxHash: string;
+    requiredLovelace: number;
   }): Promise<ProposalCreationResult> {
     const expectedVoters = proposalData.expectedVoters ?? 10;
+    const paymentTxHash = proposalData.paymentTxHash.trim().toLowerCase();
+
+    // Defensive re-verify — closes the gap between UI-time verification and
+    // actual submission (especially relevant for offline-queued retries that
+    // may run arbitrarily later than when the user first pasted the hash).
+    const verify = await treasuryService.verifyPaymentTransaction(paymentTxHash, proposalData.requiredLovelace);
+    if (!verify.ok) {
+      throw new Error(`Payment verification failed: ${verify.reason ?? 'unknown'}`);
+    }
 
     const attachments: string[] = [];
     for (const uri of (proposalData.attachmentUris ?? []).slice(0, MAX_ATTACHMENTS)) {
@@ -311,35 +323,39 @@ class BlockchainService {
     const cid = await this.uploadToIPFS(proposal);
     console.log('[BlockchainService] Uploaded to IPFS:', cid);
 
-    const txHash = await this.buildAndSubmitMetadataTx(
+    const metadataTxHash = await this.buildAndSubmitMetadataTx(
       {
         [METADATA_LABELS.PROPOSAL]: {
           type:       'proposal',
           cid,
           proposalId: proposal.id!,
-          version:    '1.0',
+          version:    '1.1',
           platform:   'VoteBoxApp',
+          paymentTxHash, // lets verifyPaymentTransaction's global replay check scan this
         },
       },
       `VoteBoxApp proposal: ${proposal.id}`
     );
-    console.log('[BlockchainService] Cardano tx:', txHash);
+    console.log('[BlockchainService] Cardano tx:', metadataTxHash);
 
     const treasuryTx = await treasuryService.recordProposalFeeCollection(
       proposal.id!,
       proposalData.creator,
       expectedVoters,
-      txHash
+      paymentTxHash,
+      verify.paidLovelace!,
+      metadataTxHash,
     );
     const fees = treasuryService.calculateProposalFees(expectedVoters);
 
-    const fullProposal = { ...proposal, cid, txHash } as Proposal;
+    const fullProposal = { ...proposal, cid, txHash: metadataTxHash } as Proposal;
     await this.cacheNewProposal(fullProposal);
 
     return {
       proposalId: proposal.id!,
       cid,
-      txHash,
+      metadataTxHash,
+      paymentTxHash,
       treasuryTxId: treasuryTx.id,
       feesCollected: {
         totalADA:        fees.grandTotalADA,

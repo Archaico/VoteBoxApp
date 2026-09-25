@@ -39,6 +39,8 @@ export interface QueuedProposal {
   duration: number;
   expectedVoters: number;
   attachmentUris?: string[];
+  paymentTxHash: string;
+  requiredLovelace: number;
   timestamp: number;
   attempts: number;
   lastAttempt?: number;
@@ -55,6 +57,18 @@ type QueuedItem = QueuedVote | QueuedProposal;
 export function isNetworkError(error: unknown): boolean {
   const message = error instanceof Error ? error.message : String(error ?? '');
   return /network|fetch|abort|timeout/i.test(message);
+}
+
+// BlockchainService.createProposal() throws "Payment verification failed:
+// <reason>" for both retriable (network_error — already matches
+// isNetworkError via the substring "network") and terminal reasons
+// (wrong_recipient, insufficient_amount, already_used, malformed_hash,
+// not_found_or_pending). Retrying a terminal one won't ever succeed — the
+// payment tx itself isn't going to change — so these should be removed from
+// the queue immediately instead of burning all MAX_ATTEMPTS retries.
+export function isTerminalPaymentError(error: unknown): boolean {
+  const message = error instanceof Error ? error.message : String(error ?? '');
+  return message.startsWith('Payment verification failed:') && !isNetworkError(error);
 }
 
 interface QueueStatus {
@@ -133,6 +147,8 @@ class OfflineQueueService {
     duration: number;
     expectedVoters: number;
     attachmentUris?: string[];
+    paymentTxHash: string;
+    requiredLovelace: number;
   }): Promise<void> {
     const queuedProposal: QueuedProposal = {
       id: `proposal_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
@@ -142,6 +158,8 @@ class OfflineQueueService {
       duration: proposalData.duration,
       expectedVoters: proposalData.expectedVoters,
       attachmentUris: proposalData.attachmentUris,
+      paymentTxHash: proposalData.paymentTxHash,
+      requiredLovelace: proposalData.requiredLovelace,
       timestamp: Date.now(),
       attempts: 0,
     };
@@ -190,7 +208,17 @@ class OfflineQueueService {
           toastService.success(`✅ ${type} submitted successfully`);
         } catch (error) {
           console.error('[OfflineQueue] Failed to process item:', error);
-          await this.updateItemAttempt(item, error as Error);
+
+          if (!this.isVote(item) && isTerminalPaymentError(error)) {
+            // Retrying can't fix a payment that's already been proven wrong/
+            // reused — remove immediately rather than burning MAX_ATTEMPTS.
+            await this.removeFromQueue(item.id);
+            const reason = (error instanceof Error ? error.message : String(error))
+              .replace('Payment verification failed: ', '');
+            toastService.error(`❌ Proposal removed — payment could not be verified (${reason})`);
+          } else {
+            await this.updateItemAttempt(item, error as Error);
+          }
         }
 
         // Small delay between attempts
@@ -218,6 +246,8 @@ class OfflineQueueService {
         duration: item.duration,
         expectedVoters: item.expectedVoters,
         attachmentUris: item.attachmentUris,
+        paymentTxHash: item.paymentTxHash,
+        requiredLovelace: item.requiredLovelace,
       });
     }
   }

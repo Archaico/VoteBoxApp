@@ -18,7 +18,8 @@ import * as Clipboard from 'expo-clipboard';
 import * as Haptics from 'expo-haptics';
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
-import { blockchainService, FeeEstimate } from '../services/BlockchainService';
+import { blockchainService } from '../services/BlockchainService';
+import { treasuryService, TREASURY_CONFIG, FeeCalculation } from '../services/TreasuryService';
 import { notificationService } from '../services/NotificationService';
 import { shareService } from '../services/ShareService';
 import { offlineQueueService, isNetworkError } from '../services/OfflineQueueService';
@@ -40,8 +41,6 @@ const VOTER_PRESETS = [
   { label: '1M', value: 1000000 },
 ];
 
-const FOUNDATION_FEE_PERCENTAGE = 0.30;
-const ADA_TO_USD_RATE = 0.35;
 const MAX_ATTACHMENTS = 2;
 const ATTACHMENT_MAX_DIMENSION = 1280;
 const ATTACHMENT_COMPRESSION = 0.7;
@@ -85,6 +84,20 @@ const CARDANO_WALLETS = [
 
 type WalletFlowState = 'select' | 'no-wallet-guide' | 'manual-entry' | 'connected';
 
+// Separate from WalletFlowState — that answers "do we have an address",
+// this answers "has that address's payment been proved". Conflating them
+// would make walletFlow === 'connected' ambiguous.
+type PaymentFlowState = 'not-started' | 'awaiting-payment' | 'verifying' | 'verify-failed';
+
+const VERIFY_FAILURE_MESSAGES: Record<string, string> = {
+  malformed_hash: 'That doesn\'t look like a valid transaction hash. It should be 64 hex characters — check what you pasted.',
+  not_found_or_pending: 'Not found on-chain yet. If you just sent it, wait 30-60 seconds for confirmation and try again.',
+  wrong_recipient: 'This transaction doesn\'t pay the Foundation wallet address shown above.',
+  insufficient_amount: 'The amount sent is less than required — see the amount above.',
+  already_used: 'This transaction has already been used for another proposal.',
+  network_error: 'Could not reach the network to verify — check your connection and try again.',
+};
+
 export default function CreateProposalScreen({
   onBack,
   onProposalCreated,
@@ -101,19 +114,18 @@ export default function CreateProposalScreen({
   const [uploadStatus, setUploadStatus] = useState('');
   const [attachments, setAttachments] = useState<string[]>([]);
   const [isPickingAttachment, setIsPickingAttachment] = useState(false);
-  const [feeEstimate, setFeeEstimate] = useState<{
-    creation: FeeEstimate;
-    voting: FeeEstimate;
-    gasCosts: number;
-    foundationFee: number;
-    total: number;
-  } | null>(null);
-  const [isEstimatingFee, setIsEstimatingFee] = useState(false);
+  const [feeEstimate, setFeeEstimate] = useState<FeeCalculation | null>(null);
 
   // Wallet connection flow state
   const [walletFlow, setWalletFlow] = useState<WalletFlowState>('select');
   const [selectedWallet, setSelectedWallet] = useState<string | null>(null);
   const [showManualAfterWallet, setShowManualAfterWallet] = useState(false);
+
+  // Payment flow state — see PaymentFlowState comment above
+  const [paymentFlow, setPaymentFlow] = useState<PaymentFlowState>('not-started');
+  const [lockedFees, setLockedFees] = useState<FeeCalculation | null>(null);
+  const [paymentTxHashInput, setPaymentTxHashInput] = useState('');
+  const [paymentVerifyError, setPaymentVerifyError] = useState<string | null>(null);
 
   // ─── Wallet Flow Handlers ────────────────────────────────────────────
   // Real WalletConnect integration exists (see WalletConnectService.ts,
@@ -128,7 +140,7 @@ export default function CreateProposalScreen({
     setSelectedWallet(wallet.id);
     Alert.alert(
       `Open ${wallet.name}?`,
-      `This will open the ${wallet.name} wallet app (or take you to download it).\n\nAfter connecting, copy your Cardano address (starts with addr1...) and come back here to paste it.`,
+      `This will open the ${wallet.name} wallet app (or take you to download it).\n\nAfter connecting, copy your Cardano address (starts with addr_test1...) and come back here to paste it.`,
       [
         { text: 'Cancel', style: 'cancel', onPress: () => setSelectedWallet(null) },
         {
@@ -150,10 +162,14 @@ export default function CreateProposalScreen({
 
   const handleConfirmManualAddress = () => {
     const cleaned = manualAddressInput.trim();
-    if (!cleaned.startsWith('addr1') || cleaned.length < 50) {
+    // The app runs entirely on Cardano preprod testnet (addr_test1...), not
+    // mainnet (addr1...) — this only ever checked for the mainnet prefix,
+    // which silently rejected every real testnet address a user could paste.
+    const hasValidPrefix = cleaned.startsWith('addr1') || cleaned.startsWith('addr_test1');
+    if (!hasValidPrefix || cleaned.length < 50) {
       Alert.alert(
         'Invalid Address',
-        'Please enter a valid Cardano address. It should start with "addr1" and be at least 50 characters long.'
+        'Please enter a valid Cardano address. It should start with "addr_test1" (testnet) and be at least 50 characters long.'
       );
       return;
     }
@@ -247,7 +263,7 @@ export default function CreateProposalScreen({
     }
   };
 
-  const handleEstimateFee = async () => {
+  const handleEstimateFee = () => {
     if (!title.trim() || !description.trim() || !walletAddress.trim()) {
       Alert.alert('Missing Information', 'Please fill in all required fields first, including your wallet address');
       return;
@@ -257,75 +273,30 @@ export default function CreateProposalScreen({
       return;
     }
 
-    setIsEstimatingFee(true);
-    try {
-      const minFeeA = 44;
-      const minFeeB = 155381;
-      const proposalMetadataSize = 500;
-      const creationFee = minFeeB + (proposalMetadataSize * minFeeA);
-      const batchCount = Math.ceil(expectedVoters / 100);
-      const batchMetadataSize = 300;
-      const votingFeePerBatch = minFeeB + (batchMetadataSize * minFeeA);
-      const totalVotingCost = batchCount * votingFeePerBatch;
-      const totalGasCosts = creationFee + totalVotingCost;
-      const foundationFee = Math.floor(totalGasCosts * FOUNDATION_FEE_PERCENTAGE);
-      const grandTotal = totalGasCosts + foundationFee;
+    const fees = treasuryService.calculateProposalFees(expectedVoters);
+    setFeeEstimate(fees);
 
-      setFeeEstimate({
-        creation: {
-          fee: creationFee.toString(),
-          total: creationFee.toString(),
-          breakdown: {
-            basicFee: minFeeB.toString(),
-            metadataFee: (proposalMetadataSize * minFeeA).toString(),
-          },
-        },
-        voting: {
-          fee: totalVotingCost.toString(),
-          total: totalVotingCost.toString(),
-          breakdown: {
-            basicFee: (minFeeB * batchCount).toString(),
-            metadataFee: (batchMetadataSize * minFeeA * batchCount).toString(),
-          },
-        },
-        gasCosts: totalGasCosts,
-        foundationFee,
-        total: grandTotal,
-      });
+    const batchCount = Math.ceil(expectedVoters / 100);
+    const batchWord = batchCount > 1 ? 'batches' : 'batch';
+    const message = [
+      'Expected voters: ' + expectedVoters.toLocaleString(),
+      '',
+      'Gas costs (' + batchCount + ' ' + batchWord + '): ' + fees.gasCostADA + ' ADA',
+      'Foundation fee: ' + fees.foundationFeeADA + ' ADA',
+      '---',
+      'TOTAL: ' + fees.grandTotalADA + ' ADA (~$' + fees.grandTotalUSD + ' USD)',
+      fees.isMinimumApplied ? '(platform minimum of 1.2 ADA applied)' : '',
+      '',
+      'Foundation fee supports VoteBoxApp open-source development.',
+      'Voting is FREE for all participants!',
+    ].filter(Boolean).join('\n');
 
-      const creationADA = (creationFee / 1000000).toFixed(2);
-      const votingADA = (totalVotingCost / 1000000).toFixed(2);
-      const gasADA = (totalGasCosts / 1000000).toFixed(2);
-      const foundationADA = (foundationFee / 1000000).toFixed(2);
-      const totalADA = (grandTotal / 1000000).toFixed(2);
-      const totalUSD = (parseFloat(totalADA) * ADA_TO_USD_RATE).toFixed(2);
-      const batchWord = batchCount > 1 ? 'batches' : 'batch';
-
-      const message = [
-        'Expected voters: ' + expectedVoters.toLocaleString(),
-        '',
-        'Proposal creation: ' + creationADA + ' ADA',
-        'Voting (' + batchCount + ' ' + batchWord + '): ' + votingADA + ' ADA',
-        '---',
-        'Gas costs: ' + gasADA + ' ADA',
-        'Foundation fee (30%): ' + foundationADA + ' ADA',
-        '---',
-        'TOTAL: ' + totalADA + ' ADA (~$' + totalUSD + ' USD)',
-        '',
-        'Foundation fee supports VoteBoxApp open-source development.',
-        'Voting is FREE for all participants!',
-      ].join('\n');
-
-      Alert.alert('Complete Fee Breakdown', message, [{ text: 'OK' }]);
-    } catch (error) {
-      const errorMsg = error instanceof Error ? error.message : String(error);
-      Alert.alert('Estimation Failed', 'Error: ' + errorMsg);
-    } finally {
-      setIsEstimatingFee(false);
-    }
+    Alert.alert('Complete Fee Breakdown', message, [{ text: 'OK' }]);
   };
 
-  const handlePublish = async () => {
+  // Step 1: validate the form, freeze a fee quote, reveal the payment card.
+  // No network calls yet.
+  const handleBeginPublish = () => {
     if (!title.trim()) {
       Alert.alert('Missing Title', 'Please enter a proposal title');
       return;
@@ -347,6 +318,50 @@ export default function CreateProposalScreen({
       return;
     }
 
+    const fees = treasuryService.calculateProposalFees(expectedVoters);
+    setLockedFees(fees);
+    setPaymentTxHashInput('');
+    setPaymentVerifyError(null);
+    setPaymentFlow('awaiting-payment');
+  };
+
+  // Step 2: user pastes their payment's tx hash, we verify it on-chain.
+  const handleVerifyAndPublish = async () => {
+    if (!lockedFees) return;
+    setPaymentFlow('verifying');
+    setPaymentVerifyError(null);
+
+    const result = await treasuryService.verifyPaymentTransaction(paymentTxHashInput, lockedFees.grandTotal);
+    if (!result.ok) {
+      setPaymentFlow('verify-failed');
+      setPaymentVerifyError(VERIFY_FAILURE_MESSAGES[result.reason ?? 'network_error'] ?? 'Verification failed — please try again.');
+      return;
+    }
+
+    // Soft guard against likely unit-confusion (e.g. pasting a tx sized for
+    // 1000 ADA instead of 1.2) — informational only, doesn't block.
+    if (result.paidLovelace! > lockedFees.grandTotal * 10) {
+      const proceed = await new Promise<boolean>(resolve => {
+        Alert.alert(
+          'Amount much higher than required',
+          `You sent ${(result.paidLovelace! / 1_000_000).toFixed(4)} ADA, but only ${lockedFees.grandTotalADA} ADA was required. This can't be refunded — continue anyway?`,
+          [
+            { text: 'Cancel', style: 'cancel', onPress: () => resolve(false) },
+            { text: 'Continue', onPress: () => resolve(true) },
+          ]
+        );
+      });
+      if (!proceed) {
+        setPaymentFlow('awaiting-payment');
+        return;
+      }
+    }
+
+    await executePublish(paymentTxHashInput.trim().toLowerCase(), lockedFees.grandTotal);
+  };
+
+  // Step 3: the actual publish, now given an already-verified payment.
+  const executePublish = async (paymentTxHash: string, requiredLovelace: number) => {
     setIsSubmitting(true);
     setUploadStatus('Initializing blockchain service...');
 
@@ -362,11 +377,13 @@ export default function CreateProposalScreen({
         duration: parseInt(duration),
         expectedVoters,
         attachmentUris: attachments,
+        paymentTxHash,
+        requiredLovelace,
       });
 
       setUploadStatus('Recording on blockchain...');
 
-      if (!result || !result.cid || !result.txHash) {
+      if (!result || !result.cid || !result.metadataTxHash) {
         throw new Error('Incomplete response from blockchain service');
       }
 
@@ -375,33 +392,25 @@ export default function CreateProposalScreen({
       notificationService.subscribeToProposal(result.proposalId, 'creator', proposalDeadline, title.trim()).catch(() => {});
       notificationService.notifyProposalLive(result.proposalId, title.trim()).catch(() => {});
 
-      const minFeeA = 44;
-      const minFeeB = 155381;
-      const proposalMetadataSize = 500;
-      const gasCost = minFeeB + (proposalMetadataSize * minFeeA);
-      const foundationFee = Math.floor(gasCost * FOUNDATION_FEE_PERCENTAGE);
-      const totalCost = gasCost + foundationFee;
-      const totalADA = (totalCost / 1000000).toFixed(2);
-      const totalUSD = (parseFloat(totalADA) * ADA_TO_USD_RATE).toFixed(2);
-      const batchCount = Math.ceil(expectedVoters / 100);
-      const batchWord = batchCount > 1 ? 'batches' : 'batch';
+      const fees = treasuryService.calculateProposalFees(expectedVoters);
 
       setIsSubmitting(false);
       setUploadStatus('');
+      setPaymentFlow('not-started');
+      setLockedFees(null);
+      setPaymentTxHashInput('');
 
       const successMessage = [
         'Your proposal is now live!',
         '',
         'IPFS: ' + result.cid.slice(0, 24) + '...',
-        'TX:   ' + result.txHash.slice(0, 24) + '...',
+        'TX:   ' + result.metadataTxHash.slice(0, 24) + '...',
         '',
         'Verify on preprod.cardanoscan.io',
         '',
-        'Total: ' + totalADA + ' ADA (~$' + totalUSD + ' USD)',
-        '   (includes 30% foundation fee)',
+        'Total paid: ' + fees.grandTotalADA + ' ADA (~$' + fees.grandTotalUSD + ' USD)',
         '',
         'Configured for ' + expectedVoters.toLocaleString() + ' voters',
-        'Gas-optimized with ' + batchCount + ' ' + batchWord,
         '',
         'Voting is FREE for all participants!',
       ].join('\n');
@@ -410,7 +419,7 @@ export default function CreateProposalScreen({
         {
           text: '📋 Copy TX Hash',
           onPress: async () => {
-            await Clipboard.setStringAsync(result.txHash);
+            await Clipboard.setStringAsync(result.metadataTxHash);
             onProposalCreated();
           },
         },
@@ -445,18 +454,117 @@ export default function CreateProposalScreen({
           duration: parseInt(duration),
           expectedVoters,
           attachmentUris: attachments,
+          paymentTxHash,
+          requiredLovelace,
         });
         toastService.warning('⏳ No connection — proposal queued, will publish when back online');
+        setPaymentFlow('not-started');
+        setLockedFees(null);
         return;
       }
 
+      // Terminal payment failures (wrong recipient/insufficient/already used)
+      // surface here via BlockchainService's defensive re-verify — don't queue
+      // those, retrying later won't fix a bad payment. Send the user back to
+      // the payment step so they can paste a different hash.
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      setPaymentFlow('verify-failed');
+      setPaymentVerifyError(errorMessage);
       Alert.alert(
         'Publication Failed',
         errorMessage + '\n\nCheck console for detailed logs.',
         [{ text: 'OK' }]
       );
     }
+  };
+
+  const handleEditProposal = () => {
+    setPaymentFlow('not-started');
+    setLockedFees(null);
+    setPaymentTxHashInput('');
+    setPaymentVerifyError(null);
+  };
+
+  // ─── Payment Section Renderer ───────────────────────────────────────
+
+  const renderPaymentSection = () => {
+    if (paymentFlow === 'not-started' || !lockedFees) return null;
+
+    return (
+      <View style={styles.paymentBox}>
+        <Text style={styles.paymentTitle}>Send Payment to Publish</Text>
+        <Text style={styles.paymentInstructions}>
+          Send exactly this amount from your own wallet app, then paste the transaction hash below.
+        </Text>
+
+        <View style={styles.paymentField}>
+          <Text style={styles.paymentFieldLabel}>Send to</Text>
+          <View style={styles.paymentCopyRow}>
+            <Text style={styles.paymentFieldValue} numberOfLines={1}>
+              {truncateAddress(TREASURY_CONFIG.FOUNDATION_WALLET)}
+            </Text>
+            <TouchableOpacity
+              style={styles.paymentCopyBtn}
+              onPress={() => Clipboard.setStringAsync(TREASURY_CONFIG.FOUNDATION_WALLET)}
+            >
+              <Text style={styles.paymentCopyBtnText}>Copy</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <View style={styles.paymentField}>
+          <Text style={styles.paymentFieldLabel}>Amount</Text>
+          <View style={styles.paymentCopyRow}>
+            <Text style={styles.paymentFieldValue}>{lockedFees.grandTotalADA} ADA</Text>
+            <TouchableOpacity
+              style={styles.paymentCopyBtn}
+              onPress={() => Clipboard.setStringAsync(lockedFees.grandTotalADA)}
+            >
+              <Text style={styles.paymentCopyBtnText}>Copy</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <Text style={styles.label}>Transaction Hash</Text>
+        <TextInput
+          style={styles.walletManualInput}
+          placeholder="Paste the tx hash from your wallet app"
+          placeholderTextColor="#9ca3af"
+          value={paymentTxHashInput}
+          onChangeText={text => { setPaymentTxHashInput(text); setPaymentVerifyError(null); }}
+          autoCapitalize="none"
+          autoCorrect={false}
+          multiline={false}
+          editable={paymentFlow !== 'verifying'}
+        />
+
+        {paymentVerifyError && (
+          <Text style={styles.paymentErrorText}>{paymentVerifyError}</Text>
+        )}
+
+        <TouchableOpacity
+          style={[
+            styles.paymentVerifyBtn,
+            (paymentFlow === 'verifying' || !paymentTxHashInput.trim()) && styles.paymentVerifyBtnDisabled,
+          ]}
+          onPress={handleVerifyAndPublish}
+          disabled={paymentFlow === 'verifying' || !paymentTxHashInput.trim()}
+        >
+          {paymentFlow === 'verifying' ? (
+            <>
+              <ActivityIndicator size="small" color="white" />
+              <Text style={styles.paymentVerifyBtnText}>Verifying payment...</Text>
+            </>
+          ) : (
+            <Text style={styles.paymentVerifyBtnText}>Verify & Publish</Text>
+          )}
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={handleEditProposal} disabled={paymentFlow === 'verifying' || isSubmitting}>
+          <Text style={styles.paymentEditLink}>← Edit Proposal</Text>
+        </TouchableOpacity>
+      </View>
+    );
   };
 
   // ─── Wallet Section Renderers ────────────────────────────────────────
@@ -487,14 +595,14 @@ export default function CreateProposalScreen({
           {showManualAfterWallet && (
             <View style={styles.walletReturnHint}>
               <Text style={styles.walletReturnHintText}>
-                👋 Welcome back! Open your wallet app, copy your address (addr1...), and paste it below.
+                👋 Welcome back! Open your wallet app, copy your address (addr_test1...), and paste it below.
               </Text>
             </View>
           )}
           <Text style={styles.label}>Your Cardano Address</Text>
           <TextInput
             style={styles.walletManualInput}
-            placeholder="addr1..."
+            placeholder="addr_test1..."
             placeholderTextColor="#9ca3af"
             value={manualAddressInput}
             onChangeText={setManualAddressInput}
@@ -504,7 +612,7 @@ export default function CreateProposalScreen({
             multiline={false}
           />
           <Text style={styles.helperText}>
-            Starts with "addr1" · Found in your wallet under "Receive" or "Address"
+            Starts with "addr_test1" · Found in your wallet under "Receive" or "Address"
           </Text>
           <View style={styles.walletManualButtons}>
             <TouchableOpacity
@@ -782,7 +890,7 @@ export default function CreateProposalScreen({
               onChangeText={setDuration}
               keyboardType="number-pad"
               maxLength={3}
-              editable={!isSubmitting}
+              editable={!isSubmitting && paymentFlow === 'not-started'}
             />
             <Text style={styles.helperText}>Recommended: 7–14 days</Text>
           </View>
@@ -802,7 +910,7 @@ export default function CreateProposalScreen({
                     expectedVoters === preset.value && styles.presetButtonSelected,
                   ]}
                   onPress={() => handleVoterPresetSelect(preset.value)}
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || paymentFlow !== 'not-started'}
                 >
                   <Text
                     style={[
@@ -822,7 +930,7 @@ export default function CreateProposalScreen({
               value={customVoters}
               onChangeText={handleCustomVotersChange}
               keyboardType="number-pad"
-              editable={!isSubmitting}
+              editable={!isSubmitting && paymentFlow === 'not-started'}
             />
             <Text style={styles.helperText}>
               Selected: {expectedVoters.toLocaleString()} voters
@@ -831,18 +939,11 @@ export default function CreateProposalScreen({
 
           {/* ── FEE ESTIMATOR ── */}
           <TouchableOpacity
-            style={[styles.estimateButton, isEstimatingFee && styles.estimateButtonLoading]}
+            style={styles.estimateButton}
             onPress={handleEstimateFee}
-            disabled={isSubmitting || isEstimatingFee}
+            disabled={isSubmitting || paymentFlow !== 'not-started'}
           >
-            {isEstimatingFee ? (
-              <>
-                <ActivityIndicator size="small" color="#15803d" />
-                <Text style={styles.estimateButtonText}>Calculating...</Text>
-              </>
-            ) : (
-              <Text style={styles.estimateButtonText}>Calculate Total Cost</Text>
-            )}
+            <Text style={styles.estimateButtonText}>Calculate Total Cost</Text>
           </TouchableOpacity>
 
           {/* ── FEE BREAKDOWN ── */}
@@ -850,31 +951,34 @@ export default function CreateProposalScreen({
             <View style={styles.feeBox}>
               <Text style={styles.feeTitle}>Total Cost Breakdown</Text>
               <Text style={styles.feeAmount}>
-                {(feeEstimate.total / 1000000).toFixed(2)} ADA
+                {feeEstimate.grandTotalADA} ADA
               </Text>
               <Text style={styles.feeAmountUSD}>
-                (${((feeEstimate.total / 1000000) * ADA_TO_USD_RATE).toFixed(2)} USD)
+                (${feeEstimate.grandTotalUSD} USD)
               </Text>
               <View style={styles.feeBreakdownContainer}>
                 <View style={styles.feeBreakdownRow}>
                   <Text style={styles.feeBreakdownLabel}>Gas costs:</Text>
                   <Text style={styles.feeBreakdownValue}>
-                    {(feeEstimate.gasCosts / 1000000).toFixed(2)} ADA
+                    {feeEstimate.gasCostADA} ADA
                   </Text>
                 </View>
                 <View style={[styles.feeBreakdownRow, { paddingTop: 8, borderTopWidth: 1, borderTopColor: '#fde047' }]}>
-                  <Text style={styles.feeBreakdownLabel}>Foundation fee (30%):</Text>
+                  <Text style={styles.feeBreakdownLabel}>Foundation fee:</Text>
                   <Text style={styles.feeBreakdownValue}>
-                    {(feeEstimate.foundationFee / 1000000).toFixed(2)} ADA
+                    {feeEstimate.foundationFeeADA} ADA
                   </Text>
                 </View>
                 <View style={[styles.feeBreakdownRow, { marginTop: 8, paddingTop: 8, borderTopWidth: 2, borderTopColor: '#fbbf24' }]}>
                   <Text style={[styles.feeBreakdownLabel, { fontWeight: 'bold' }]}>Total:</Text>
                   <Text style={[styles.feeBreakdownValue, { fontWeight: 'bold', fontSize: 14 }]}>
-                    {(feeEstimate.total / 1000000).toFixed(2)} ADA
+                    {feeEstimate.grandTotalADA} ADA
                   </Text>
                 </View>
               </View>
+              {feeEstimate.isMinimumApplied && (
+                <Text style={styles.feeMinimumNote}>Platform minimum of 1.2 ADA applied</Text>
+              )}
               <View style={styles.foundationInfoBox}>
                 <Text style={styles.foundationInfoText}>
                   Foundation fee supports VoteBoxApp open-source development
@@ -882,6 +986,9 @@ export default function CreateProposalScreen({
               </View>
             </View>
           )}
+
+          {/* ── PAYMENT ── */}
+          {renderPaymentSection()}
 
           {/* ── BATCH INFO ── */}
           <View style={styles.optimizationBox}>
@@ -898,24 +1005,22 @@ export default function CreateProposalScreen({
       </ScrollView>
 
       {/* ── PUBLISH BUTTON ── */}
-      <View style={styles.footer}>
-        <TouchableOpacity
-          style={[
-            styles.publishButton,
-            (isSubmitting || walletFlow !== 'connected') && styles.publishButtonDisabled,
-          ]}
-          onPress={handlePublish}
-          disabled={isSubmitting || walletFlow !== 'connected'}
-        >
-          <Text style={styles.publishButtonText}>
-            {isSubmitting
-              ? 'Publishing...'
-              : walletFlow !== 'connected'
-              ? 'Connect Wallet to Publish'
-              : 'Publish Proposal'}
-          </Text>
-        </TouchableOpacity>
-      </View>
+      {paymentFlow === 'not-started' && (
+        <View style={styles.footer}>
+          <TouchableOpacity
+            style={[
+              styles.publishButton,
+              (isSubmitting || walletFlow !== 'connected') && styles.publishButtonDisabled,
+            ]}
+            onPress={handleBeginPublish}
+            disabled={isSubmitting || walletFlow !== 'connected'}
+          >
+            <Text style={styles.publishButtonText}>
+              {walletFlow !== 'connected' ? 'Connect Wallet to Publish' : 'Continue to Payment'}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </KeyboardAvoidingView>
   );
 }
@@ -1186,6 +1291,36 @@ const styles = StyleSheet.create({
     backgroundColor: '#dbeafe', padding: 10, borderRadius: 6, borderWidth: 1, borderColor: '#93c5fd',
   },
   foundationInfoText: { fontSize: 11, color: '#1e40af', textAlign: 'center', lineHeight: 16 },
+  feeMinimumNote: { fontSize: 11, color: '#92400e', textAlign: 'center', fontStyle: 'italic', marginBottom: 8 },
+
+  // ── Payment Section ──
+  paymentBox: {
+    backgroundColor: '#eff6ff', padding: 16, borderRadius: 12,
+    borderWidth: 2, borderColor: '#93c5fd', marginBottom: 16,
+  },
+  paymentTitle: { fontSize: 15, fontWeight: '700', color: '#1e40af', marginBottom: 6, textAlign: 'center' },
+  paymentInstructions: { fontSize: 12.5, color: '#1e3a8a', lineHeight: 18, marginBottom: 14, textAlign: 'center' },
+  paymentField: { marginBottom: 12 },
+  paymentFieldLabel: { fontSize: 11, fontWeight: '600', color: '#1e40af', marginBottom: 4, textTransform: 'uppercase', letterSpacing: 0.3 },
+  paymentCopyRow: {
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+    backgroundColor: 'white', borderRadius: 8, borderWidth: 1, borderColor: '#bfdbfe',
+    paddingVertical: 10, paddingHorizontal: 12,
+  },
+  paymentFieldValue: {
+    fontSize: 14, fontWeight: '600', color: '#111827', flex: 1, marginRight: 8,
+    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+  },
+  paymentCopyBtn: { paddingHorizontal: 10, paddingVertical: 5, backgroundColor: '#dbeafe', borderRadius: 6 },
+  paymentCopyBtnText: { fontSize: 12, fontWeight: '700', color: '#1e40af' },
+  paymentErrorText: { fontSize: 12.5, color: '#dc2626', marginTop: 8, marginBottom: 4, lineHeight: 18 },
+  paymentVerifyBtn: {
+    flexDirection: 'row', backgroundColor: '#1d4ed8', padding: 14, borderRadius: 10,
+    alignItems: 'center', justifyContent: 'center', marginTop: 14, gap: 8,
+  },
+  paymentVerifyBtnDisabled: { backgroundColor: '#9ca3af' },
+  paymentVerifyBtnText: { fontSize: 15, color: 'white', fontWeight: '700' },
+  paymentEditLink: { fontSize: 13, color: '#6b7280', textAlign: 'center', marginTop: 14, fontWeight: '500' },
   optimizationBox: {
     marginTop: 8, padding: 14, backgroundColor: '#f0fdf4',
     borderRadius: 8, borderWidth: 1, borderColor: '#bbf7d0',

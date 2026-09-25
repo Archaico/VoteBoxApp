@@ -45,17 +45,17 @@ export const TREASURY_CONFIG = {
   // Foundation wallet will become a multi-sig address (3-of-5 initially)
   FOUNDATION_WALLET: 'addr_test1vqfrwehprdjvxrv3kmnz7axek2jkg4sjcl5fxtwecevh74ge4rmhd',
   FOUNDER_WALLET:    'addr_test1qz8zqndgltd6v6ke2yyx4m2slfv6y8uzla5n2vszgl2n3xflp87cuc8wy3r59x3zdgw76japc2fuz7ulhmag4cs57tds8lzen3',
-  
+
   // Cardano protocol parameters (testnet)
   MIN_FEE_A: 44,         // lovelace per byte
   MIN_FEE_B: 155381,     // base fee in lovelace
   ADA_TO_USD_RATE: 0.35, // updated manually until live price feed integrated
-  
+
   // Blockfrost API — use environment variable in production
   // Replace with your real Blockfrost project ID
   BLOCKFROST_API_URL: 'https://cardano-preprod.blockfrost.io/api/v0',
   BLOCKFROST_PROJECT_ID: process.env.EXPO_PUBLIC_BLOCKFROST_PROJECT_ID ?? '',
-  
+
   // Treasury storage keys
   STORAGE_KEYS: {
     TRANSACTION_LOG:   '@treasury_transaction_log',
@@ -93,7 +93,11 @@ export interface TreasuryTransaction {
   foundationAmount: number; // lovelace
   timestamp: number;
   status: 'pending' | 'confirmed' | 'failed';
+  /** @deprecated pre-verified-payment field; kept only so previously-stored records still parse */
   blockfrostTxHash?: string;
+  paymentTxHash?: string;      // the creator's own verified payment tx (proposal_fee entries)
+  metadataTxHash?: string;     // the Foundation's proposal/vote/payout-anchoring tx
+  paidLovelace?: number;       // actual verified amount paid (may exceed `amount` on overpayment)
   notes?: string;
 }
 
@@ -105,11 +109,24 @@ export interface TreasurySummary {
   lastUpdated: number;
 }
 
+export interface PaymentVerificationResult {
+  ok: boolean;
+  paidLovelace?: number;
+  reason?:
+    | 'malformed_hash'
+    | 'not_found_or_pending'
+    | 'wrong_recipient'
+    | 'insufficient_amount'
+    | 'already_used'
+    | 'network_error';
+  detail?: string;
+}
+
 // ─── Treasury Service ─────────────────────────────────────────────────────────
 
 class TreasuryService {
   private static instance: TreasuryService;
-  
+
   private constructor() {}
 
   static getInstance(): TreasuryService {
@@ -120,7 +137,9 @@ class TreasuryService {
   }
 
   // ── Fee Calculation ─────────────────────────────────────────────────────────
-  // Pure calculation — no side effects. Call this to show users costs upfront.
+  // Pure calculation — no side effects. Call this to show users costs upfront,
+  // AND to determine the exact amount payment verification checks against.
+  // Never duplicate this math elsewhere (see CreateProposalScreen.tsx history).
 
   calculateProposalFees(expectedVoters: number): FeeCalculation {
     const { MIN_FEE_A, MIN_FEE_B, FOUNDATION_FEE_PERCENTAGE, FOUNDER_FEE_PERCENTAGE, MIN_PROPOSAL_FEE_LOVELACE, ADA_TO_USD_RATE } = TREASURY_CONFIG;
@@ -172,14 +191,16 @@ class TreasuryService {
   }
 
   // ── Fee Collection ──────────────────────────────────────────────────────────
-  // Called when a proposal is successfully created.
-  // Records the transaction and triggers fee distribution.
+  // Called after a creator's payment has been verified on-chain (see
+  // verifyPaymentTransaction) and the proposal's own metadata tx has submitted.
 
   async recordProposalFeeCollection(
     proposalId: string,
     creatorAddress: string,
     expectedVoters: number,
-    blockfrostTxHash?: string
+    paymentTxHash: string,
+    paidLovelace: number,
+    metadataTxHash: string,
   ): Promise<TreasuryTransaction> {
     const fees = this.calculateProposalFees(expectedVoters);
 
@@ -192,8 +213,10 @@ class TreasuryService {
       founderAmount: fees.founderShare,
       foundationAmount: fees.operationsShare,
       timestamp: Date.now(),
-      status: blockfrostTxHash ? 'confirmed' : 'pending',
-      blockfrostTxHash,
+      status: 'confirmed', // verification already gates this call — always confirmed by construction
+      paymentTxHash,
+      metadataTxHash,
+      paidLovelace,
       notes: `Proposal: ${proposalId} | Voters: ${expectedVoters}`,
     };
 
@@ -210,29 +233,95 @@ class TreasuryService {
     return transaction;
   }
 
-  // ── Blockfrost Integration ──────────────────────────────────────────────────
-  // Verify a transaction exists on-chain via Blockfrost.
-  // Used to confirm a creator's payment before publishing their proposal.
+  // ── Payment Verification ────────────────────────────────────────────────────
+  // Verifies a creator's pasted transaction hash actually pays the Foundation
+  // wallet at least the required amount, and hasn't been used before. This is
+  // the gate proposal publishing sits behind — see CreateProposalScreen.tsx.
 
-  async verifyTransactionOnChain(txHash: string): Promise<boolean> {
+  async verifyPaymentTransaction(rawTxHash: string, requiredLovelace: number): Promise<PaymentVerificationResult> {
+    // 1. Normalize + format-validate (no network call). Tolerate a pasted
+    //    cardanoscan URL rather than requiring the bare hash.
+    let txHash = rawTxHash.trim().toLowerCase();
+    const urlMatch = txHash.match(/\/transaction\/([0-9a-f]{64})/i);
+    if (urlMatch) txHash = urlMatch[1];
+    txHash = txHash.split('?')[0];
+
+    if (!/^[0-9a-f]{64}$/.test(txHash)) {
+      return { ok: false, reason: 'malformed_hash', detail: 'Expected a 64-character transaction hash' };
+    }
+
+    // 2. Local replay check — fast, catches same-device reuse before any network call.
+    const log = await this.getTransactionLog();
+    if (log.some(t => t.type === 'proposal_fee' && t.paymentTxHash === txHash)) {
+      return { ok: false, reason: 'already_used' };
+    }
+
     try {
-      const response = await fetch(
+      // 3. Existence/confirmation. Blockfrost only indexes confirmed txs, so a
+      //    404 covers both "invalid hash" and "not yet confirmed" — can't
+      //    reliably distinguish via this endpoint alone.
+      const txResponse = await fetch(
         `${TREASURY_CONFIG.BLOCKFROST_API_URL}/txs/${txHash}`,
-        {
-          headers: {
-            'project_id': TREASURY_CONFIG.BLOCKFROST_PROJECT_ID,
-          },
-        }
+        { headers: { 'project_id': TREASURY_CONFIG.BLOCKFROST_PROJECT_ID } }
       );
+      if (txResponse.status === 404) {
+        return { ok: false, reason: 'not_found_or_pending' };
+      }
+      if (!txResponse.ok) {
+        return { ok: false, reason: 'network_error', detail: `Blockfrost /txs → ${txResponse.status}` };
+      }
 
-      if (!response.ok) return false;
+      // 4. Recipient + amount — sum lovelace across ALL outputs paying the
+      //    Foundation wallet (a tx could legitimately have multiple such outputs).
+      const utxosResponse = await fetch(
+        `${TREASURY_CONFIG.BLOCKFROST_API_URL}/txs/${txHash}/utxos`,
+        { headers: { 'project_id': TREASURY_CONFIG.BLOCKFROST_PROJECT_ID } }
+      );
+      if (!utxosResponse.ok) {
+        return { ok: false, reason: 'network_error', detail: `Blockfrost /utxos → ${utxosResponse.status}` };
+      }
+      const utxos = await utxosResponse.json();
+      const paidLovelace: number = (utxos.outputs ?? [])
+        .filter((o: any) => o.address === TREASURY_CONFIG.FOUNDATION_WALLET)
+        .reduce((sum: number, o: any) =>
+          sum + parseInt(o.amount.find((a: any) => a.unit === 'lovelace')?.quantity ?? '0'), 0);
 
-      const tx = await response.json();
-      return tx.block != null; // confirmed if it has a block
+      if (paidLovelace === 0) {
+        return { ok: false, reason: 'wrong_recipient' };
+      }
+      if (paidLovelace < requiredLovelace) {
+        return { ok: false, reason: 'insufficient_amount', paidLovelace };
+      }
 
+      // 5. Global (cross-device) replay check — best-effort scan of the most
+      //    recent 100 published proposals' own metadata (label 674, which now
+      //    carries the creator's paymentTxHash — see BlockchainService.ts).
+      //    Not a full history scan; no backend exists to do better.
+      try {
+        const labelResponse = await fetch(
+          `${TREASURY_CONFIG.BLOCKFROST_API_URL}/metadata/txs/labels/674?order=desc&count=100`,
+          { headers: { 'project_id': TREASURY_CONFIG.BLOCKFROST_PROJECT_ID } }
+        );
+        if (labelResponse.ok) {
+          const entries = await labelResponse.json();
+          const reused = (entries as any[]).some(e => {
+            const val = e.json_metadata?.paymentTxHash;
+            return typeof val === 'string' && val.toLowerCase() === txHash;
+          });
+          if (reused) {
+            return { ok: false, reason: 'already_used' };
+          }
+        }
+        // A failure here is not fatal — the local check in step 2 still applies,
+        // and this is a best-effort supplementary check, not the only guard.
+      } catch {
+        // ignore — best-effort
+      }
+
+      return { ok: true, paidLovelace };
     } catch (error) {
-      console.error('[Treasury] Blockfrost verification failed:', error);
-      return false;
+      console.error('[Treasury] Payment verification failed:', error);
+      return { ok: false, reason: 'network_error', detail: error instanceof Error ? error.message : String(error) };
     }
   }
 
@@ -252,7 +341,7 @@ class TreasuryService {
 
       const data = await response.json();
       const lovelace = parseInt(data.amount?.find((a: any) => a.unit === 'lovelace')?.quantity || '0');
-      
+
       return {
         lovelace,
         ada: (lovelace / 1_000_000).toFixed(4),
