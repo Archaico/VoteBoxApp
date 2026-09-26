@@ -505,6 +505,10 @@ class BlockchainService {
   // possible (out of scope — would need a real UTxO-reservation backend).
   private txMutex: Promise<unknown> = Promise.resolve();
 
+  // Inputs this app instance has already spent. Blockfrost's UTxO listing can
+  // lag behind a just-confirmed tx, so these are skipped even if still listed.
+  private spentInputs = new Set<string>();
+
   private buildAndSubmitMetadataTx(
     metadataObj: Record<number, Record<string, string>>,
     memo: string,
@@ -533,11 +537,12 @@ class BlockchainService {
       this.blockfrostGet<any>('/blocks/latest'),
     ]);
 
-    if (!utxos || utxos.length === 0) {
+    const available = (utxos ?? []).filter((u: any) => !this.spentInputs.has(`${u.tx_hash}#${u.output_index}`));
+    if (available.length === 0) {
       throw new Error('Foundation wallet has no UTxOs — fund it from the preprod faucet');
     }
 
-    const utxo = utxos.reduce((best: any, u: any) => {
+    const utxo = available.reduce((best: any, u: any) => {
       const bestAmt = parseInt(best.amount.find((a: any) => a.unit === 'lovelace')?.quantity ?? '0');
       const uAmt    = parseInt(u.amount.find((a: any) => a.unit === 'lovelace')?.quantity ?? '0');
       return uAmt > bestAmt ? u : best;
@@ -572,16 +577,19 @@ class BlockchainService {
     if (!submitResponse.ok) {
       const errText = await submitResponse.text();
       // A stale/already-spent UTxO reference (race with another tx built off
-      // the same input) surfaces as one of these Blockfrost error names —
-      // re-fetch fresh UTxOs and retry exactly once before giving up.
-      const isUtxoConflict = /BadInputsUTxO|ValueNotConservedUTxO/.test(errText);
+      // the same input) surfaces as one of these node errors — skip that input,
+      // give Blockfrost's index a moment, then retry exactly once.
+      const isUtxoConflict = /BadInputsUTxO|ValueNotConservedUTxO|All inputs are spent/.test(errText);
       if (isUtxoConflict && !isRetry) {
         console.warn('[BlockchainService] UTxO conflict, retrying once with fresh UTxOs:', errText);
+        this.spentInputs.add(`${utxo.tx_hash}#${utxo.output_index}`);
+        await new Promise(resolve => setTimeout(resolve, 20_000));
         return this.buildAndSubmitMetadataTxAttempt(metadataObj, memo, paymentOutputs, true);
       }
       throw new Error(`Blockfrost submit failed: ${submitResponse.status} ${errText}`);
     }
 
+    this.spentInputs.add(`${utxo.tx_hash}#${utxo.output_index}`);
     console.log('[BlockchainService] Real tx submitted:', txHash);
     return txHash;
   }
