@@ -24,7 +24,10 @@ exports.notifyNewComment = onDocumentWritten('comment_cids/{proposalId}', async 
   const title = subscribersDoc.data()?.title ?? 'a proposal';
 
   const tokensSnap = await subscribersRef.collection('tokens').get();
-  if (tokensSnap.empty) return;
+  if (tokensSnap.empty) {
+    console.log(`[notifyNewComment] ${proposalId}: no subscribed devices`);
+    return;
+  }
 
   const messages = tokensSnap.docs.map((tokenDoc) => ({
     to: tokenDoc.id,
@@ -43,6 +46,12 @@ exports.notifyNewComment = onDocumentWritten('comment_cids/{proposalId}', async 
     });
     if (!res.ok) {
       console.error('[notifyNewComment] Expo push API error:', res.status, await res.text());
+      continue;
     }
+    // Per-device failures (e.g. DeviceNotRegistered) come back inside a 200 response.
+    const { data: tickets = [] } = await res.json();
+    const errors = tickets.filter((t) => t.status === 'error');
+    console.log(`[notifyNewComment] ${proposalId}: sent to ${chunk.length - errors.length}/${chunk.length} devices`);
+    errors.forEach((t) => console.warn('[notifyNewComment] ticket error:', t.message, t.details?.error));
   }
 });
