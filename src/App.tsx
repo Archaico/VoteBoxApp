@@ -62,7 +62,9 @@ export default function App() {
 
   // Request notification permissions + register background sync + start offline queue on mount
   useEffect(() => {
-    notificationService.requestPermissions().catch(() => {});
+    notificationService.requestPermissions()
+      .then(granted => granted ? notificationService.reregisterPushTokens() : undefined)
+      .catch(() => {});
     registerBackgroundSync().catch(() => {});
     offlineQueueService.initialize().catch(() => {});
     discussionService.initializeOfflineRetry();

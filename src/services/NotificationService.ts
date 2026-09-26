@@ -115,8 +115,12 @@ class NotificationService {
     const roleRank: Record<string, number> = { creator: 3, voter: 2, commenter: 1 };
 
     if (subs[proposalId]) {
-      // Only upgrade role; cancel old reminders before rescheduling
-      if (roleRank[role] <= roleRank[subs[proposalId].role]) return;
+      // Only upgrade role; cancel old reminders before rescheduling. Still
+      // (re-)register the push token — an earlier registration may have failed.
+      if (roleRank[role] <= roleRank[subs[proposalId].role]) {
+        await this.registerPushToken(proposalId, subs[proposalId].role, subs[proposalId].title);
+        return;
+      }
       await this.cancelDeadlineNotifs(subs[proposalId]);
     }
 
@@ -125,6 +129,15 @@ class NotificationService {
     await this.saveSubs(subs);
     await this.seedCommentBaseline(proposalId);
     await this.registerPushToken(proposalId, role, title);
+  }
+
+  // Re-registers the push token for every existing subscription — repairs
+  // subscriptions made while registration was failing, or before a token change.
+  async reregisterPushTokens(): Promise<void> {
+    const subs = await this.getSubs();
+    for (const [proposalId, sub] of Object.entries(subs)) {
+      await this.registerPushToken(proposalId, sub.role, sub.title);
+    }
   }
 
   // Registers this device's Expo push token against the proposal in Firestore,
