@@ -5,6 +5,9 @@
 .env
 .env.local
 
+# Firebase Android config — kept out of the public repo, still included in EAS builds
+google-services.json
+
 # Keep template (safe to commit)
 !.env.example
 
