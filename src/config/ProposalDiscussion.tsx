@@ -28,8 +28,10 @@ export default function ProposalDiscussion({ proposalId, userAddress, proposalTi
   const [newComment, setNewComment] = useState('');
   const [replyingTo, setReplyingTo] = useState<string | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(false);
+  const [hasLoaded, setHasLoaded] = useState(false);
 
   useEffect(() => {
+    setHasLoaded(false);
     loadComments();
     
     // Auto-refresh every 30 seconds
@@ -45,6 +47,8 @@ export default function ProposalDiscussion({ proposalId, userAddress, proposalTi
       setComments(loaded);
     } catch (error) {
       console.error('Failed to load comments:', error);
+    } finally {
+      setHasLoaded(true);
     }
   };
 
@@ -130,7 +134,11 @@ export default function ProposalDiscussion({ proposalId, userAddress, proposalTi
 
       {/* Comments List */}
       <ScrollView style={styles.commentsList} contentContainerStyle={styles.commentsListContent}>
-        {getTopLevelComments().length === 0 ? (
+        {!hasLoaded && comments.length === 0 ? (
+          <View style={styles.emptyState}>
+            <Text style={styles.emptySubtext}>One moment… fetching comments from the decentralised IPFS network.</Text>
+          </View>
+        ) : getTopLevelComments().length === 0 ? (
           <View style={styles.emptyState}>
             <Text style={styles.emptyText}>No comments yet.</Text>
             <Text style={styles.emptySubtext}>Be the first to discuss this proposal!</Text>
