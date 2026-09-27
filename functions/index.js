@@ -9,6 +9,7 @@
 const { onDocumentWritten } = require('firebase-functions/v2/firestore');
 const { initializeApp } = require('firebase-admin/app');
 const { getFirestore } = require('firebase-admin/firestore');
+const { createHash } = require('crypto');
 
 initializeApp();
 const db = getFirestore();
@@ -17,6 +18,9 @@ const EXPO_PUSH_API = 'https://exp.host/--/api/v2/push/send';
 
 exports.notifyNewComment = onDocumentWritten('comment_cids/{proposalId}', async (event) => {
   const { proposalId } = event.params;
+  // Set by the posting device (see CIDRegistryService.setCID) so it isn't
+  // notified about its own comment.
+  const posterTokenHash = event.data?.after?.data()?.posterTokenHash;
 
   const subscribersRef = db.collection('proposal_subscribers').doc(proposalId);
   const subscribersDoc = await subscribersRef.get();
@@ -29,7 +33,14 @@ exports.notifyNewComment = onDocumentWritten('comment_cids/{proposalId}', async 
     return;
   }
 
-  const messages = tokensSnap.docs.map((tokenDoc) => ({
+  const recipients = tokensSnap.docs.filter((tokenDoc) =>
+    !posterTokenHash || createHash('blake2b512').update(tokenDoc.id).digest('hex') !== posterTokenHash);
+  if (recipients.length === 0) {
+    console.log(`[notifyNewComment] ${proposalId}: only the author is subscribed`);
+    return;
+  }
+
+  const messages = recipients.map((tokenDoc) => ({
     to: tokenDoc.id,
     title: 'New comment on proposal',
     body: title,

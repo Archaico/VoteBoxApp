@@ -7,6 +7,8 @@ import { getApps } from 'firebase/app';
 import { getFirestore, doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { cidRegistryService } from './CIDRegistryService';
 
+const blakejs = require('blakejs') as typeof import('blakejs');
+
 // Reuses the Firebase app CIDRegistryService.ts already initializes on import
 // (guaranteed loaded first — imported below).
 const db = getFirestore(getApps()[0]);
@@ -137,6 +139,19 @@ class NotificationService {
     const subs = await this.getSubs();
     for (const [proposalId, sub] of Object.entries(subs)) {
       await this.registerPushToken(proposalId, sub.role, sub.title);
+    }
+  }
+
+  // blake2b-512 hex of this device's push token, attached to comment writes so
+  // the Cloud Function can skip the author. Hashed because comment_cids is
+  // publicly readable and a raw token would let anyone push to this device.
+  async getPushTokenHash(): Promise<string | null> {
+    if (!EAS_PROJECT_ID) return null;
+    try {
+      const { data: token } = await Notifications.getExpoPushTokenAsync({ projectId: EAS_PROJECT_ID });
+      return blakejs.blake2bHex(token);
+    } catch {
+      return null;
     }
   }
 

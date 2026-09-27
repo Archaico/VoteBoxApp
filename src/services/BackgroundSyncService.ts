@@ -204,10 +204,8 @@ async function runSync(): Promise<number> {
       const prevCid = lastCids[proposalId];
 
       if (newCid && newCid !== prevCid) {
-        // subscribeToProposal() seeds a baseline CID at subscribe time, so by
-        // the time this runs, prevCid reflects "what existed when I joined" —
-        // any difference from that is a genuinely new comment, first check or not.
-        await notificationService.notifyNewComment(proposalId, sub.title);
+        // New-comment alerts now come from the notifyNewComment Cloud Function
+        // (server push, which skips the author). Only track the CID here.
         lastCids[proposalId] = newCid;
         cidsChanged = true;
       }

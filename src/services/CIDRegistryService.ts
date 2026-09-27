@@ -22,12 +22,13 @@ const db  = getFirestore(app);
 const COLLECTION = 'comment_cids';
 
 class CIDRegistryService {
-  async setCID(proposalId: string, cid: string): Promise<void> {
+  async setCID(proposalId: string, cid: string, posterTokenHash?: string | null): Promise<void> {
     try {
       await setDoc(doc(db, COLLECTION, proposalId), {
         cid,
         proposalId,
         updatedAt: serverTimestamp(),
+        ...(posterTokenHash ? { posterTokenHash } : {}),
       });
     } catch (error) {
       console.warn('[CIDRegistry] Write failed (non-fatal):', error);

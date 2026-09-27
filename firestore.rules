@@ -5,7 +5,12 @@ service cloud.firestore {
     match /comment_cids/{proposalId} {
       allow read: if true;
 
-      allow write: if request.resource.data.keys().hasOnly(['cid', 'updatedAt', 'proposalId'])
+      // posterTokenHash (optional): blake2b-512 hex of the author's push token,
+      // so notifyNewComment can skip the author's own device.
+      allow write: if request.resource.data.keys().hasOnly(['cid', 'updatedAt', 'proposalId', 'posterTokenHash'])
+                   && (!('posterTokenHash' in request.resource.data)
+                       || (request.resource.data.posterTokenHash is string
+                           && request.resource.data.posterTokenHash.matches('[0-9a-f]{128}')))
                    && request.resource.data.cid is string
                    && request.resource.data.cid.size() > 10
                    && request.resource.data.cid.size() < 120

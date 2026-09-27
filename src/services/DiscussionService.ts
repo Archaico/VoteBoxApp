@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
 import { cidRegistryService } from './CIDRegistryService';
 import { discordService } from './DiscordService';
+import { notificationService } from './NotificationService';
 
 export interface Comment {
   id: string;
@@ -196,7 +197,9 @@ class DiscussionService {
       }
 
       await AsyncStorage.setItem(this.cidKey(proposalId), cid);
-      cidRegistryService.setCID(proposalId, cid).catch(() => {});
+      notificationService.getPushTokenHash()
+        .then(hash => cidRegistryService.setCID(proposalId, cid, hash))
+        .catch(() => {});
       console.log(`[DiscussionService] Comments uploaded to IPFS: ${cid}`);
       return cid;
     } catch (error) {
