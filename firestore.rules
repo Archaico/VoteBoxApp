@@ -1,0 +1,38 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /comment_cids/{proposalId} {
+      allow read: if true;
+
+      allow write: if request.resource.data.keys().hasOnly(['cid', 'updatedAt', 'proposalId'])
+                   && request.resource.data.cid is string
+                   && request.resource.data.cid.size() > 10
+                   && request.resource.data.cid.size() < 120
+                   && request.resource.data.proposalId == proposalId
+                   && request.resource.data.updatedAt is timestamp;
+    }
+
+    // Push subscriptions (NotificationService.registerPushToken). Write-only
+    // from the app; only the notifyNewComment Cloud Function reads them, via
+    // the Admin SDK, which bypasses these rules.
+    match /proposal_subscribers/{proposalId} {
+      allow read: if false;
+      allow create, update: if request.resource.data.keys().hasOnly(['title'])
+                            && request.resource.data.title is string
+                            && request.resource.data.title.size() < 300;
+
+      match /tokens/{token} {
+        allow read, delete: if false;
+        allow create, update: if token.matches('ExponentPushToken\\[[A-Za-z0-9_-]+\\]')
+                              && request.resource.data.keys().hasOnly(['role', 'addedAt'])
+                              && request.resource.data.role in ['creator', 'voter', 'commenter']
+                              && request.resource.data.addedAt == request.time;
+      }
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
