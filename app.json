@@ -75,6 +75,7 @@
           "photosPermission": "VoteBoxApp uses your photos to let you attach images to a proposal."
         }
       ],
+      "expo-localization"
     ]
   }
 }
