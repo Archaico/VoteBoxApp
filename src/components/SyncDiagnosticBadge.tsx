@@ -11,20 +11,23 @@
 
 import React, { useState, useEffect } from 'react';
 import { TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import i18n from '../i18n';
 import { getSyncDiagnostics } from '../services/BackgroundSyncService';
 
 function timeAgo(timestamp: number | null): string {
-  if (timestamp === null) return 'never';
+  if (timestamp === null) return i18n.t('list:syncDiagnostic.timeAgo.never');
   const mins = Math.floor((Date.now() - timestamp) / 60000);
-  if (mins < 1) return 'just now';
-  if (mins < 60) return `${mins} min ago`;
+  if (mins < 1) return i18n.t('list:syncDiagnostic.timeAgo.justNow');
+  if (mins < 60) return i18n.t('list:syncDiagnostic.timeAgo.minutes', { minutes: mins });
   const hours = Math.floor(mins / 60);
-  if (hours < 24) return `${hours}h ${mins % 60}m ago`;
+  if (hours < 24) return i18n.t('list:syncDiagnostic.timeAgo.hoursMinutes', { hours, minutes: mins % 60 });
   const days = Math.floor(hours / 24);
-  return `${days}d ago`;
+  return i18n.t('list:syncDiagnostic.timeAgo.days', { days });
 }
 
 export const SyncDiagnosticBadge: React.FC = () => {
+  const { t } = useTranslation('list');
   const [hasRun, setHasRun] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -35,21 +38,25 @@ export const SyncDiagnosticBadge: React.FC = () => {
     const d = await getSyncDiagnostics();
 
     const message = [
-      '── Registration ──',
-      `Registered: ${d.registeredAt ? new Date(d.registeredAt).toLocaleString() : 'never'}`,
-      `OS status: ${d.registrationStatus ?? 'unknown'}`,
+      t('syncDiagnostic.registrationHeading'),
+      t('syncDiagnostic.registered', {
+        time: d.registeredAt ? new Date(d.registeredAt).toLocaleString() : t('syncDiagnostic.never'),
+      }),
+      t('syncDiagnostic.osStatus', { status: d.registrationStatus ?? t('syncDiagnostic.unknown') }),
       '',
-      '── Last Background Run ──',
-      `Last run: ${d.lastRunAt ? new Date(d.lastRunAt).toLocaleString() : 'NEVER — task has not executed'}`,
-      `(${timeAgo(d.lastRunAt)})`,
-      d.lastRunAt ? `Result: ${d.lastRunResult}` : '',
-      d.lastRunResult === 'failed' ? `Error: ${d.lastRunError}` : '',
-      d.lastRunAt ? `Subscriptions checked: ${d.lastRunSubCount}` : '',
+      t('syncDiagnostic.lastRunHeading'),
+      t('syncDiagnostic.lastRun', {
+        time: d.lastRunAt ? new Date(d.lastRunAt).toLocaleString() : t('syncDiagnostic.lastRunNever'),
+      }),
+      t('syncDiagnostic.timeAgoParenthetical', { ago: timeAgo(d.lastRunAt) }),
+      d.lastRunAt ? t('syncDiagnostic.result', { result: d.lastRunResult }) : '',
+      d.lastRunResult === 'failed' ? t('syncDiagnostic.error', { error: d.lastRunError }) : '',
+      d.lastRunAt ? t('syncDiagnostic.subscriptionsChecked', { count: d.lastRunSubCount }) : '',
       '',
-      'Task is scheduled every ~15 min. If "Last run" is more than ~30-45 min old (or never, despite the app being closed that long), the OS is very likely blocking the background task — check battery/background-activity restrictions for VoteBoxApp in device settings.',
+      t('syncDiagnostic.explanation'),
     ].filter(Boolean).join('\n');
 
-    Alert.alert('🔄 Background Sync Diagnostic', message, [{ text: 'OK' }]);
+    Alert.alert(t('syncDiagnostic.title'), message, [{ text: t('syncDiagnostic.ok') }]);
     setHasRun(d.lastRunAt !== null);
   };
 

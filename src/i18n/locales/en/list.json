@@ -1,1 +1,63 @@
-{}
+{
+  "header": {
+    "updatedAt": "Updated {{time}}",
+    "createButton": "+ Create"
+  },
+  "loading": "Loading proposals...",
+  "errors": {
+    "cannotConnect": "Could not connect to Cardano network. Pull down or tap Retry.",
+    "connectionError": "Connection error — pull down to retry"
+  },
+  "emptyState": {
+    "loadFailedTitle": "Couldn't Load Proposals",
+    "retry": "Retry",
+    "noProposalsTitle": "No Proposals Yet",
+    "noProposalsText": "Be the first to create a proposal and start the conversation!",
+    "createFirst": "Create First Proposal"
+  },
+  "card": {
+    "closed": "Closed",
+    "remainingDaysHours": "{{days}}d {{hours}}h remaining",
+    "remainingHours": "{{hours}}h remaining",
+    "remainingMinutes": "{{minutes}}m remaining",
+    "optionCount_one": "{{count}} option",
+    "optionCount_other": "{{count}} options",
+    "voteCount_one": "{{count}} vote",
+    "voteCount_other": "{{count}} votes"
+  },
+  "queue": {
+    "title": "📤 Queued Items",
+    "votesQueued_one": "{{count}} vote queued",
+    "votesQueued_other": "{{count}} votes queued",
+    "proposalsQueued_one": "{{count}} proposal queued",
+    "proposalsQueued_other": "{{count}} proposals queued",
+    "autoSubmitNote": "These will be submitted automatically when you have a stable connection.",
+    "oldestItem": "Oldest item: {{time}}",
+    "retryNow": "Retry Now",
+    "ok": "OK"
+  },
+  "syncDiagnostic": {
+    "title": "🔄 Background Sync Diagnostic",
+    "registrationHeading": "── Registration ──",
+    "registered": "Registered: {{time}}",
+    "never": "never",
+    "osStatus": "OS status: {{status}}",
+    "unknown": "unknown",
+    "lastRunHeading": "── Last Background Run ──",
+    "lastRun": "Last run: {{time}}",
+    "lastRunNever": "NEVER — task has not executed",
+    "timeAgoParenthetical": "({{ago}})",
+    "result": "Result: {{result}}",
+    "error": "Error: {{error}}",
+    "subscriptionsChecked": "Subscriptions checked: {{count}}",
+    "explanation": "Task is scheduled every ~15 min. If \"Last run\" is more than ~30-45 min old (or never, despite the app being closed that long), the OS is very likely blocking the background task — check battery/background-activity restrictions for VoteBoxApp in device settings.",
+    "ok": "OK",
+    "timeAgo": {
+      "never": "never",
+      "justNow": "just now",
+      "minutes": "{{minutes}} min ago",
+      "hoursMinutes": "{{hours}}h {{minutes}}m ago",
+      "days": "{{days}}d ago"
+    }
+  }
+}

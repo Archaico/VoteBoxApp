@@ -8,12 +8,14 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import * as LocalAuthentication from 'expo-local-authentication';
+import { useTranslation } from 'react-i18next';
 
 interface AuthScreenProps {
   onAuthenticate: () => void;
 }
 
 const AuthScreen = ({ onAuthenticate }: AuthScreenProps) => {
+  const { t } = useTranslation('auth');
   const [isAuthenticating, setIsAuthenticating] = useState(false);
   const [biometricAvailable, setBiometricAvailable] = useState(false);
   const [checking, setChecking] = useState(true);
@@ -40,9 +42,9 @@ const AuthScreen = ({ onAuthenticate }: AuthScreenProps) => {
       setIsAuthenticating(true);
 
       const result = await LocalAuthentication.authenticateAsync({
-        promptMessage: 'Verify your identity to access VoteBoxApp',
-        fallbackLabel: 'Use device passcode',
-        cancelLabel: 'Cancel',
+        promptMessage: t('biometricPrompt.message'),
+        fallbackLabel: t('biometricPrompt.fallbackLabel'),
+        cancelLabel: t('biometricPrompt.cancelLabel'),
         disableDeviceFallback: false,
       });
 
@@ -50,13 +52,13 @@ const AuthScreen = ({ onAuthenticate }: AuthScreenProps) => {
         onAuthenticate();
       } else {
         Alert.alert(
-          'Authentication Failed',
-          'Please try again or use your device passcode.',
+          t('alerts.authFailedTitle'),
+          t('alerts.authFailedMessage'),
         );
       }
     } catch (error) {
       console.error('Authentication error:', error);
-      Alert.alert('Error', 'Something went wrong. Please try again.');
+      Alert.alert(t('alerts.errorTitle'), t('alerts.errorMessage'));
     } finally {
       setIsAuthenticating(false);
     }
@@ -78,7 +80,7 @@ const AuthScreen = ({ onAuthenticate }: AuthScreenProps) => {
           <Text style={styles.logoText}>V</Text>
         </View>
         <Text style={styles.appName}>VoteBoxApp</Text>
-        <Text style={styles.tagline}>Your voice. Your vote. No barriers.</Text>
+        <Text style={styles.tagline}>{t('tagline')}</Text>
       </View>
 
       {/* Auth Area */}
@@ -94,12 +96,12 @@ const AuthScreen = ({ onAuthenticate }: AuthScreenProps) => {
               {isAuthenticating ? (
                 <ActivityIndicator size="small" color="white" />
               ) : (
-                <Text style={styles.buttonText}>🔐  Authenticate to Vote</Text>
+                <Text style={styles.buttonText}>{t('buttons.authenticateToVote')}</Text>
               )}
             </TouchableOpacity>
 
             <Text style={styles.hint}>
-              Use your fingerprint or face ID to enter
+              {t('hints.useBiometric')}
             </Text>
           </>
         ) : (
@@ -113,12 +115,12 @@ const AuthScreen = ({ onAuthenticate }: AuthScreenProps) => {
               {isAuthenticating ? (
                 <ActivityIndicator size="small" color="white" />
               ) : (
-                <Text style={styles.buttonText}>🔒  Enter with Passcode</Text>
+                <Text style={styles.buttonText}>{t('buttons.enterWithPasscode')}</Text>
               )}
             </TouchableOpacity>
 
             <Text style={styles.hint}>
-              Set up fingerprint in device settings for faster access
+              {t('hints.setUpBiometric')}
             </Text>
           </>
         )}
@@ -127,10 +129,10 @@ const AuthScreen = ({ onAuthenticate }: AuthScreenProps) => {
       {/* Footer */}
       <View style={styles.footer}>
         <Text style={styles.footerText}>
-          Made with ❤️ by the LifeGround Community (LGC)
+          {t('footer.madeWithLove')}
         </Text>
         <Text style={styles.footerSub}>
-          No wallet required to vote · Free forever
+          {t('footer.noWalletRequired')}
         </Text>
       </View>
     </View>

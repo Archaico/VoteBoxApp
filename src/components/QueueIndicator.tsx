@@ -5,9 +5,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { offlineQueueService } from '../services/OfflineQueueService';
 
 export const QueueIndicator: React.FC = () => {
+  const { t } = useTranslation('list');
   const [queueCount, setQueueCount] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -27,22 +29,22 @@ export const QueueIndicator: React.FC = () => {
   const handlePress = async () => {
     const status = await offlineQueueService.getQueueStatus();
     const message = [
-      `${status.votes} vote${status.votes !== 1 ? 's' : ''} queued`,
-      `${status.proposals} proposal${status.proposals !== 1 ? 's' : ''} queued`,
+      t('queue.votesQueued', { count: status.votes }),
+      t('queue.proposalsQueued', { count: status.proposals }),
       '',
-      'These will be submitted automatically when you have a stable connection.',
+      t('queue.autoSubmitNote'),
       '',
       status.oldestTimestamp
-        ? `Oldest item: ${new Date(status.oldestTimestamp).toLocaleString()}`
+        ? t('queue.oldestItem', { time: new Date(status.oldestTimestamp).toLocaleString() })
         : '',
     ].filter(Boolean).join('\n');
 
-    Alert.alert('📤 Queued Items', message, [
+    Alert.alert(t('queue.title'), message, [
       {
-        text: 'Retry Now',
+        text: t('queue.retryNow'),
         onPress: () => offlineQueueService.processQueue(),
       },
-      { text: 'OK', style: 'cancel' },
+      { text: t('queue.ok'), style: 'cancel' },
     ]);
   };
 

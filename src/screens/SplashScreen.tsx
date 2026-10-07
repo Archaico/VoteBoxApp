@@ -1,12 +1,14 @@
 // src/screens/SplashScreen.tsx
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 interface SplashScreenProps {
   onFinish: () => void;
 }
 
 const SplashScreen = ({ onFinish }: SplashScreenProps) => {
+  const { t } = useTranslation('auth');
   useEffect(() => {
     const timer = setTimeout(() => {
       onFinish();
@@ -23,10 +25,10 @@ const SplashScreen = ({ onFinish }: SplashScreenProps) => {
       />
       <Text style={styles.title}>VoteBoxApp</Text>
       <Text style={styles.subtitle}>
-        Decentralized Democratic Voting
+        {t('splash.subtitle')}
       </Text>
       <Text style={styles.footer}>
-        Made by LifeGround Community (LGC) with ❤️
+        {t('splash.footer')}
       </Text>
     </View>
   );

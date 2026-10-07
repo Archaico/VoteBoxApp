@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useTranslation } from 'react-i18next';
 import { blockchainService } from '../services/BlockchainService';
 import { QueueIndicator } from '../components/QueueIndicator';
 import { SyncDiagnosticBadge } from '../components/SyncDiagnosticBadge';
@@ -37,17 +38,21 @@ interface ProposalListScreenProps {
 
 const PROPOSALS_STORAGE_KEY = '@cached_proposals';
 
+// Translation keys (in the 'list' namespace) for the fetch error shown in the empty state.
+type FetchErrorKey = 'errors.cannotConnect' | 'errors.connectionError';
+
 export default function ProposalListScreen({
   onCreateProposal,
   onVoteProposal,
   refreshTrigger = 0,
 }: ProposalListScreenProps) {
+  const { t } = useTranslation('list');
   const insets = useSafeAreaInsets();
   const [proposals, setProposals] = useState<Proposal[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
-  const [fetchError, setFetchError] = useState<string | null>(null);
+  const [fetchError, setFetchError] = useState<FetchErrorKey | null>(null);
 
   useEffect(() => {
     loadProposals();
@@ -71,7 +76,7 @@ export default function ProposalListScreen({
       setLastUpdated(new Date());
       if (all.length === 0) {
         const err = blockchainService.getLastFetchError();
-        if (err) setFetchError('Could not connect to Cardano network. Pull down or tap Retry.');
+        if (err) setFetchError('errors.cannotConnect');
       }
       // If cache was returned, also do a chain refresh and update UI when it resolves
       blockchainService.refreshFromChain().then(fresh => {
@@ -80,7 +85,7 @@ export default function ProposalListScreen({
       }).catch(() => {});
     } catch (error) {
       console.error('Failed to load proposals:', error);
-      setFetchError('Connection error — pull down to retry');
+      setFetchError('errors.connectionError');
       await loadFromCache();
     } finally {
       setIsLoading(false);
@@ -117,13 +122,13 @@ export default function ProposalListScreen({
 
   const getTimeRemaining = (deadline: number): string => {
     const remaining = deadline - Date.now();
-    if (remaining <= 0) return 'Closed';
+    if (remaining <= 0) return t('card.closed');
     const days = Math.floor(remaining / (1000 * 60 * 60 * 24));
     const hours = Math.floor((remaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    if (days > 0) return `${days}d ${hours}h remaining`;
-    if (hours > 0) return `${hours}h remaining`;
+    if (days > 0) return t('card.remainingDaysHours', { days, hours });
+    if (hours > 0) return t('card.remainingHours', { hours });
     const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
-    return `${minutes}m remaining`;
+    return t('card.remainingMinutes', { minutes });
   };
 
   const renderProposal = ({ item }: { item: Proposal }) => {
@@ -140,7 +145,7 @@ export default function ProposalListScreen({
           </Text>
           <View style={[styles.statusBadge, isClosed ? styles.statusBadgeClosed : styles.statusBadgeActive]}>
             <Text style={[styles.statusBadgeText, isClosed ? styles.statusBadgeTextClosed : styles.statusBadgeTextActive]}>
-              {isClosed ? 'Closed' : getTimeRemaining(item.deadline)}
+              {isClosed ? t('card.closed') : getTimeRemaining(item.deadline)}
             </Text>
           </View>
         </View>
@@ -148,9 +153,9 @@ export default function ProposalListScreen({
           {item.description}
         </Text>
         <View style={styles.proposalFooter}>
-          <Text style={styles.proposalOptions}>{item.options?.length ?? 3} options</Text>
+          <Text style={styles.proposalOptions}>{t('card.optionCount', { count: item.options?.length ?? 3 })}</Text>
           <Text style={[styles.proposalVotes, isClosed && styles.proposalVotesClosed]}>
-            {item.totalVotes ?? 0} votes
+            {t('card.voteCount', { count: item.totalVotes ?? 0 })}
           </Text>
         </View>
       </TouchableOpacity>
@@ -161,24 +166,24 @@ export default function ProposalListScreen({
     if (fetchError) {
       return (
         <View style={styles.emptyState}>
-          <Text style={styles.emptyTitle}>Couldn't Load Proposals</Text>
+          <Text style={styles.emptyTitle}>{t('emptyState.loadFailedTitle')}</Text>
           <Text style={styles.emptyText}>
-            {fetchError}
+            {t(fetchError)}
           </Text>
           <TouchableOpacity style={styles.createFirstButton} onPress={handleRefresh}>
-            <Text style={styles.createFirstButtonText}>Retry</Text>
+            <Text style={styles.createFirstButtonText}>{t('emptyState.retry')}</Text>
           </TouchableOpacity>
         </View>
       );
     }
     return (
       <View style={styles.emptyState}>
-        <Text style={styles.emptyTitle}>No Proposals Yet</Text>
+        <Text style={styles.emptyTitle}>{t('emptyState.noProposalsTitle')}</Text>
         <Text style={styles.emptyText}>
-          Be the first to create a proposal and start the conversation!
+          {t('emptyState.noProposalsText')}
         </Text>
         <TouchableOpacity style={styles.createFirstButton} onPress={onCreateProposal}>
-          <Text style={styles.createFirstButtonText}>Create First Proposal</Text>
+          <Text style={styles.createFirstButtonText}>{t('emptyState.createFirst')}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -188,7 +193,7 @@ export default function ProposalListScreen({
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#22c55e" />
-        <Text style={styles.loadingText}>Loading proposals...</Text>
+        <Text style={styles.loadingText}>{t('loading')}</Text>
       </View>
     );
   }
@@ -200,7 +205,7 @@ export default function ProposalListScreen({
           <Text style={styles.headerTitle}>VoteBoxApp</Text>
           {lastUpdated && (
             <Text style={styles.lastUpdated}>
-              Updated {lastUpdated.toLocaleTimeString()}
+              {t('header.updatedAt', { time: lastUpdated.toLocaleTimeString() })}
             </Text>
           )}
         </View>
@@ -209,7 +214,7 @@ export default function ProposalListScreen({
           <SyncDiagnosticBadge />
           <QueueIndicator />
           <TouchableOpacity style={styles.createButton} onPress={onCreateProposal}>
-            <Text style={styles.createButtonText}>+ Create</Text>
+            <Text style={styles.createButtonText}>{t('header.createButton')}</Text>
           </TouchableOpacity>
         </View>
       </View>
