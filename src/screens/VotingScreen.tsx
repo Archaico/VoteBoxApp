@@ -13,6 +13,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Haptics from 'expo-haptics';
 import { useTranslation, Trans } from 'react-i18next';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { blockchainService } from '../services/BlockchainService';
 import { notificationService } from '../services/NotificationService';
 import { shareService } from '../services/ShareService';
@@ -53,6 +54,7 @@ export default function VotingScreen({
   onVoteSubmitted,
 }: VotingScreenProps) {
   const { t } = useTranslation('voting');
+  const insets = useSafeAreaInsets();
   const [activeTab, setActiveTab] = useState<TabType>('vote');
   const [commentCount, setCommentCount] = useState(0);
 
@@ -183,7 +185,7 @@ export default function VotingScreen({
   const isExpired = proposal.deadline <= Date.now();
 
   const renderTabs = () => (
-    <View style={styles.tabBar}>
+    <View style={[styles.tabBar, { paddingTop: insets.top + 8 }]}>
       <TouchableOpacity
         style={[styles.tab, activeTab === 'vote' && styles.tabActive]}
         onPress={() => setActiveTab('vote')}
@@ -247,7 +249,7 @@ export default function VotingScreen({
             )}
             <View style={styles.metaRow}>
               <Text style={styles.metaLabel}>{t('votingScreen.createdBy')}</Text>
-              <Text style={styles.metaValue}>{proposal.creator}</Text>
+              <Text style={[styles.metaValue, styles.metaValueShrink]} numberOfLines={1} ellipsizeMode="middle">{proposal.creator}</Text>
             </View>
             <View style={styles.metaRow}>
               <Text style={styles.metaLabel}>{t('votingScreen.deadline')}</Text>
@@ -423,6 +425,7 @@ const styles = StyleSheet.create({
   metaRow: { flexDirection: 'row', marginBottom: 8 },
   metaLabel: { fontSize: 14, color: '#666', fontWeight: '600', marginRight: 8 },
   metaValue: { fontSize: 14, color: '#444' },
+  metaValueShrink: { flexShrink: 1 },
   deadlineValue: { fontSize: 14, color: '#ef4444', fontWeight: '600' },
   resultsCard: {
     backgroundColor: '#fff', marginHorizontal: 16, marginBottom: 16, padding: 20, borderRadius: 12,
