@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Haptics from 'expo-haptics';
+import { useTranslation, Trans } from 'react-i18next';
 import { blockchainService } from '../services/BlockchainService';
 import { notificationService } from '../services/NotificationService';
 import { shareService } from '../services/ShareService';
@@ -51,6 +52,7 @@ export default function VotingScreen({
   onBack,
   onVoteSubmitted,
 }: VotingScreenProps) {
+  const { t } = useTranslation('voting');
   const [activeTab, setActiveTab] = useState<TabType>('vote');
   const [commentCount, setCommentCount] = useState(0);
 
@@ -102,7 +104,7 @@ export default function VotingScreen({
           id: found.id,
           title: found.title,
           description: found.description,
-          creator: found.creator || 'Unknown',
+          creator: found.creator || t('votingScreen.unknownCreator'),
           deadline: found.deadline,
           votesYes: found.results ? (found.results['yes'] ?? found.results['Yes'] ?? 0) : 0,
           votesNo: found.results ? (found.results['no'] ?? found.results['No'] ?? 0) : 0,
@@ -120,23 +122,23 @@ export default function VotingScreen({
 
   const handleVoteSubmit = async () => {
     if (!selectedVote) {
-      toastService.warning('Please select your vote first');
+      toastService.warning(t('votingScreen.toasts.selectVoteFirst'));
       return;
     }
     if (proposal.deadline <= Date.now()) {
-      toastService.error('Voting has closed for this proposal');
+      toastService.error(t('votingScreen.toasts.votingClosed'));
       return;
     }
 
     const activeVoterId = voterId || await voterIdentityService.getVoterId();
     setIsSubmitting(true);
-    setVoteStatus('Preparing your vote...');
+    setVoteStatus(t('votingScreen.status.preparing'));
 
     try {
-      setVoteStatus('Connecting to Cardano network...');
+      setVoteStatus(t('votingScreen.status.connecting'));
       await blockchainService.initialize();
 
-      setVoteStatus('Submitting vote to blockchain...');
+      setVoteStatus(t('votingScreen.status.submitting'));
       const txHash = await blockchainService.submitVote({
         proposalId: proposal.id,
         choice: selectedVote,
@@ -157,7 +159,7 @@ export default function VotingScreen({
       console.error('Vote submission error:', error);
 
       if (isNetworkError(error)) {
-        toastService.warning('⚠️ Vote queued - will submit when online');
+        toastService.warning(t('votingScreen.toasts.voteQueued'));
         await offlineQueueService.queueVote({
           proposalId: proposal.id,
           choice: selectedVote,
@@ -165,7 +167,7 @@ export default function VotingScreen({
           timestamp: Date.now(),
         });
       } else {
-        toastService.error(`❌ Vote failed: ${error.message || 'Unknown error'}`);
+        toastService.error(t('votingScreen.toasts.voteFailed', { message: error.message || t('votingScreen.toasts.unknownError') }));
       }
     } finally {
       setIsSubmitting(false);
@@ -186,14 +188,16 @@ export default function VotingScreen({
         style={[styles.tab, activeTab === 'vote' && styles.tabActive]}
         onPress={() => setActiveTab('vote')}
       >
-        <Text style={[styles.tabText, activeTab === 'vote' && styles.tabTextActive]}>Vote</Text>
+        <Text style={[styles.tabText, activeTab === 'vote' && styles.tabTextActive]}>{t('votingScreen.tabs.vote')}</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={[styles.tab, activeTab === 'discussion' && styles.tabActive]}
         onPress={() => setActiveTab('discussion')}
       >
         <Text style={[styles.tabText, activeTab === 'discussion' && styles.tabTextActive]}>
-          Discussion {commentCount > 0 ? `(${commentCount})` : ''}
+          {commentCount > 0
+            ? t('votingScreen.tabs.discussionWithCount', { count: commentCount })
+            : t('votingScreen.tabs.discussion')}
         </Text>
       </TouchableOpacity>
     </View>
@@ -203,7 +207,7 @@ export default function VotingScreen({
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={onBack} style={styles.backButton}>
-          <Text style={styles.backText}>← Back</Text>
+          <Text style={styles.backText}>{t('votingScreen.back')}</Text>
         </TouchableOpacity>
         <View style={styles.headerActions}>
           <ShareButton
@@ -225,7 +229,7 @@ export default function VotingScreen({
       {isLoading ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#22c55e" />
-          <Text style={styles.loadingText}>Loading proposal...</Text>
+          <Text style={styles.loadingText}>{t('votingScreen.loading')}</Text>
         </View>
       ) : (
         <>
@@ -242,27 +246,27 @@ export default function VotingScreen({
               </View>
             )}
             <View style={styles.metaRow}>
-              <Text style={styles.metaLabel}>Created by:</Text>
+              <Text style={styles.metaLabel}>{t('votingScreen.createdBy')}</Text>
               <Text style={styles.metaValue}>{proposal.creator}</Text>
             </View>
             <View style={styles.metaRow}>
-              <Text style={styles.metaLabel}>Deadline:</Text>
+              <Text style={styles.metaLabel}>{t('votingScreen.deadline')}</Text>
               <Text style={styles.deadlineValue}>
-                {daysRemaining} {daysRemaining === 1 ? 'day' : 'days'} remaining
+                {t('votingScreen.daysRemaining', { count: daysRemaining })}
               </Text>
             </View>
           </View>
 
           <View style={styles.resultsCard}>
-            <Text style={styles.sectionTitle}>Current Results</Text>
-            <Text style={styles.totalVotes}>{totalVotes} total votes</Text>
+            <Text style={styles.sectionTitle}>{t('votingScreen.results.title')}</Text>
+            <Text style={styles.totalVotes}>{t('votingScreen.results.totalVotes', { count: totalVotes })}</Text>
 
             {[
-              { label: 'Yes', pct: yesPercentage, count: proposal.votesYes, style: styles.progressYes },
-              { label: 'No', pct: noPercentage, count: proposal.votesNo, style: styles.progressNo },
-              { label: 'Abstain', pct: abstainPercentage, count: proposal.votesAbstain, style: styles.progressAbstain },
-            ].map(({ label, pct, count, style }) => (
-              <View key={label} style={styles.resultRow}>
+              { id: 'yes', label: t('choices.yes'), pct: yesPercentage, count: proposal.votesYes, style: styles.progressYes },
+              { id: 'no', label: t('choices.no'), pct: noPercentage, count: proposal.votesNo, style: styles.progressNo },
+              { id: 'abstain', label: t('choices.abstain'), pct: abstainPercentage, count: proposal.votesAbstain, style: styles.progressAbstain },
+            ].map(({ id, label, pct, count, style }) => (
+              <View key={id} style={styles.resultRow}>
                 <View style={styles.resultLabel}>
                   <Text style={styles.resultText}>{label}</Text>
                   <Text style={styles.resultPercent}>{pct}%</Text>
@@ -277,25 +281,30 @@ export default function VotingScreen({
 
           {hasVoted ? (
             <View style={styles.votedCard}>
-              <Text style={styles.votedTitle}>✅ You've Already Voted</Text>
+              <Text style={styles.votedTitle}>{t('votingScreen.alreadyVoted.title')}</Text>
               <Text style={styles.votedChoice}>
-                Your vote: <Text style={styles.votedChoiceValue}>{votedChoice.toUpperCase()}</Text>
+                <Trans
+                  t={t}
+                  i18nKey="votingScreen.alreadyVoted.yourVote"
+                  values={{ choice: t(`choices.${votedChoice}`, { defaultValue: votedChoice }).toUpperCase() }}
+                  components={{ bold: <Text style={styles.votedChoiceValue} /> }}
+                />
               </Text>
-              <Text style={styles.votedNote}>You cannot change your vote once submitted.</Text>
+              <Text style={styles.votedNote}>{t('votingScreen.alreadyVoted.note')}</Text>
             </View>
           ) : isExpired ? (
             <View style={styles.votedCard}>
-              <Text style={styles.votedTitle}>🔒 Voting Has Closed</Text>
+              <Text style={styles.votedTitle}>{t('votingScreen.closed.title')}</Text>
               <Text style={styles.votedNote}>
-                This proposal's deadline has passed. Votes are no longer being accepted.
+                {t('votingScreen.closed.note')}
               </Text>
             </View>
           ) : (
             <View style={styles.votingCard}>
-              <Text style={styles.sectionTitle}>Cast Your Vote</Text>
+              <Text style={styles.sectionTitle}>{t('votingScreen.castVote.title')}</Text>
               <View style={styles.privacyNotice}>
                 <Text style={styles.privacyText}>
-                  🔒 Your vote is completely anonymous and cannot be traced back to you
+                  {t('votingScreen.castVote.privacyNotice')}
                 </Text>
               </View>
               <View style={styles.voteOptions}>
@@ -306,7 +315,7 @@ export default function VotingScreen({
                     onPress={() => setSelectedVote(choice)}
                   >
                     <Text style={[styles.voteButtonText, selectedVote === choice && styles.voteButtonTextSelected]}>
-                      {choice === 'yes' ? '✅ Yes' : choice === 'no' ? '❌ No' : '⚪ Abstain'}
+                      {choice === 'yes' ? t('votingScreen.castVote.yes') : choice === 'no' ? t('votingScreen.castVote.no') : t('votingScreen.castVote.abstain')}
                     </Text>
                   </TouchableOpacity>
                 ))}
@@ -320,7 +329,7 @@ export default function VotingScreen({
                 {isSubmitting ? (
                   <ActivityIndicator color="#fff" />
                 ) : (
-                  <Text style={styles.submitButtonText}>Submit Vote</Text>
+                  <Text style={styles.submitButtonText}>{t('votingScreen.castVote.submit')}</Text>
                 )}
               </TouchableOpacity>
             </View>

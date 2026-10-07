@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal, ScrollView, Platform, Alert } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
+import { useTranslation } from 'react-i18next';
 import { ShareButton } from './ShareButton';
 import type { ShareableProposal } from '../services/ShareService';
 
@@ -16,6 +17,7 @@ interface VoteSuccessModalProps {
 }
 
 const CopyRow: React.FC<{ label: string; value: string; mono?: boolean }> = ({ label, value, mono = false }) => {
+  const { t } = useTranslation('voting');
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -24,28 +26,30 @@ const CopyRow: React.FC<{ label: string; value: string; mono?: boolean }> = ({ l
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
-      Alert.alert('Copy failed', 'Please copy manually: ' + value);
+      Alert.alert(t('successModal.copyFailedTitle'), t('successModal.copyFailedMessage', { value }));
     }
   };
 
   return (
-    <View style={styles.copyRow}>
-      <Text style={styles.copyLabel}>{label}</Text>
-      <View style={styles.copyValueRow}>
-        <Text style={[styles.copyValue, mono && styles.copyValueMono]} numberOfLines={1} ellipsizeMode="middle">
-          {value}
-        </Text>
-        <TouchableOpacity style={[styles.copyBtn, copied && styles.copyBtnDone]} onPress={handleCopy} activeOpacity={0.7}>
-          <Text style={[styles.copyBtnText, copied && styles.copyBtnTextDone]}>
-            {copied ? '✓ Copied' : '⎘ Copy'}
+      <View style={styles.copyRow}>
+        <Text style={styles.copyLabel}>{label}</Text>
+        <View style={styles.copyValueRow}>
+          <Text style={[styles.copyValue, mono && styles.copyValueMono]} numberOfLines={1} ellipsizeMode="middle">
+            {value}
           </Text>
-        </TouchableOpacity>
+          <TouchableOpacity style={[styles.copyBtn, copied && styles.copyBtnDone]} onPress={handleCopy} activeOpacity={0.7}>
+            <Text style={[styles.copyBtnText, copied && styles.copyBtnTextDone]}>
+              {copied ? t('successModal.copied') : t('successModal.copy')}
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
   );
 };
 
-export const VoteSuccessModal: React.FC<VoteSuccessModalProps> = ({ visible, proposalId, txHash, proposal, votedChoice, onClose }) => (
+export const VoteSuccessModal: React.FC<VoteSuccessModalProps> = ({ visible, proposalId, txHash, proposal, votedChoice, onClose }) => {
+  const { t } = useTranslation('voting');
+  return (
   <Modal visible={visible} transparent animationType="fade" statusBarTranslucent onRequestClose={onClose}>
     <TouchableOpacity style={styles.backdrop} activeOpacity={1} onPress={onClose} />
     <View style={styles.cardWrapper}>
@@ -54,8 +58,8 @@ export const VoteSuccessModal: React.FC<VoteSuccessModalProps> = ({ visible, pro
           <View style={styles.headerRow}>
             <Text style={styles.checkmark}>✅</Text>
             <View style={styles.headerText}>
-              <Text style={styles.title}>Vote Submitted</Text>
-              <Text style={styles.subtitle}>Recorded on the Cardano blockchain</Text>
+              <Text style={styles.title}>{t('successModal.title')}</Text>
+              <Text style={styles.subtitle}>{t('successModal.subtitle')}</Text>
             </View>
           </View>
 
@@ -68,30 +72,31 @@ export const VoteSuccessModal: React.FC<VoteSuccessModalProps> = ({ visible, pro
             <Text style={styles.chainNetwork}>Testnet</Text>
           </View>
 
-          <CopyRow label="Proposal ID" value={proposalId} mono />
-          <CopyRow label="Transaction hash" value={txHash} mono />
+          <CopyRow label={t('successModal.proposalId')} value={proposalId} mono />
+          <CopyRow label={t('successModal.transactionHash')} value={txHash} mono />
 
           <View style={styles.choiceRow}>
-            <Text style={styles.copyLabel}>Your vote</Text>
+            <Text style={styles.copyLabel}>{t('successModal.yourVote')}</Text>
             <Text style={styles.choiceValue}>
-              {votedChoice.charAt(0).toUpperCase() + votedChoice.slice(1)}
+              {t(`choices.${votedChoice}`, { defaultValue: votedChoice.charAt(0).toUpperCase() + votedChoice.slice(1) })}
             </Text>
           </View>
 
           <View style={styles.divider} />
 
-          <Text style={styles.sharePrompt}>Let others know you voted 👇</Text>
+          <Text style={styles.sharePrompt}>{t('successModal.sharePrompt')}</Text>
 
-          <ShareButton proposal={proposal} moment="voted" choice={votedChoice} variant="outline" label="Share That You Voted" />
+          <ShareButton proposal={proposal} moment="voted" choice={votedChoice} variant="outline" label={t('shareButton.moments.voted')} />
 
           <TouchableOpacity style={styles.closeBtn} onPress={onClose} activeOpacity={0.8}>
-            <Text style={styles.closeBtnText}>Done</Text>
+            <Text style={styles.closeBtnText}>{t('successModal.done')}</Text>
           </TouchableOpacity>
         </ScrollView>
       </View>
     </View>
   </Modal>
-);
+  );
+};
 
 const styles = StyleSheet.create({
   backdrop: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0,0,0,0.55)' },

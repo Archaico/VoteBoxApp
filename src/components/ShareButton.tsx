@@ -19,6 +19,7 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { shareService, ShareableProposal } from '../services/ShareService';
 
 type ShareMoment = 'invite' | 'voted' | 'results' | 'urgency' | 'discovery';
@@ -34,42 +35,36 @@ interface ShareButtonProps {
 }
 
 const MOMENT_CONFIG: Record<ShareMoment, {
-  label: string;
   icon: string;
   color: string;
   bg: string;
   borderColor: string;
 }> = {
   invite: {
-    label: 'Invite People to Vote',
     icon: '📢',
     color: '#15803d',
     bg: '#f0fdf4',
     borderColor: '#22c55e',
   },
   voted: {
-    label: 'Share That You Voted',
     icon: '✊',
     color: '#1d4ed8',
     bg: '#eff6ff',
     borderColor: '#3b82f6',
   },
   results: {
-    label: 'Share Results',
     icon: '📊',
     color: '#7c3aed',
     bg: '#f5f3ff',
     borderColor: '#8b5cf6',
   },
   urgency: {
-    label: 'Share — Vote Closing Soon',
     icon: '⚡',
     color: '#b45309',
     bg: '#fffbeb',
     borderColor: '#f59e0b',
   },
   discovery: {
-    label: 'Share Proposal',
     icon: '⤴️',
     color: '#374151',
     bg: '#f9fafb',
@@ -85,6 +80,7 @@ export const ShareButton: React.FC<ShareButtonProps> = ({
   label,
   onShareComplete,
 }) => {
+  const { t } = useTranslation('voting');
   const [sharing, setSharing] = useState(false);
   const config = MOMENT_CONFIG[moment];
 
@@ -117,7 +113,7 @@ export const ShareButton: React.FC<ShareButtonProps> = ({
       }
 
       if (!result.success && result.error) {
-        Alert.alert('Share Failed', result.error);
+        Alert.alert(t('shareButton.shareFailedTitle'), result.error);
       }
     } catch (error) {
       console.error('[ShareButton] error:', error);
@@ -126,7 +122,7 @@ export const ShareButton: React.FC<ShareButtonProps> = ({
     }
   };
 
-  const displayLabel = label || config.label;
+  const displayLabel = label || t(`shareButton.moments.${moment}`);
 
   // Icon-only variant — for proposal list cards
   if (variant === 'icon') {

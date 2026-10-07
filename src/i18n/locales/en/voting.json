@@ -1,1 +1,78 @@
-{}
+{
+  "choices": {
+    "yes": "Yes",
+    "no": "No",
+    "abstain": "Abstain"
+  },
+  "votingScreen": {
+    "tabs": {
+      "vote": "Vote",
+      "discussion": "Discussion",
+      "discussionWithCount": "Discussion ({{count}})"
+    },
+    "back": "← Back",
+    "loading": "Loading proposal...",
+    "unknownCreator": "Unknown",
+    "createdBy": "Created by:",
+    "deadline": "Deadline:",
+    "daysRemaining_one": "{{count}} day remaining",
+    "daysRemaining_other": "{{count}} days remaining",
+    "results": {
+      "title": "Current Results",
+      "totalVotes_one": "{{count}} total vote",
+      "totalVotes_other": "{{count}} total votes"
+    },
+    "alreadyVoted": {
+      "title": "✅ You've Already Voted",
+      "yourVote": "Your vote: <bold>{{choice}}</bold>",
+      "note": "You cannot change your vote once submitted."
+    },
+    "closed": {
+      "title": "🔒 Voting Has Closed",
+      "note": "This proposal's deadline has passed. Votes are no longer being accepted."
+    },
+    "castVote": {
+      "title": "Cast Your Vote",
+      "privacyNotice": "🔒 Your vote is completely anonymous and cannot be traced back to you",
+      "yes": "✅ Yes",
+      "no": "❌ No",
+      "abstain": "⚪ Abstain",
+      "submit": "Submit Vote"
+    },
+    "status": {
+      "preparing": "Preparing your vote...",
+      "connecting": "Connecting to Cardano network...",
+      "submitting": "Submitting vote to blockchain..."
+    },
+    "toasts": {
+      "selectVoteFirst": "Please select your vote first",
+      "votingClosed": "Voting has closed for this proposal",
+      "voteQueued": "⚠️ Vote queued - will submit when online",
+      "voteFailed": "❌ Vote failed: {{message}}",
+      "unknownError": "Unknown error"
+    }
+  },
+  "successModal": {
+    "title": "Vote Submitted",
+    "subtitle": "Recorded on the Cardano blockchain",
+    "proposalId": "Proposal ID",
+    "transactionHash": "Transaction hash",
+    "yourVote": "Your vote",
+    "sharePrompt": "Let others know you voted 👇",
+    "done": "Done",
+    "copy": "⎘ Copy",
+    "copied": "✓ Copied",
+    "copyFailedTitle": "Copy failed",
+    "copyFailedMessage": "Please copy manually: {{value}}"
+  },
+  "shareButton": {
+    "moments": {
+      "invite": "Invite People to Vote",
+      "voted": "Share That You Voted",
+      "results": "Share Results",
+      "urgency": "Share — Vote Closing Soon",
+      "discovery": "Share Proposal"
+    },
+    "shareFailedTitle": "Share Failed"
+  }
+}
