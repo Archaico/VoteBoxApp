@@ -170,6 +170,7 @@ class NotificationService {
       await setDoc(doc(db, 'proposal_subscribers', proposalId), { title }, { merge: true });
       await setDoc(doc(db, 'proposal_subscribers', proposalId, 'tokens', token), {
         role,
+        lang: i18n.language, // so server pushes arrive in this device's language
         addedAt: serverTimestamp(),
       });
     } catch (error) {

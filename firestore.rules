@@ -30,8 +30,11 @@ service cloud.firestore {
       match /tokens/{token} {
         allow read, delete: if false;
         allow create, update: if token.matches('ExponentPushToken\\[[A-Za-z0-9_-]+\\]')
-                              && request.resource.data.keys().hasOnly(['role', 'addedAt'])
+                              && request.resource.data.keys().hasOnly(['role', 'addedAt', 'lang'])
                               && request.resource.data.role in ['creator', 'voter', 'commenter']
+                              && (!('lang' in request.resource.data)
+                                  || (request.resource.data.lang is string
+                                      && request.resource.data.lang.matches('[a-z]{2}(-[A-Za-z]{2,4})?')))
                               && request.resource.data.addedAt == request.time;
       }
     }

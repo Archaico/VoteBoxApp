@@ -7,6 +7,7 @@ import React, { useState } from 'react';
 import { TouchableOpacity, Text, StyleSheet, Modal, View, FlatList, Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { LANGUAGES, setLanguage } from '../i18n';
+import { notificationService } from '../services/NotificationService';
 
 export const LanguagePicker: React.FC = () => {
   const { t, i18n } = useTranslation('common');
@@ -15,6 +16,7 @@ export const LanguagePicker: React.FC = () => {
   const choose = async (code: string) => {
     setOpen(false);
     const needsRestart = await setLanguage(code);
+    notificationService.reregisterPushTokens().catch(() => {});
     if (needsRestart) Alert.alert(t('language.restartTitle'), t('language.restartMessage'));
   };
 

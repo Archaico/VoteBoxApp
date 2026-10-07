@@ -10,6 +10,8 @@ const { onDocumentWritten } = require('firebase-functions/v2/firestore');
 const { initializeApp } = require('firebase-admin/app');
 const { getFirestore } = require('firebase-admin/firestore');
 const { createHash } = require('crypto');
+// Generated from src/i18n/locales/*/notifications.json by scripts/gen-push-text.js.
+const PUSH_TEXT = require('./pushText.json');
 
 initializeApp();
 const db = getFirestore();
@@ -42,7 +44,7 @@ exports.notifyNewComment = onDocumentWritten('comment_cids/{proposalId}', async 
 
   const messages = recipients.map((tokenDoc) => ({
     to: tokenDoc.id,
-    title: 'New comment on proposal',
+    title: (PUSH_TEXT[tokenDoc.get('lang')] ?? PUSH_TEXT.en).newCommentTitle,
     body: title,
     data: { type: 'new_comment', proposalId },
   }));
