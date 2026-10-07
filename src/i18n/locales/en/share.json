@@ -1,0 +1,53 @@
+{
+  "invite": {
+    "heading": "🗳️ YOUR VOTE IS NEEDED",
+    "closes_one": "⏰ Voting closes: {{date}} ({{count}} day left)",
+    "closes_other": "⏰ Voting closes: {{date}} ({{count}} days left)",
+    "secured": "🔒 Secured on Cardano blockchain",
+    "free": "✅ Completely free to vote — no wallet needed",
+    "voteNow": "Vote now on VoteBoxApp:",
+    "footer": "— Shared via VoteBoxApp · Free democratic voting for everyone",
+    "title": "Vote on: {{title}}"
+  },
+  "voted": {
+    "heading": "✊ I just voted on VoteBoxApp",
+    "daysLeft_one": "{{count}} day left to vote — add your voice:",
+    "daysLeft_other": "{{count}} days left to vote — add your voice:",
+    "closed": "Voting has closed — add your voice:",
+    "tagline": "🔒 Blockchain-secured · 100% free · No wallet needed",
+    "footer": "— VoteBoxApp: Democratic voting for everyone",
+    "title": "I voted: {{title}}"
+  },
+  "results": {
+    "noResults": "No results available yet",
+    "noVotes": "No votes recorded yet",
+    "row_one": "{{bar}} {{option}}: {{count}} vote ({{pct}}%)",
+    "row_other": "{{bar}} {{option}}: {{count}} votes ({{pct}}%)",
+    "heading": "📊 VOTING RESULTS",
+    "leading": "🏆 Leading: \"{{option}}\" with {{pct}}%",
+    "total": "Total votes cast: {{count}}",
+    "verified": "🔒 Verified on Cardano blockchain",
+    "seeFull": "See full results on VoteBoxApp:",
+    "footer": "— VoteBoxApp: Transparent, free democratic voting",
+    "title": "Results: {{title}}"
+  },
+  "urgent": {
+    "lessThanHour": "⚡ LESS THAN 1 HOUR LEFT TO VOTE",
+    "hours": "⚡ {{count}} HOURS LEFT TO VOTE",
+    "days": "⏰ {{count}} DAYS LEFT TO VOTE",
+    "votedSoFar_one": "{{count}} person has voted so far.",
+    "votedSoFar_other": "{{count}} people have voted so far.",
+    "stillCounts": "Your voice still counts — vote now:",
+    "tagline": "✅ Free · No wallet needed · Takes 10 seconds",
+    "footer": "— VoteBoxApp: Democratic voting on the blockchain",
+    "title": "Urgent: Vote on \"{{title}}\""
+  },
+  "discovery": {
+    "heading": "🗳️ Check out this proposal on VoteBoxApp",
+    "open": "🟢 Voting is OPEN",
+    "closed": "🔴 Voting has closed",
+    "freeToVote": "✅ Free to vote — no wallet or account needed",
+    "seeResults": "📊 See the final results",
+    "footer": "— VoteBoxApp: Free, open, blockchain-secured voting"
+  }
+}

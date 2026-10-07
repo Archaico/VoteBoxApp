@@ -20,6 +20,10 @@
 
 import { Share, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import i18n from '../i18n';
+
+// Share text is written in the sender's app language (resolved at call time).
+const t = i18n.getFixedT(null, 'share');
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -59,32 +63,32 @@ class ShareService {
   async shareProposalInvite(proposal: ShareableProposal): Promise<ShareResult> {
     const deadline = new Date(proposal.deadline);
     const daysLeft = Math.ceil((proposal.deadline - Date.now()) / (1000 * 60 * 60 * 24));
-    const deadlineStr = deadline.toLocaleDateString('en-GB', {
+    const deadlineStr = deadline.toLocaleDateString(i18n.language, {
       day: 'numeric',
       month: 'long',
       year: 'numeric',
     });
 
     const message = [
-      `🗳️ YOUR VOTE IS NEEDED`,
+      t('invite.heading'),
       ``,
       `"${proposal.title}"`,
       ``,
       `${proposal.description.slice(0, 150)}${proposal.description.length > 150 ? '...' : ''}`,
       ``,
-      `⏰ Voting closes: ${deadlineStr} (${daysLeft} day${daysLeft !== 1 ? 's' : ''} left)`,
-      `🔒 Secured on Cardano blockchain`,
-      `✅ Completely free to vote — no wallet needed`,
+      t('invite.closes', { date: deadlineStr, count: daysLeft }),
+      t('invite.secured'),
+      t('invite.free'),
       ``,
-      `Vote now on VoteBoxApp:`,
+      t('invite.voteNow'),
       `https://vote.voteboxapp.org/proposal/${proposal.id}`,
       ``,
-      `— Shared via VoteBoxApp · Free democratic voting for everyone`,
+      t('invite.footer'),
     ].join('\n');
 
     return this.executeShare({
       message,
-      title: `Vote on: ${proposal.title}`,
+      title: t('invite.title', { title: proposal.title }),
       type: 'proposal_invite',
       proposalId: proposal.id,
     });
@@ -101,24 +105,24 @@ class ShareService {
   ): Promise<ShareResult> {
     const daysLeft = Math.ceil((proposal.deadline - Date.now()) / (1000 * 60 * 60 * 24));
     const timeStr = daysLeft > 0
-      ? `${daysLeft} day${daysLeft !== 1 ? 's' : ''} left to vote`
-      : 'Voting has closed';
+      ? t('voted.daysLeft', { count: daysLeft })
+      : t('voted.closed');
 
     const message = [
-      `✊ I just voted on VoteBoxApp`,
+      t('voted.heading'),
       ``,
       `"${proposal.title}"`,
       ``,
-      `${timeStr} — add your voice:`,
+      timeStr,
       `https://vote.voteboxapp.org/proposal/${proposal.id}`,
       ``,
-      `🔒 Blockchain-secured · 100% free · No wallet needed`,
-      `— VoteBoxApp: Democratic voting for everyone`,
+      t('voted.tagline'),
+      t('voted.footer'),
     ].join('\n');
 
     return this.executeShare({
       message,
-      title: `I voted: ${proposal.title}`,
+      title: t('voted.title', { title: proposal.title }),
       type: 'vote_confirmation',
       proposalId: proposal.id,
     });
@@ -130,7 +134,7 @@ class ShareService {
 
   async shareResults(proposal: ShareableProposal): Promise<ShareResult> {
     if (!proposal.results || Object.keys(proposal.results).length === 0) {
-      return { success: false, error: 'No results available yet' };
+      return { success: false, error: t('results.noResults') };
     }
 
     const totalVotes = Object.values(proposal.results).reduce(
@@ -138,7 +142,7 @@ class ShareService {
     );
 
     if (totalVotes === 0) {
-      return { success: false, error: 'No votes recorded yet' };
+      return { success: false, error: t('results.noVotes') };
     }
 
     // Find winner
@@ -153,31 +157,31 @@ class ShareService {
       .map(([option, votes]) => {
         const pct = ((votes as number) / totalVotes * 100).toFixed(1);
         const bar = this.buildTextBar(parseFloat(pct));
-        return `${bar} ${option}: ${votes} votes (${pct}%)`;
+        return t('results.row', { bar, option: this.optionLabel(option), count: votes as number, pct });
       })
       .join('\n');
 
     const message = [
-      `📊 VOTING RESULTS`,
+      t('results.heading'),
       ``,
       `"${proposal.title}"`,
       ``,
-      `🏆 Leading: "${winner[0]}" with ${winnerPct}%`,
+      t('results.leading', { option: this.optionLabel(winner[0]), pct: winnerPct }),
       ``,
       breakdown,
       ``,
-      `Total votes cast: ${totalVotes}`,
-      `🔒 Verified on Cardano blockchain`,
+      t('results.total', { count: totalVotes }),
+      t('results.verified'),
       ``,
-      `See full results on VoteBoxApp:`,
+      t('results.seeFull'),
       `https://vote.voteboxapp.org/proposal/${proposal.id}`,
       ``,
-      `— VoteBoxApp: Transparent, free democratic voting`,
+      t('results.footer'),
     ].join('\n');
 
     return this.executeShare({
       message,
-      title: `Results: ${proposal.title}`,
+      title: t('results.title', { title: proposal.title }),
       type: 'results',
       proposalId: proposal.id,
     });
@@ -190,28 +194,28 @@ class ShareService {
   async shareUrgentVote(proposal: ShareableProposal): Promise<ShareResult> {
     const hoursLeft = Math.ceil((proposal.deadline - Date.now()) / (1000 * 60 * 60));
     const urgencyStr = hoursLeft <= 1
-      ? '⚡ LESS THAN 1 HOUR LEFT'
+      ? t('urgent.lessThanHour')
       : hoursLeft <= 24
-      ? `⚡ ${hoursLeft} HOURS LEFT`
-      : `⏰ ${Math.ceil(hoursLeft / 24)} DAYS LEFT`;
+      ? t('urgent.hours', { count: hoursLeft })
+      : t('urgent.days', { count: Math.ceil(hoursLeft / 24) });
 
     const message = [
-      `${urgencyStr} TO VOTE`,
+      urgencyStr,
       ``,
       `"${proposal.title}"`,
       ``,
-      `${proposal.totalVotes} ${proposal.totalVotes === 1 ? 'person has' : 'people have'} voted so far.`,
-      `Your voice still counts — vote now:`,
+      t('urgent.votedSoFar', { count: proposal.totalVotes }),
+      t('urgent.stillCounts'),
       ``,
       `https://vote.voteboxapp.org/proposal/${proposal.id}`,
       ``,
-      `✅ Free · No wallet needed · Takes 10 seconds`,
-      `— VoteBoxApp: Democratic voting on the blockchain`,
+      t('urgent.tagline'),
+      t('urgent.footer'),
     ].join('\n');
 
     return this.executeShare({
       message,
-      title: `Urgent: Vote on "${proposal.title}"`,
+      title: t('urgent.title', { title: proposal.title }),
       type: 'urgency',
       proposalId: proposal.id,
     });
@@ -224,22 +228,22 @@ class ShareService {
   async shareProposalDiscovery(proposal: ShareableProposal): Promise<ShareResult> {
     const isActive = proposal.deadline > Date.now();
     const statusStr = isActive
-      ? `🟢 Voting is OPEN`
-      : `🔴 Voting has closed`;
+      ? t('discovery.open')
+      : t('discovery.closed');
 
     const message = [
-      `🗳️ Check out this proposal on VoteBoxApp`,
+      t('discovery.heading'),
       ``,
       `"${proposal.title}"`,
       ``,
       `${proposal.description.slice(0, 200)}${proposal.description.length > 200 ? '...' : ''}`,
       ``,
       statusStr,
-      isActive ? `✅ Free to vote — no wallet or account needed` : `📊 See the final results`,
+      isActive ? t('discovery.freeToVote') : t('discovery.seeResults'),
       ``,
       `https://vote.voteboxapp.org/proposal/${proposal.id}`,
       ``,
-      `— VoteBoxApp: Free, open, blockchain-secured voting`,
+      t('discovery.footer'),
     ].join('\n');
 
     return this.executeShare({
@@ -248,6 +252,11 @@ class ShareService {
       type: 'discovery',
       proposalId: proposal.id,
     });
+  }
+
+  // Results arrive keyed 'Yes' / 'No' / 'Abstain'; show them in the app language.
+  private optionLabel(option: string): string {
+    return i18n.t(`voting:choices.${option.toLowerCase()}`, { defaultValue: option });
   }
 
   // ── Core Share Executor ─────────────────────────────────────────────────────

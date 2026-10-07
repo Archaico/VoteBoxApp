@@ -66,7 +66,7 @@ walk(SRC);
 console.log('\n[keys used in code]');
 for (const file of files) {
   const src = fs.readFileSync(file, 'utf8');
-  const nsMatch = src.match(/useTranslation\(\s*['"](\w+)['"]/);
+  const nsMatch = src.match(/useTranslation\(\s*['"](\w+)['"]/) || src.match(/getFixedT\([^,]*,\s*['"](\w+)['"]/);
   const defaultNs = nsMatch ? nsMatch[1] : 'common';
   for (const m of src.matchAll(/\bt\(\s*['"]([\w.:-]+)['"]/g)) {
     const [ns, key] = m[1].includes(':') ? m[1].split(':') : [defaultNs, m[1]];

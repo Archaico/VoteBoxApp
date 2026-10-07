@@ -12,8 +12,9 @@ import enCreate from './en/create.json';
 import enVoting from './en/voting.json';
 import enDiscussion from './en/discussion.json';
 import enNotifications from './en/notifications.json';
+import enShare from './en/share.json';
 
-export const NAMESPACES = ['common', 'auth', 'list', 'create', 'voting', 'discussion', 'notifications'] as const;
+export const NAMESPACES = ['common', 'auth', 'list', 'create', 'voting', 'discussion', 'notifications', 'share'] as const;
 
 export const resources = {
   en: {
@@ -24,6 +25,7 @@ export const resources = {
     voting: enVoting,
     discussion: enDiscussion,
     notifications: enNotifications,
+    share: enShare,
   },
 };
 
