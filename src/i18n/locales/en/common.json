@@ -1,5 +1,7 @@
 {
   "language": {
-    "title": "Language"
+    "title": "Language",
+    "restartTitle": "Restart needed",
+    "restartMessage": "Please close and reopen VoteBoxApp to switch the text direction for this language."
   }
 }

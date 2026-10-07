@@ -9,15 +9,23 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import * as Localization from 'expo-localization';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { resources, NAMESPACES, LANGUAGES } from './locales';
+import { I18nManager } from 'react-native';
+import { resources, NAMESPACES } from './locales';
+import { ALL_LANGUAGES, matchLocale, Language } from './languages';
 
 const LANGUAGE_KEY = '@app_language';
+
+// Languages that actually have translations bundled.
+export const LANGUAGES: Language[] = ALL_LANGUAGES.filter(l => l.code in resources);
 
 const isSupported = (code: string | null | undefined): code is string =>
   !!code && LANGUAGES.some(l => l.code === code);
 
+const isRTL = (code: string) => !!LANGUAGES.find(l => l.code === code)?.rtl;
+
 function deviceLanguage(): string {
-  const code = Localization.getLocales()[0]?.languageCode;
+  const locale = Localization.getLocales()[0];
+  const code = matchLocale(locale?.languageCode, locale?.regionCode);
   return isSupported(code) ? code : 'en';
 }
 
@@ -31,6 +39,16 @@ i18n.use(initReactI18next).init({
   returnNull: false,
 });
 
+// Layout direction can only change on the next app start (React Native rule).
+// Returns true if the user needs to restart for the new direction to apply.
+function applyDirection(code: string): boolean {
+  const rtl = isRTL(code);
+  if (I18nManager.isRTL === rtl) return false;
+  I18nManager.allowRTL(rtl);
+  I18nManager.forceRTL(rtl);
+  return true;
+}
+
 // Applies a previously saved manual choice (async, so it runs just after start-up).
 export async function loadSavedLanguage(): Promise<void> {
   try {
@@ -39,13 +57,15 @@ export async function loadSavedLanguage(): Promise<void> {
   } catch {
     // keep the device/default language
   }
+  applyDirection(i18n.language);
 }
 
-export async function setLanguage(code: string): Promise<void> {
-  if (!isSupported(code)) return;
+// Returns true if the app must be restarted to switch layout direction.
+export async function setLanguage(code: string): Promise<boolean> {
+  if (!isSupported(code)) return false;
   await i18n.changeLanguage(code);
   await AsyncStorage.setItem(LANGUAGE_KEY, code).catch(() => {});
+  return applyDirection(code);
 }
 
-export { LANGUAGES };
 export default i18n;

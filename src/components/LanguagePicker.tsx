@@ -4,7 +4,7 @@
 // switches the UI immediately and is remembered across restarts.
 
 import React, { useState } from 'react';
-import { TouchableOpacity, Text, StyleSheet, Modal, View, FlatList } from 'react-native';
+import { TouchableOpacity, Text, StyleSheet, Modal, View, FlatList, Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { LANGUAGES, setLanguage } from '../i18n';
 
@@ -14,7 +14,8 @@ export const LanguagePicker: React.FC = () => {
 
   const choose = async (code: string) => {
     setOpen(false);
-    await setLanguage(code);
+    const needsRestart = await setLanguage(code);
+    if (needsRestart) Alert.alert(t('language.restartTitle'), t('language.restartMessage'));
   };
 
   return (

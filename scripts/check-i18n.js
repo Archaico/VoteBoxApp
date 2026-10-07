@@ -40,15 +40,37 @@ const langs = fs.readdirSync(LOCALES).filter(d => fs.statSync(path.join(LOCALES,
 
 console.log(`English: ${Object.values(en).reduce((n, ns) => n + Object.keys(ns).length, 0)} strings in ${Object.keys(en).length} namespaces`);
 
+// Plural keys ("x_one", "x_other") need each language's own CLDR plural
+// forms instead (e.g. Russian one/few/many/other, Japanese other only).
+const PLURAL = /_(zero|one|two|few|many|other)$/;
+const expectedKeys = (keys, lang) => {
+  const categories = new Intl.PluralRules(lang).resolvedOptions().pluralCategories;
+  const out = {};
+  for (const [key, value] of Object.entries(keys)) {
+    if (!PLURAL.test(key)) { out[key] = value; continue; }
+    const base = key.replace(PLURAL, '');
+    const english = keys[`${base}_other`] ?? value;
+    for (const c of categories) out[`${base}_${c}`] = english;
+  }
+  return out;
+};
+
 // 1 + 2
 for (const lang of langs) {
   console.log(`\n[${lang}]`);
   const tr = readNs(lang);
-  for (const [ns, keys] of Object.entries(en)) {
+  for (const [ns, enKeys] of Object.entries(en)) {
+    const keys = expectedKeys(enKeys, lang);
     const t = tr[ns] || {};
     for (const key of Object.keys(keys)) {
       if (!(key in t)) fail(`${ns}:${key} missing`);
-      else if (placeholders(t[key]) !== placeholders(keys[key])) fail(`${ns}:${key} placeholders differ (${placeholders(keys[key])} vs ${placeholders(t[key])})`);
+      else if (!PLURAL.test(key) && placeholders(t[key]) !== placeholders(keys[key])) fail(`${ns}:${key} placeholders differ (${placeholders(keys[key])} vs ${placeholders(t[key])})`);
+      else if (PLURAL.test(key)) {
+        // A plural form may drop {{count}} (e.g. "one vote"), but no other placeholder.
+        const need = placeholders(keys[key]).split(',').filter(p => p && p !== '{{count}}').join(',');
+        const got = placeholders(t[key]).split(',').filter(p => p && p !== '{{count}}').join(',');
+        if (need !== got) fail(`${ns}:${key} placeholders differ (${need} vs ${got})`);
+      }
     }
     for (const key of Object.keys(t)) if (!(key in keys)) fail(`${ns}:${key} not in English`);
   }
