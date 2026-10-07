@@ -8,7 +8,7 @@ Your support helps make decentralized governance accessible to communities world
 
 ### 1. **Report Issues & Provide Feedback**  
 If you find a bug, have a feature request, or want to suggest improvements, please:  
-- Open an issue in the [GitHub Issues](https://github.com/YourRepo/VoteBoxApp/issues) section.  
+- Open an issue in the [GitHub Issues](https://github.com/Archaico/VoteBoxApp/issues) section.  
 - Clearly describe the problem or suggestion.  
 - Attach screenshots or logs (if applicable).  
 
@@ -28,6 +28,14 @@ git push origin feature-name
 
 Create a pull request (PR) from your forked repository to the main branch of VoteBoxApp.
 Wait for review, respond to comments, and iterate if needed.
+
+### Help With Translations
+VoteBoxApp is available in 23 languages, but the translations have **not yet been
+reviewed by native speakers**. If you speak one of them, you can help without
+writing any code: review the JSON files in `src/i18n/locales/<language>/`, starting
+with the open questions in `docs/i18n-review-notes.md` (terms and tone are explained
+in `docs/i18n-glossary.md`). Run `node scripts/check-i18n.js` to check your changes,
+or simply email your suggestions to lifegroundcommunity@gmail.com.
 
 3. Write Documentation
 Help improve existing documentation (README, installation guides, API docs).

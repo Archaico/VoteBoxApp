@@ -20,6 +20,7 @@ vote, no token-weighting, no corporate platform dependency.
 - [Roadmap — What Funding Supports](#roadmap--what-funding-supports)
 - [Sustainability](#sustainability)
 - [Funding](#funding)
+- [Languages & Translations](#languages--translations)
 - [Contributing](#contributing)
 - [License](#license)
 - [Background](#background)
@@ -37,8 +38,10 @@ vote, no token-weighting, no corporate platform dependency.
 - **Free voting** — proposal creation costs a small ADA fee; voting is always free
 - **Image attachments** — proposal creators can attach supporting images
 - **Discussion threads** — per-proposal comments, synced across devices
-- **Notifications** — deadline reminders, vote confirmations, and cross-device
-  alerts for new comments and results, including while the app is closed
+- **Notifications** — deadline reminders, vote confirmations, and real push
+  notifications for new comments on proposals you follow, across devices
+- **23 languages** — the app follows the phone's language, with a manual
+  language picker (including right-to-left Arabic)
 - **Offline-capable** — votes and comments queue locally and sync automatically
   when connectivity returns
 - **Biometric authentication** — Expo LocalAuthentication for secure, private access
@@ -59,7 +62,8 @@ vote, no token-weighting, no corporate platform dependency.
 | Content storage | IPFS via Pinata (`pinFileToIPFS` / `pinJSONToIPFS`), with public-gateway fallback chain |
 | Cross-device comment discovery | Firebase Firestore (lightweight CID registry only — no user data) |
 | Community integration | Discord (forum thread per proposal) |
-| Notifications | Expo Notifications + background fetch |
+| Notifications | Expo Notifications + push via Firebase Cloud Functions |
+| Languages | i18next + react-i18next (23 languages) |
 | Auth | Expo LocalAuthentication + expo-secure-store |
 | Distribution | GitHub Releases (public APK) + EAS Build |
 | Smart Contracts | Aiken (Cardano validator language) — planned, not yet built |
@@ -80,7 +84,11 @@ VoteBoxFresh/
 │   │                       #   CIDRegistryService, ShareService,
 │   │                       #   TreasuryService, OfflineQueueService,
 │   │                       #   DiscussionService
+│   ├── i18n/               # Language setup + translations (locales/<lang>/*.json)
 │   └── lib/                # CardanoTxBuilder (pure-JS tx signing)
+├── docs/                   # Translation glossary and review notes
+├── scripts/                # check-i18n.js and locale generators
+├── functions/              # Firebase Cloud Function (push notifications)
 ├── app.json                # Expo config, Android App Links
 └── package.json
 ```
@@ -111,8 +119,14 @@ no Play Store required.
 - [x] Cross-device sync — proposals, votes, comments, and image attachments
       all confirmed working across independent devices
 - [x] Discord integration — auto-created forum thread per proposal
-- [x] Notifications — local (vote confirmed, deadline reminders) and
-      cross-device background sync (new comments, results when voting closes)
+- [x] Notifications — local (vote confirmed, deadline reminders) and real
+      cross-device push for new comments, in each device's own language
+- [x] Proposal fees paid by the creator — the app verifies the payment
+      on-chain before publishing, and a payment can only be used once
+- [x] Founder fee paid out on-chain in batches, with every contributing
+      proposal itemised in the transaction metadata
+- [x] 23 languages (AI-translated, awaiting native-speaker review — see
+      [Languages & Translations](#languages--translations))
 - [x] Offline queue — votes and comments survive connectivity loss
 - [x] Voting closes automatically once a proposal's deadline passes
 - [x] Public distribution — signed APK via GitHub Releases, no Play Store
@@ -135,23 +149,18 @@ the app.
 
 **Mainnet migration**
 Moving from Cardano preprod to mainnet: wallet security review, transaction
-fee finalisation, and a real ADA transfer path for the foundation fee
-(currently recorded but not yet moved on-chain).
+fee finalisation, and moving the foundation's signing key out of the app
+build.
 
 **User-controlled wallets**
 Today, a foundation-operated wallet relays every transaction. Integrating
 WalletConnect so proposal creators sign with their own wallet removes that
 central point of trust.
 
-**True push notifications**
-Current notifications rely on the app periodically checking in the
-background. Real push infrastructure (device token registry + delivery
-server) means instant notifications even when the OS restricts background
-activity.
-
-**Internationalisation**
-Infrastructure for 15-language support exists but isn't wired into the UI yet
-— this is what makes the platform usable for non-English-speaking
+**Native-speaker translation review**
+The app is translated into 23 languages, but the translations have not yet
+been reviewed by native speakers. Reviewing them — especially the voting
+terms — is what makes the platform trustworthy for non-English-speaking
 communities, a core part of the project's global-access mission.
 
 **Accessibility & low-bandwidth polish**
@@ -191,6 +200,32 @@ If you would like to support the project directly:
 
 - [Patreon — Life Ground Community](https://www.patreon.com/LifeGroundCommunity)
 - Cardano ADA donations: contact lifegroundcommunity@gmail.com
+
+---
+
+## Languages & Translations
+
+VoteBoxApp is available in **English** plus **22 languages**: Arabic, Bengali,
+Chinese (Simplified), Danish, Dutch, Finnish, French, German, Greek, Hausa,
+Hindi, Italian, Japanese, Korean, Norwegian, Polish, Portuguese (Brazil),
+Portuguese (Portugal), Russian, Spanish, Swahili and Swedish.
+
+> **Note:** these translations were produced with AI assistance and **have not
+> yet been reviewed by native speakers.** Some wording — particularly voting
+> terms such as "Abstain" — may be inaccurate or unnatural.
+
+**Help us get it right.** If you speak one of these languages, we would love
+your help reviewing it, or adding a new one. No coding needed:
+
+- Translations live in [`src/i18n/locales/<language>/`](src/i18n/locales) as
+  plain JSON files.
+- [`docs/i18n-review-notes.md`](docs/i18n-review-notes.md) lists the choices
+  the translators were unsure about, per language — a good place to start.
+- [`docs/i18n-glossary.md`](docs/i18n-glossary.md) explains the key terms and
+  tone.
+
+Open an issue or pull request, or email **lifegroundcommunity@gmail.com** —
+we're happy to help you get started.
 
 ---
 
