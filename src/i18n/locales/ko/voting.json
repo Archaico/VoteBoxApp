@@ -1,0 +1,76 @@
+{
+  "choices": {
+    "yes": "찬성",
+    "no": "반대",
+    "abstain": "기권"
+  },
+  "votingScreen": {
+    "tabs": {
+      "vote": "투표",
+      "discussion": "토론",
+      "discussionWithCount": "토론({{count}})"
+    },
+    "back": "← 뒤로",
+    "loading": "제안 불러오는 중...",
+    "unknownCreator": "알 수 없음",
+    "createdBy": "작성자:",
+    "deadline": "마감:",
+    "daysRemaining_other": "{{count}}일 남음",
+    "results": {
+      "title": "현재 결과",
+      "totalVotes_other": "총 {{count}}표"
+    },
+    "alreadyVoted": {
+      "title": "✅ 이미 투표했어요",
+      "yourVote": "내 투표: <bold>{{choice}}</bold>",
+      "note": "제출한 투표는 변경할 수 없어요."
+    },
+    "closed": {
+      "title": "🔒 투표가 마감되었어요",
+      "note": "이 제안의 마감일이 지났어요. 더 이상 투표를 받지 않아요."
+    },
+    "castVote": {
+      "title": "투표하기",
+      "privacyNotice": "🔒 투표는 완전히 익명이며 누가 투표했는지 추적할 수 없어요",
+      "yes": "✅ 찬성",
+      "no": "❌ 반대",
+      "abstain": "⚪ 기권",
+      "submit": "투표 제출"
+    },
+    "status": {
+      "preparing": "투표 준비 중...",
+      "connecting": "Cardano 네트워크에 연결 중...",
+      "submitting": "블록체인에 투표 제출 중..."
+    },
+    "toasts": {
+      "selectVoteFirst": "먼저 투표 항목을 선택해 주세요",
+      "votingClosed": "이 제안의 투표는 마감되었어요",
+      "voteQueued": "⚠️ 투표가 대기열에 추가됨 — 온라인이 되면 제출돼요",
+      "voteFailed": "❌ 투표 실패: {{message}}",
+      "unknownError": "알 수 없는 오류"
+    }
+  },
+  "successModal": {
+    "title": "투표 제출 완료",
+    "subtitle": "Cardano 블록체인에 기록되었어요",
+    "proposalId": "제안 ID",
+    "transactionHash": "트랜잭션 해시",
+    "yourVote": "내 투표",
+    "sharePrompt": "투표했다고 다른 사람들에게 알려 주세요 👇",
+    "done": "완료",
+    "copy": "⎘ 복사",
+    "copied": "✓ 복사됨",
+    "copyFailedTitle": "복사 실패",
+    "copyFailedMessage": "직접 복사해 주세요: {{value}}"
+  },
+  "shareButton": {
+    "moments": {
+      "invite": "투표에 초대하기",
+      "voted": "투표 인증 공유",
+      "results": "결과 공유",
+      "urgency": "공유 — 곧 투표 마감",
+      "discovery": "제안 공유"
+    },
+    "shareFailedTitle": "공유 실패"
+  }
+}

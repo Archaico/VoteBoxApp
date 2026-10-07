@@ -1,0 +1,173 @@
+{
+  "header": {
+    "back": "뒤로",
+    "title": "제안 만들기"
+  },
+  "infoBanner": "Cardano 보안 · 가스비 80% 절감 · 투표자는 무료",
+  "buttons": {
+    "cancel": "취소",
+    "ok": "확인",
+    "continue": "계속",
+    "remove": "삭제",
+    "done": "완료"
+  },
+  "wallets": {
+    "eternl": {
+      "badge": "추천",
+      "description": "가장 강력한 Cardano 지갑. WalletConnect 지원."
+    },
+    "vespr": {
+      "badge": "초보자에게 최고",
+      "description": "모바일 전용으로 빠르고 설정이 쉬워요."
+    },
+    "lace": {
+      "badge": "IOG 공식",
+      "description": "Cardano 창립자들이 만든 올인원 Web3 허브."
+    }
+  },
+  "walletSelect": {
+    "title": "지갑 연결하기",
+    "subtitle": "제안 생성 수수료를 내는 데 필요해요. 투표자는 지갑이 필요 없어요.",
+    "or": "또는",
+    "enterManually": "📋  주소 직접 입력",
+    "noWallet": "❓  아직 지갑이 없어요",
+    "walletConnectSoon": "🔗 WalletConnect 지원 예정 — 600개 이상의 지갑에 한 번에 연결",
+    "openAlertTitle": "{{wallet}}을(를) 열까요?",
+    "openAlertMessage": "{{wallet}} 지갑 앱이 열려요(또는 다운로드 페이지로 이동해요).\n\n연결한 후 Cardano 주소(addr_test1...로 시작)를 복사해서 여기로 돌아와 붙여넣으세요.",
+    "openAlertButton": "{{wallet}} 열기",
+    "linkErrorTitle": "링크를 열 수 없어요",
+    "linkErrorMessage": "Play 스토어에서 지갑을 직접 검색해 주세요."
+  },
+  "walletManual": {
+    "welcomeBack": "👋 다시 오셨네요! 지갑 앱을 열어 주소(addr_test1...)를 복사한 후 아래에 붙여넣으세요.",
+    "addressLabel": "내 Cardano 주소",
+    "addressHelper": "\"addr_test1\"로 시작 · 지갑의 \"받기\" 또는 \"주소\"에서 찾을 수 있어요",
+    "back": "← 뒤로",
+    "confirm": "주소 확인",
+    "invalidTitle": "유효하지 않은 주소",
+    "invalidMessage": "유효한 Cardano 주소를 입력해 주세요. \"addr_test1\"(테스트넷)로 시작하고 50자 이상이어야 해요."
+  },
+  "walletConnected": {
+    "label": "지갑 연결됨",
+    "removeButton": "삭제하고 지갑 변경",
+    "removeAlertTitle": "지갑 삭제",
+    "removeAlertMessage": "지갑 주소를 삭제할까요?"
+  },
+  "noWallet": {
+    "title": "Cardano 지갑 만들기",
+    "body": "Cardano 지갑이 있으면 ADA(Cardano의 화폐)를 보관하고 제안을 게시하는 소액 수수료를 낼 수 있어요. 투표자에게는 필요 없고, 제안을 만드는 사람만 있으면 돼요.",
+    "step1": "<bold>Vespr</bold>를 다운로드하세요. 모바일용으로 만들어진, 초보자가 쓰기 가장 쉬운 Cardano 지갑이에요.",
+    "step2": "지갑을 만들고 복구 문구를 안전하게 적어 두세요.",
+    "step3": "ADA를 조금 충전하세요. 몇 달러 정도면 제안을 게시하기에 충분해요.",
+    "step4": "여기로 돌아와 Vespr를 누르고 주소를 붙여넣으세요.",
+    "downloadButton": "⬇️  Vespr 지갑 다운로드",
+    "back": "← 지갑 선택으로 돌아가기",
+    "linkErrorMessage": "Play 스토어에서 \"Vespr Wallet\"을 검색하세요."
+  },
+  "form": {
+    "titleLabel": "제안 제목 *",
+    "titlePlaceholder": "명확하고 간결한 제목을 입력하세요",
+    "characterCount": "{{current}}/{{max}}자",
+    "descriptionLabel": "설명 *",
+    "descriptionPlaceholder": "제안 내용을 자세히 설명하세요...",
+    "durationLabel": "투표 기간(일) *",
+    "durationHelper": "권장: 7–14일",
+    "votersLabel": "예상 투표자 수 *",
+    "votersHelper": "참여자 수를 예상해 주세요(최소 2명)",
+    "customVotersPlaceholder": "또는 직접 입력(최소 2명)",
+    "selectedVoters_other": "선택됨: 투표자 {{voters}}명"
+  },
+  "attachments": {
+    "label": "첨부 파일(선택)",
+    "helper": "제안에 이미지를 최대 {{max}}장까지 첨부할 수 있어요",
+    "addPhoto": "+\n사진",
+    "limitTitle": "한도 도달",
+    "limitMessage": "제안 하나에 이미지를 최대 {{max}}장까지 첨부할 수 있어요.",
+    "permissionTitle": "권한 필요",
+    "permissionMessage": "이미지를 첨부하려면 사진 보관함 접근을 허용해 주세요.",
+    "errorTitle": "이미지를 추가할 수 없어요"
+  },
+  "validation": {
+    "missingInfoTitle": "정보 누락",
+    "missingInfoMessage": "지갑 주소를 포함해 모든 필수 항목을 먼저 입력해 주세요",
+    "invalidVotersTitle": "유효하지 않은 투표자 수",
+    "minVotersMessage": "예상 투표자 수는 최소 2명이에요",
+    "votersAtLeastMessage": "예상 투표자 수는 2명 이상이어야 해요",
+    "missingTitleTitle": "제목 누락",
+    "missingTitleMessage": "제안 제목을 입력해 주세요",
+    "missingDescriptionTitle": "설명 누락",
+    "missingDescriptionMessage": "제안 설명을 입력해 주세요",
+    "invalidDurationTitle": "유효하지 않은 기간",
+    "invalidDurationMessage": "기간은 1일 이상이어야 해요",
+    "walletRequiredTitle": "지갑 필요",
+    "walletRequiredMessage": "생성 수수료를 내려면 Cardano 지갑을 연결해 주세요"
+  },
+  "fees": {
+    "calculateButton": "총비용 계산",
+    "breakdownTitle": "총비용 내역",
+    "gasCosts": "가스비:",
+    "foundationFee": "재단 수수료:",
+    "total": "합계:",
+    "minimumApplied": "플랫폼 최소 금액 1.2 ADA 적용",
+    "foundationInfo": "재단 수수료는 VoteBoxApp 오픈소스 개발을 지원해요",
+    "alertTitle": "전체 수수료 내역",
+    "alertExpectedVoters": "예상 투표자 수: {{voters}}",
+    "alertGasCosts_other": "가스비({{count}}개 배치): {{amount}} ADA",
+    "alertFoundationFee": "재단 수수료: {{amount}} ADA",
+    "alertTotal": "합계: {{ada}} ADA(약 ${{usd}} USD)",
+    "alertMinimumApplied": "(플랫폼 최소 금액 1.2 ADA 적용)",
+    "alertFoundationInfo": "재단 수수료는 VoteBoxApp 오픈소스 개발을 지원해요.",
+    "votingFree": "모든 참여자는 무료로 투표할 수 있어요!"
+  },
+  "payment": {
+    "title": "결제하고 게시하기",
+    "instructions": "본인의 지갑 앱에서 정확히 이 금액을 보낸 후 아래에 트랜잭션 해시를 붙여넣으세요.",
+    "sendTo": "받는 주소",
+    "amount": "금액",
+    "copy": "복사",
+    "txHashLabel": "트랜잭션 해시",
+    "txHashPlaceholder": "지갑 앱의 TX 해시를 붙여넣으세요",
+    "verifying": "결제 확인 중...",
+    "verifyButton": "확인 후 게시",
+    "editProposal": "← 제안 수정",
+    "overpayTitle": "필요한 금액보다 훨씬 많아요",
+    "overpayMessage": "{{sent}} ADA를 보냈지만 필요한 금액은 {{required}} ADA예요. 초과 금액은 환불되지 않아요. 그래도 계속할까요?",
+    "verifyErrors": {
+      "malformed_hash": "유효한 트랜잭션 해시가 아닌 것 같아요. 16진수 64자여야 하니 붙여넣은 내용을 확인해 주세요.",
+      "not_found_or_pending": "아직 온체인에서 찾을 수 없어요. 방금 보냈다면 확인될 때까지 30–60초 기다린 후 다시 시도해 주세요.",
+      "wrong_recipient": "이 트랜잭션은 위에 표시된 재단 지갑 주소로 결제되지 않았어요.",
+      "insufficient_amount": "보낸 금액이 필요한 금액보다 적어요. 위의 금액을 확인해 주세요.",
+      "already_used": "이 트랜잭션은 이미 다른 제안에 사용되었어요.",
+      "network_error": "확인을 위해 네트워크에 연결할 수 없어요. 연결 상태를 확인하고 다시 시도해 주세요.",
+      "generic": "확인에 실패했어요. 다시 시도해 주세요."
+    }
+  },
+  "publish": {
+    "statusInitializing": "블록체인 서비스 초기화 중...",
+    "statusConnecting": "Cardano 네트워크에 연결 중...",
+    "statusUploading": "IPFS에 업로드 중...",
+    "statusRecording": "블록체인에 기록 중...",
+    "incompleteResponse": "블록체인 서비스의 응답이 불완전해요",
+    "unknownError": "알 수 없는 오류",
+    "queuedToast": "⏳ 연결 없음 — 제안이 대기열에 추가되었고, 다시 온라인이 되면 게시돼요",
+    "failedTitle": "게시 실패",
+    "failedMessage": "{{error}}\n\n자세한 로그는 콘솔을 확인하세요.",
+    "connectWalletButton": "지갑 연결하고 게시하기",
+    "continueButton": "결제로 계속"
+  },
+  "success": {
+    "title": "🎉 제안이 게시되었어요!",
+    "live": "제안이 이제 공개되었어요!",
+    "ipfs": "IPFS: {{cid}}...",
+    "tx": "TX:   {{hash}}...",
+    "verifyOn": "preprod.cardanoscan.io에서 확인",
+    "totalPaid": "총 결제 금액: {{ada}} ADA(약 ${{usd}} USD)",
+    "configuredFor_other": "투표자 {{voters}}명 기준으로 설정됨",
+    "copyTxHash": "📋 TX 해시 복사",
+    "share": "📢 공유"
+  },
+  "batching": {
+    "title": "투표 일괄 처리 시스템",
+    "body": "가스비 절감을 위해 투표를 최대 100개씩 묶어서 처리\n작은 배치는 10분마다 자동 제출\n제안 종료 시 모든 투표 기록\n개별 투표 대비 비용 80% 절감\n참여자의 투표는 완전히 무료"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "invite": {
+    "heading": "🗳️ あなたの一票が必要です",
+    "closes_other": "⏰ 投票締め切り：{{date}}（残り {{count}} 日）",
+    "secured": "🔒 Cardano ブロックチェーンで保護",
+    "free": "✅ 投票は完全無料 — ウォレット不要",
+    "voteNow": "VoteBoxApp で今すぐ投票：",
+    "footer": "— VoteBoxApp から共有 · 誰でも使える無料の民主的投票",
+    "title": "投票しよう：{{title}}"
+  },
+  "voted": {
+    "heading": "✊ VoteBoxApp で投票しました",
+    "daysLeft_other": "投票締め切りまであと {{count}} 日 — あなたの声を届けよう：",
+    "closed": "投票は終了しました — あなたの声を届けよう：",
+    "tagline": "🔒 ブロックチェーンで保護 · 100% 無料 · ウォレット不要",
+    "footer": "— VoteBoxApp：誰もが参加できる民主的投票",
+    "title": "投票しました：{{title}}"
+  },
+  "results": {
+    "noResults": "まだ結果はありません",
+    "noVotes": "まだ投票は記録されていません",
+    "row_other": "{{bar}} {{option}}：{{count}} 票（{{pct}}%）",
+    "heading": "📊 投票結果",
+    "leading": "🏆 トップ：「{{option}}」{{pct}}%",
+    "total": "総投票数：{{count}}",
+    "verified": "🔒 Cardano ブロックチェーンで検証済み",
+    "seeFull": "VoteBoxApp で全結果を見る：",
+    "footer": "— VoteBoxApp：透明で無料の民主的投票",
+    "title": "結果：{{title}}"
+  },
+  "urgent": {
+    "lessThanHour": "⚡ 投票締め切りまで残り 1 時間未満",
+    "hours": "⚡ 投票締め切りまで残り {{count}} 時間",
+    "days": "⏰ 投票締め切りまで残り {{count}} 日",
+    "votedSoFar_other": "これまでに {{count}} 人が投票しました。",
+    "stillCounts": "あなたの声はまだ間に合います — 今すぐ投票：",
+    "tagline": "✅ 無料 · ウォレット不要 · 10 秒で完了",
+    "footer": "— VoteBoxApp：ブロックチェーン上の民主的投票",
+    "title": "急いで：「{{title}}」に投票しよう"
+  },
+  "discovery": {
+    "heading": "🗳️ VoteBoxApp のこの提案をチェック",
+    "open": "🟢 投票受付中",
+    "closed": "🔴 投票は終了しました",
+    "freeToVote": "✅ 無料で投票 — ウォレットもアカウントも不要",
+    "seeResults": "📊 最終結果を見る",
+    "footer": "— VoteBoxApp：無料・オープン・ブロックチェーンで保護された投票"
+  }
+}

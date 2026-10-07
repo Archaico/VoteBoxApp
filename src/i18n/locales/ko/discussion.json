@@ -1,0 +1,25 @@
+{
+  "header": {
+    "title": "토론({{count}})"
+  },
+  "loading": "잠시만요… 탈중앙화 IPFS 네트워크에서 댓글을 불러오는 중이에요.",
+  "empty": {
+    "title": "아직 댓글이 없어요.",
+    "subtitle": "이 제안에 대해 처음으로 의견을 남겨 보세요!"
+  },
+  "comment": {
+    "reply": "답글"
+  },
+  "replying": {
+    "label": "댓글에 답글 작성 중...",
+    "cancel": "취소"
+  },
+  "input": {
+    "placeholder": "댓글 추가...",
+    "post": "게시"
+  },
+  "toast": {
+    "savedOffline": "댓글이 저장되었어요 — 다시 온라인이 되면 동기화돼요",
+    "saveFailed": "댓글을 저장하지 못했어요"
+  }
+}

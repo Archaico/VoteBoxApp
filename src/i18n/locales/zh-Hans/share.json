@@ -1,0 +1,49 @@
+{
+  "invite": {
+    "heading": "🗳️ 需要你的一票",
+    "closes_other": "⏰ 投票截止：{{date}}（剩余 {{count}} 天）",
+    "secured": "🔒 由 Cardano 区块链保障安全",
+    "free": "✅ 投票完全免费——无需钱包",
+    "voteNow": "立即在 VoteBoxApp 上投票：",
+    "footer": "— 分享自 VoteBoxApp · 人人可用的免费民主投票",
+    "title": "投票：{{title}}"
+  },
+  "voted": {
+    "heading": "✊ 我刚刚在 VoteBoxApp 上投了票",
+    "daysLeft_other": "距投票截止还有 {{count}} 天——发出你的声音：",
+    "closed": "投票已截止——发出你的声音：",
+    "tagline": "🔒 区块链保障 · 100% 免费 · 无需钱包",
+    "footer": "— VoteBoxApp：人人可用的民主投票",
+    "title": "我已投票：{{title}}"
+  },
+  "results": {
+    "noResults": "暂无结果",
+    "noVotes": "暂无投票记录",
+    "row_other": "{{bar}} {{option}}：{{count}} 票（{{pct}}%）",
+    "heading": "📊 投票结果",
+    "leading": "🏆 领先：“{{option}}”，得票率 {{pct}}%",
+    "total": "总投票数：{{count}}",
+    "verified": "🔒 已在 Cardano 区块链上验证",
+    "seeFull": "在 VoteBoxApp 上查看完整结果：",
+    "footer": "— VoteBoxApp：透明、免费的民主投票",
+    "title": "结果：{{title}}"
+  },
+  "urgent": {
+    "lessThanHour": "⚡ 距投票截止不到 1 小时",
+    "hours": "⚡ 距投票截止还有 {{count}} 小时",
+    "days": "⏰ 距投票截止还有 {{count}} 天",
+    "votedSoFar_other": "目前已有 {{count}} 人投票。",
+    "stillCounts": "你的声音依然重要——立即投票：",
+    "tagline": "✅ 免费 · 无需钱包 · 只需 10 秒",
+    "footer": "— VoteBoxApp：基于区块链的民主投票",
+    "title": "紧急：为“{{title}}”投票"
+  },
+  "discovery": {
+    "heading": "🗳️ 来看看 VoteBoxApp 上的这个提案",
+    "open": "🟢 投票进行中",
+    "closed": "🔴 投票已截止",
+    "freeToVote": "✅ 免费投票——无需钱包或账户",
+    "seeResults": "📊 查看最终结果",
+    "footer": "— VoteBoxApp：免费、开放、区块链保障的投票"
+  }
+}

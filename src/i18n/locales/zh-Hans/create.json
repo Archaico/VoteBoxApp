@@ -1,0 +1,173 @@
+{
+  "header": {
+    "back": "返回",
+    "title": "创建提案"
+  },
+  "infoBanner": "Cardano 安全保障 · 节省 80% Gas 费 · 投票者免费",
+  "buttons": {
+    "cancel": "取消",
+    "ok": "确定",
+    "continue": "继续",
+    "remove": "移除",
+    "done": "完成"
+  },
+  "wallets": {
+    "eternl": {
+      "badge": "推荐",
+      "description": "功能最强大的 Cardano 钱包，支持 WalletConnect。"
+    },
+    "vespr": {
+      "badge": "新手首选",
+      "description": "专为手机打造，快速且易于设置。"
+    },
+    "lace": {
+      "badge": "IOG 官方",
+      "description": "由 Cardano 创始团队打造的一站式 Web3 中心。"
+    }
+  },
+  "walletSelect": {
+    "title": "连接你的钱包",
+    "subtitle": "用于支付提案创建费用。投票者无需钱包。",
+    "or": "或",
+    "enterManually": "📋  手动输入地址",
+    "noWallet": "❓  我还没有钱包",
+    "walletConnectSoon": "🔗 即将支持 WalletConnect——一键连接 600 多种钱包",
+    "openAlertTitle": "打开 {{wallet}}？",
+    "openAlertMessage": "这将打开 {{wallet}} 钱包应用（或跳转到下载页面）。\n\n连接后，复制你的 Cardano 地址（以 addr_test1... 开头），然后回到这里粘贴。",
+    "openAlertButton": "打开 {{wallet}}",
+    "linkErrorTitle": "无法打开链接",
+    "linkErrorMessage": "请在 Play 商店中手动搜索该钱包。"
+  },
+  "walletManual": {
+    "welcomeBack": "👋 欢迎回来！打开钱包应用，复制你的地址（addr_test1...），然后粘贴到下方。",
+    "addressLabel": "你的 Cardano 地址",
+    "addressHelper": "以“addr_test1”开头 · 可在钱包的“接收”或“地址”中找到",
+    "back": "← 返回",
+    "confirm": "确认地址",
+    "invalidTitle": "地址无效",
+    "invalidMessage": "请输入有效的 Cardano 地址。地址应以“addr_test1”（测试网）开头，且至少 50 个字符。"
+  },
+  "walletConnected": {
+    "label": "钱包已连接",
+    "removeButton": "移除并更换钱包",
+    "removeAlertTitle": "移除钱包",
+    "removeAlertMessage": "确定要移除你的钱包地址吗？"
+  },
+  "noWallet": {
+    "title": "获取 Cardano 钱包",
+    "body": "Cardano 钱包可以存放 ADA（Cardano 的货币），并用来支付发布提案的少量费用。投票者不需要钱包，只有提案创建者需要。",
+    "step1": "下载 <bold>Vespr</bold>——最适合新手的 Cardano 钱包，专为手机打造。",
+    "step2": "创建钱包，并妥善抄写保存你的助记词。",
+    "step3": "充入一些 ADA——几美元的金额就足以发布提案。",
+    "step4": "回到这里，点击 Vespr，然后粘贴你的地址。",
+    "downloadButton": "⬇️  下载 Vespr 钱包",
+    "back": "← 返回钱包选项",
+    "linkErrorMessage": "请在 Play 商店中搜索“Vespr Wallet”。"
+  },
+  "form": {
+    "titleLabel": "提案标题 *",
+    "titlePlaceholder": "输入清晰简洁的标题",
+    "characterCount": "{{current}}/{{max}} 个字符",
+    "descriptionLabel": "描述 *",
+    "descriptionPlaceholder": "详细说明你的提案……",
+    "durationLabel": "投票时长（天）*",
+    "durationHelper": "建议：7–14 天",
+    "votersLabel": "预计投票人数 *",
+    "votersHelper": "估算参与人数（至少 2 人）",
+    "customVotersPlaceholder": "或输入自定义人数（至少 2 人）",
+    "selectedVoters_other": "已选择：{{voters}} 名投票者"
+  },
+  "attachments": {
+    "label": "附件（可选）",
+    "helper": "最多可为提案添加 {{max}} 张图片",
+    "addPhoto": "+\n照片",
+    "limitTitle": "已达上限",
+    "limitMessage": "每个提案最多可附加 {{max}} 张图片。",
+    "permissionTitle": "需要权限",
+    "permissionMessage": "请允许访问相册以附加图片。",
+    "errorTitle": "无法添加图片"
+  },
+  "validation": {
+    "missingInfoTitle": "信息不完整",
+    "missingInfoMessage": "请先填写所有必填项，包括你的钱包地址",
+    "invalidVotersTitle": "投票人数无效",
+    "minVotersMessage": "预计投票人数至少为 2",
+    "votersAtLeastMessage": "预计投票人数必须至少为 2",
+    "missingTitleTitle": "缺少标题",
+    "missingTitleMessage": "请输入提案标题",
+    "missingDescriptionTitle": "缺少描述",
+    "missingDescriptionMessage": "请输入提案描述",
+    "invalidDurationTitle": "时长无效",
+    "invalidDurationMessage": "时长必须至少为 1 天",
+    "walletRequiredTitle": "需要钱包",
+    "walletRequiredMessage": "请连接你的 Cardano 钱包以支付创建费用"
+  },
+  "fees": {
+    "calculateButton": "计算总费用",
+    "breakdownTitle": "总费用明细",
+    "gasCosts": "Gas 费：",
+    "foundationFee": "基金会费用：",
+    "total": "合计：",
+    "minimumApplied": "已按平台最低标准 1.2 ADA 收取",
+    "foundationInfo": "基金会费用用于支持 VoteBoxApp 开源开发",
+    "alertTitle": "完整费用明细",
+    "alertExpectedVoters": "预计投票人数：{{voters}}",
+    "alertGasCosts_other": "Gas 费（{{count}} 个批次）：{{amount}} ADA",
+    "alertFoundationFee": "基金会费用：{{amount}} ADA",
+    "alertTotal": "合计：{{ada}} ADA（约 ${{usd}} 美元）",
+    "alertMinimumApplied": "（已按平台最低标准 1.2 ADA 收取）",
+    "alertFoundationInfo": "基金会费用用于支持 VoteBoxApp 开源开发。",
+    "votingFree": "所有参与者均可免费投票！"
+  },
+  "payment": {
+    "title": "付款以发布",
+    "instructions": "请从你自己的钱包应用发送此确切金额，然后在下方粘贴交易哈希。",
+    "sendTo": "收款地址",
+    "amount": "金额",
+    "copy": "复制",
+    "txHashLabel": "交易哈希",
+    "txHashPlaceholder": "粘贴钱包应用中的交易哈希",
+    "verifying": "正在验证付款……",
+    "verifyButton": "验证并发布",
+    "editProposal": "← 编辑提案",
+    "overpayTitle": "金额远高于所需",
+    "overpayMessage": "你发送了 {{sent}} ADA，但只需 {{required}} ADA。多付的金额无法退还——仍要继续吗？",
+    "verifyErrors": {
+      "malformed_hash": "这看起来不是有效的交易哈希。它应为 64 个十六进制字符——请检查你粘贴的内容。",
+      "not_found_or_pending": "链上暂未找到。如果刚刚发送，请等待 30–60 秒确认后重试。",
+      "wrong_recipient": "此交易并未支付到上方显示的基金会钱包地址。",
+      "insufficient_amount": "发送金额少于所需金额——请查看上方金额。",
+      "already_used": "此交易已被用于另一个提案。",
+      "network_error": "无法连接网络进行验证——请检查网络连接后重试。",
+      "generic": "验证失败——请重试。"
+    }
+  },
+  "publish": {
+    "statusInitializing": "正在初始化区块链服务……",
+    "statusConnecting": "正在连接 Cardano 网络……",
+    "statusUploading": "正在上传到 IPFS……",
+    "statusRecording": "正在记录到区块链……",
+    "incompleteResponse": "区块链服务返回的响应不完整",
+    "unknownError": "未知错误",
+    "queuedToast": "⏳ 无网络连接——提案已加入队列，恢复联网后将自动发布",
+    "failedTitle": "发布失败",
+    "failedMessage": "{{error}}\n\n请查看控制台中的详细日志。",
+    "connectWalletButton": "连接钱包以发布",
+    "continueButton": "继续付款"
+  },
+  "success": {
+    "title": "🎉 提案已发布！",
+    "live": "你的提案现已上线！",
+    "ipfs": "IPFS：{{cid}}...",
+    "tx": "交易：{{hash}}...",
+    "verifyOn": "在 preprod.cardanoscan.io 上验证",
+    "totalPaid": "已支付总额：{{ada}} ADA（约 ${{usd}} 美元）",
+    "configuredFor_other": "已按 {{voters}} 名投票者配置",
+    "copyTxHash": "📋 复制交易哈希",
+    "share": "📢 分享"
+  },
+  "batching": {
+    "title": "投票批处理系统",
+    "body": "投票每满 100 张合并为一批提交，以节省 Gas 费\n较小的批次每 10 分钟自动提交\n提案结束时所有投票均已记录\n与逐张提交相比，成本降低 80%\n参与者投票完全免费"
+  }
+}

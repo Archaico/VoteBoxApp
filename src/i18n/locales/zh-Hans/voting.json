@@ -1,0 +1,76 @@
+{
+  "choices": {
+    "yes": "赞成",
+    "no": "反对",
+    "abstain": "弃权"
+  },
+  "votingScreen": {
+    "tabs": {
+      "vote": "投票",
+      "discussion": "讨论",
+      "discussionWithCount": "讨论（{{count}}）"
+    },
+    "back": "← 返回",
+    "loading": "正在加载提案……",
+    "unknownCreator": "未知",
+    "createdBy": "创建者：",
+    "deadline": "截止时间：",
+    "daysRemaining_other": "剩余 {{count}} 天",
+    "results": {
+      "title": "当前结果",
+      "totalVotes_other": "共 {{count}} 票"
+    },
+    "alreadyVoted": {
+      "title": "✅ 你已投票",
+      "yourVote": "你的投票：<bold>{{choice}}</bold>",
+      "note": "投票一经提交便无法更改。"
+    },
+    "closed": {
+      "title": "🔒 投票已截止",
+      "note": "此提案已过截止时间，不再接受投票。"
+    },
+    "castVote": {
+      "title": "投出你的一票",
+      "privacyNotice": "🔒 你的投票完全匿名，无法追溯到你本人",
+      "yes": "✅ 赞成",
+      "no": "❌ 反对",
+      "abstain": "⚪ 弃权",
+      "submit": "提交投票"
+    },
+    "status": {
+      "preparing": "正在准备你的投票……",
+      "connecting": "正在连接 Cardano 网络……",
+      "submitting": "正在将投票提交到区块链……"
+    },
+    "toasts": {
+      "selectVoteFirst": "请先选择你的投票",
+      "votingClosed": "此提案的投票已截止",
+      "voteQueued": "⚠️ 投票已加入队列——联网后将自动提交",
+      "voteFailed": "❌ 投票失败：{{message}}",
+      "unknownError": "未知错误"
+    }
+  },
+  "successModal": {
+    "title": "投票已提交",
+    "subtitle": "已记录在 Cardano 区块链上",
+    "proposalId": "提案 ID",
+    "transactionHash": "交易哈希",
+    "yourVote": "你的投票",
+    "sharePrompt": "告诉大家你已投票 👇",
+    "done": "完成",
+    "copy": "⎘ 复制",
+    "copied": "✓ 已复制",
+    "copyFailedTitle": "复制失败",
+    "copyFailedMessage": "请手动复制：{{value}}"
+  },
+  "shareButton": {
+    "moments": {
+      "invite": "邀请他人投票",
+      "voted": "分享你已投票",
+      "results": "分享结果",
+      "urgency": "分享——投票即将截止",
+      "discovery": "分享提案"
+    },
+    "shareFailedTitle": "分享失败"
+  }
+}

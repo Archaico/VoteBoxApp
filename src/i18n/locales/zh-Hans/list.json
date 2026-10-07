@@ -1,0 +1,59 @@
+{
+  "header": {
+    "updatedAt": "更新于 {{time}}",
+    "createButton": "+ 创建"
+  },
+  "loading": "正在加载提案……",
+  "errors": {
+    "cannotConnect": "无法连接 Cardano 网络。请下拉刷新或点击“重试”。",
+    "connectionError": "连接错误——下拉即可重试"
+  },
+  "emptyState": {
+    "loadFailedTitle": "无法加载提案",
+    "retry": "重试",
+    "noProposalsTitle": "暂无提案",
+    "noProposalsText": "成为第一个创建提案的人，开启讨论吧！",
+    "createFirst": "创建第一个提案"
+  },
+  "card": {
+    "closed": "已结束",
+    "remainingDaysHours": "剩余 {{days}} 天 {{hours}} 小时",
+    "remainingHours": "剩余 {{hours}} 小时",
+    "remainingMinutes": "剩余 {{minutes}} 分钟",
+    "optionCount_other": "{{count}} 个选项",
+    "voteCount_other": "{{count}} 票"
+  },
+  "queue": {
+    "title": "📤 排队中的项目",
+    "votesQueued_other": "{{count}} 张投票排队中",
+    "proposalsQueued_other": "{{count}} 个提案排队中",
+    "autoSubmitNote": "网络连接稳定后，这些内容将自动提交。",
+    "oldestItem": "最早的项目：{{time}}",
+    "retryNow": "立即重试",
+    "ok": "确定"
+  },
+  "syncDiagnostic": {
+    "title": "🔄 后台同步诊断",
+    "registrationHeading": "── 注册 ──",
+    "registered": "注册时间：{{time}}",
+    "never": "从未",
+    "osStatus": "系统状态：{{status}}",
+    "unknown": "未知",
+    "lastRunHeading": "── 上次后台运行 ──",
+    "lastRun": "上次运行：{{time}}",
+    "lastRunNever": "从未——任务尚未执行",
+    "timeAgoParenthetical": "（{{ago}}）",
+    "result": "结果：{{result}}",
+    "error": "错误：{{error}}",
+    "subscriptionsChecked": "已检查的订阅：{{count}}",
+    "explanation": "任务约每 15 分钟运行一次。如果“上次运行”已超过约 30–45 分钟（或显示从未，尽管应用已关闭这么久），很可能是系统阻止了后台任务——请在设备设置中检查 VoteBoxApp 的电池/后台活动限制。",
+    "ok": "确定",
+    "timeAgo": {
+      "never": "从未",
+      "justNow": "刚刚",
+      "minutes": "{{minutes}} 分钟前",
+      "hoursMinutes": "{{hours}} 小时 {{minutes}} 分钟前",
+      "days": "{{days}} 天前"
+    }
+  }
+}

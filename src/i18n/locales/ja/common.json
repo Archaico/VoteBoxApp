@@ -1,0 +1,7 @@
+{
+  "language": {
+    "title": "言語",
+    "restartTitle": "再起動が必要です",
+    "restartMessage": "この言語の文字の向きに切り替えるには、VoteBoxApp を閉じてから再度開いてください。"
+  }
+}

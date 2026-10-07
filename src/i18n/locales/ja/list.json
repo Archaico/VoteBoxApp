@@ -1,0 +1,59 @@
+{
+  "header": {
+    "updatedAt": "{{time}} に更新",
+    "createButton": "+ 作成"
+  },
+  "loading": "提案を読み込んでいます...",
+  "errors": {
+    "cannotConnect": "Cardano ネットワークに接続できませんでした。下に引っ張るか、「再試行」をタップしてください。",
+    "connectionError": "接続エラー — 下に引っ張って再試行"
+  },
+  "emptyState": {
+    "loadFailedTitle": "提案を読み込めませんでした",
+    "retry": "再試行",
+    "noProposalsTitle": "まだ提案はありません",
+    "noProposalsText": "最初の提案を作成して、話し合いを始めましょう！",
+    "createFirst": "最初の提案を作成"
+  },
+  "card": {
+    "closed": "終了",
+    "remainingDaysHours": "残り {{days}} 日 {{hours}} 時間",
+    "remainingHours": "残り {{hours}} 時間",
+    "remainingMinutes": "残り {{minutes}} 分",
+    "optionCount_other": "選択肢 {{count}} 件",
+    "voteCount_other": "{{count}} 票"
+  },
+  "queue": {
+    "title": "📤 待機中の項目",
+    "votesQueued_other": "{{count}} 件の投票が待機中",
+    "proposalsQueued_other": "{{count}} 件の提案が待機中",
+    "autoSubmitNote": "接続が安定すると、自動的に送信されます。",
+    "oldestItem": "最も古い項目：{{time}}",
+    "retryNow": "今すぐ再試行",
+    "ok": "OK"
+  },
+  "syncDiagnostic": {
+    "title": "🔄 バックグラウンド同期の診断",
+    "registrationHeading": "── 登録 ──",
+    "registered": "登録日時：{{time}}",
+    "never": "なし",
+    "osStatus": "OS ステータス：{{status}}",
+    "unknown": "不明",
+    "lastRunHeading": "── 前回のバックグラウンド実行 ──",
+    "lastRun": "前回の実行：{{time}}",
+    "lastRunNever": "なし — タスクは一度も実行されていません",
+    "timeAgoParenthetical": "（{{ago}}）",
+    "result": "結果：{{result}}",
+    "error": "エラー：{{error}}",
+    "subscriptionsChecked": "確認した購読：{{count}}",
+    "explanation": "タスクは約 15 分ごとに実行される予定です。「前回の実行」が約 30〜45 分以上前の場合（またはアプリをそれだけ閉じていたのに「なし」の場合）、OS がバックグラウンドタスクをブロックしている可能性が高いです。デバイスの設定で、VoteBoxApp のバッテリー／バックグラウンド動作の制限を確認してください。",
+    "ok": "OK",
+    "timeAgo": {
+      "never": "なし",
+      "justNow": "たった今",
+      "minutes": "{{minutes}} 分前",
+      "hoursMinutes": "{{hours}} 時間 {{minutes}} 分前",
+      "days": "{{days}} 日前"
+    }
+  }
+}

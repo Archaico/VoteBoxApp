@@ -1,0 +1,7 @@
+{
+  "language": {
+    "title": "언어",
+    "restartTitle": "다시 시작 필요",
+    "restartMessage": "이 언어의 텍스트 방향으로 바꾸려면 VoteBoxApp을 닫았다가 다시 열어 주세요."
+  }
+}

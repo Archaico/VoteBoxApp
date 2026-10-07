@@ -1,0 +1,48 @@
+{
+  "push": {
+    "deadline24h": {
+      "title": "あと 24 時間で投票終了"
+    },
+    "deadline1h": {
+      "title": "あと 1 時間で投票終了"
+    },
+    "voteSubmitted": {
+      "title": "投票を送信しました"
+    },
+    "voteConfirmed": {
+      "title": "投票がオンチェーンで確定しました",
+      "body": "{{title}} · TX：{{txHash}}..."
+    },
+    "proposalLive": {
+      "title": "あなたの提案が公開されました"
+    },
+    "commentPosted": {
+      "title": "コメントを投稿しました"
+    },
+    "newComment": {
+      "title": "提案に新しいコメントがあります"
+    },
+    "proposalFinalised": {
+      "titlePassed": "提案が可決されました",
+      "titleEnded": "提案が終了しました",
+      "body": "{{title}} · 賛成：{{yes}} / 反対：{{no}}"
+    },
+    "lowBalance": {
+      "title": "ADA 残高不足",
+      "body": "残高が 1.5 ADA を下回っています。提案を作成するには入金してください"
+    },
+    "txFailed": {
+      "title": "トランザクションに失敗しました",
+      "body": "直前の操作をもう一度お試しください"
+    }
+  },
+  "toast": {
+    "offlineQueue": {
+      "voteSubmitted": "✅ 投票を送信しました",
+      "proposalSubmitted": "✅ 提案を送信しました",
+      "proposalPaymentRejected": "❌ 提案を削除しました — 支払いを確認できませんでした（{{reason}}）",
+      "voteFailed_other": "❌ {{count}} 回試行しましたが、投票に失敗しました",
+      "proposalFailed_other": "❌ {{count}} 回試行しましたが、提案に失敗しました"
+    }
+  }
+}

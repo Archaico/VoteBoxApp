@@ -1,0 +1,76 @@
+{
+  "choices": {
+    "yes": "賛成",
+    "no": "反対",
+    "abstain": "棄権"
+  },
+  "votingScreen": {
+    "tabs": {
+      "vote": "投票",
+      "discussion": "ディスカッション",
+      "discussionWithCount": "ディスカッション（{{count}}）"
+    },
+    "back": "← 戻る",
+    "loading": "提案を読み込んでいます...",
+    "unknownCreator": "不明",
+    "createdBy": "作成者：",
+    "deadline": "締め切り：",
+    "daysRemaining_other": "残り {{count}} 日",
+    "results": {
+      "title": "現在の結果",
+      "totalVotes_other": "合計 {{count}} 票"
+    },
+    "alreadyVoted": {
+      "title": "✅ 投票済みです",
+      "yourVote": "あなたの投票：<bold>{{choice}}</bold>",
+      "note": "一度送信した投票は変更できません。"
+    },
+    "closed": {
+      "title": "🔒 投票は終了しました",
+      "note": "この提案は締め切りを過ぎました。投票は受け付けていません。"
+    },
+    "castVote": {
+      "title": "投票する",
+      "privacyNotice": "🔒 投票は完全に匿名で、あなたまでたどられることはありません",
+      "yes": "✅ 賛成",
+      "no": "❌ 反対",
+      "abstain": "⚪ 棄権",
+      "submit": "投票を送信"
+    },
+    "status": {
+      "preparing": "投票を準備しています...",
+      "connecting": "Cardano ネットワークに接続しています...",
+      "submitting": "ブロックチェーンに投票を送信しています..."
+    },
+    "toasts": {
+      "selectVoteFirst": "先に投票内容を選択してください",
+      "votingClosed": "この提案の投票は終了しました",
+      "voteQueued": "⚠️ 投票をキューに追加しました — オンラインになったら送信されます",
+      "voteFailed": "❌ 投票に失敗しました：{{message}}",
+      "unknownError": "不明なエラー"
+    }
+  },
+  "successModal": {
+    "title": "投票を送信しました",
+    "subtitle": "Cardano ブロックチェーンに記録されました",
+    "proposalId": "提案 ID",
+    "transactionHash": "トランザクションハッシュ",
+    "yourVote": "あなたの投票",
+    "sharePrompt": "投票したことをみんなに知らせよう 👇",
+    "done": "完了",
+    "copy": "⎘ コピー",
+    "copied": "✓ コピーしました",
+    "copyFailedTitle": "コピーに失敗しました",
+    "copyFailedMessage": "手動でコピーしてください：{{value}}"
+  },
+  "shareButton": {
+    "moments": {
+      "invite": "投票に招待する",
+      "voted": "投票したことを共有",
+      "results": "結果を共有",
+      "urgency": "共有 — まもなく投票終了",
+      "discovery": "提案を共有"
+    },
+    "shareFailedTitle": "共有に失敗しました"
+  }
+}

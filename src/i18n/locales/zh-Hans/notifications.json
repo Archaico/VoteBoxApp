@@ -1,0 +1,48 @@
+{
+  "push": {
+    "deadline24h": {
+      "title": "投票将在 24 小时后截止"
+    },
+    "deadline1h": {
+      "title": "投票将在 1 小时后截止"
+    },
+    "voteSubmitted": {
+      "title": "投票已提交"
+    },
+    "voteConfirmed": {
+      "title": "投票已在链上确认",
+      "body": "{{title}} · 交易：{{txHash}}..."
+    },
+    "proposalLive": {
+      "title": "你的提案已上线"
+    },
+    "commentPosted": {
+      "title": "评论已发布"
+    },
+    "newComment": {
+      "title": "提案有新评论"
+    },
+    "proposalFinalised": {
+      "titlePassed": "提案已通过",
+      "titleEnded": "提案已结束",
+      "body": "{{title}} · 赞成：{{yes}} / 反对：{{no}}"
+    },
+    "lowBalance": {
+      "title": "ADA 余额不足",
+      "body": "余额低于 1.5 ADA——请充值以创建提案"
+    },
+    "txFailed": {
+      "title": "交易失败",
+      "body": "请重试上一步操作"
+    }
+  },
+  "toast": {
+    "offlineQueue": {
+      "voteSubmitted": "✅ 投票提交成功",
+      "proposalSubmitted": "✅ 提案提交成功",
+      "proposalPaymentRejected": "❌ 提案已移除——无法验证付款（{{reason}}）",
+      "voteFailed_other": "❌ 投票在尝试 {{count}} 次后失败",
+      "proposalFailed_other": "❌ 提案在尝试 {{count}} 次后失败"
+    }
+  }
+}

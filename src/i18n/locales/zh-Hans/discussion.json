@@ -1,0 +1,25 @@
+{
+  "header": {
+    "title": "讨论（{{count}}）"
+  },
+  "loading": "请稍候……正在从去中心化的 IPFS 网络获取评论。",
+  "empty": {
+    "title": "还没有评论。",
+    "subtitle": "来发表第一条关于此提案的评论吧！"
+  },
+  "comment": {
+    "reply": "回复"
+  },
+  "replying": {
+    "label": "正在回复评论……",
+    "cancel": "取消"
+  },
+  "input": {
+    "placeholder": "添加评论……",
+    "post": "发布"
+  },
+  "toast": {
+    "savedOffline": "评论已保存——恢复联网后将同步",
+    "saveFailed": "评论保存失败"
+  }
+}

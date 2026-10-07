@@ -1,0 +1,49 @@
+{
+  "invite": {
+    "heading": "🗳️ 당신의 한 표가 필요해요",
+    "closes_other": "⏰ 투표 마감: {{date}}({{count}}일 남음)",
+    "secured": "🔒 Cardano 블록체인으로 보호",
+    "free": "✅ 투표는 완전 무료 — 지갑 필요 없음",
+    "voteNow": "지금 VoteBoxApp에서 투표하세요:",
+    "footer": "— VoteBoxApp에서 공유 · 모두를 위한 무료 민주 투표",
+    "title": "투표하기: {{title}}"
+  },
+  "voted": {
+    "heading": "✊ 방금 VoteBoxApp에서 투표했어요",
+    "daysLeft_other": "투표 마감까지 {{count}}일 남았어요 — 목소리를 보태 주세요:",
+    "closed": "투표가 마감되었어요 — 목소리를 보태 주세요:",
+    "tagline": "🔒 블록체인 보안 · 100% 무료 · 지갑 필요 없음",
+    "footer": "— VoteBoxApp: 모두를 위한 민주 투표",
+    "title": "투표했어요: {{title}}"
+  },
+  "results": {
+    "noResults": "아직 결과가 없어요",
+    "noVotes": "아직 기록된 투표가 없어요",
+    "row_other": "{{bar}} {{option}}: {{count}}표({{pct}}%)",
+    "heading": "📊 투표 결과",
+    "leading": "🏆 선두: \"{{option}}\" {{pct}}%",
+    "total": "총 투표 수: {{count}}",
+    "verified": "🔒 Cardano 블록체인에서 검증됨",
+    "seeFull": "VoteBoxApp에서 전체 결과 보기:",
+    "footer": "— VoteBoxApp: 투명하고 무료인 민주 투표",
+    "title": "결과: {{title}}"
+  },
+  "urgent": {
+    "lessThanHour": "⚡ 투표 마감까지 1시간도 안 남았어요",
+    "hours": "⚡ 투표 마감까지 {{count}}시간 남았어요",
+    "days": "⏰ 투표 마감까지 {{count}}일 남았어요",
+    "votedSoFar_other": "지금까지 {{count}}명이 투표했어요.",
+    "stillCounts": "아직 늦지 않았어요 — 지금 투표하세요:",
+    "tagline": "✅ 무료 · 지갑 필요 없음 · 10초면 끝",
+    "footer": "— VoteBoxApp: 블록체인 기반 민주 투표",
+    "title": "긴급: \"{{title}}\"에 투표하세요"
+  },
+  "discovery": {
+    "heading": "🗳️ VoteBoxApp에서 이 제안을 확인해 보세요",
+    "open": "🟢 투표 진행 중",
+    "closed": "🔴 투표 마감됨",
+    "freeToVote": "✅ 무료 투표 — 지갑이나 계정 필요 없음",
+    "seeResults": "📊 최종 결과 보기",
+    "footer": "— VoteBoxApp: 무료, 개방형, 블록체인 보안 투표"
+  }
+}

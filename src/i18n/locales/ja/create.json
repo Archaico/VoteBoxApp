@@ -1,0 +1,173 @@
+{
+  "header": {
+    "back": "戻る",
+    "title": "提案を作成"
+  },
+  "infoBanner": "Cardano で保護 · ガス代 80% 削減 · 投票者は無料",
+  "buttons": {
+    "cancel": "キャンセル",
+    "ok": "OK",
+    "continue": "続ける",
+    "remove": "削除",
+    "done": "完了"
+  },
+  "wallets": {
+    "eternl": {
+      "badge": "おすすめ",
+      "description": "最も高機能な Cardano ウォレット。WalletConnect に対応。"
+    },
+    "vespr": {
+      "badge": "初心者に最適",
+      "description": "モバイル向けに設計。高速で、設定も簡単です。"
+    },
+    "lace": {
+      "badge": "IOG 公式",
+      "description": "Cardano の創設者たちが開発。オールインワンの Web3 ハブ。"
+    }
+  },
+  "walletSelect": {
+    "title": "ウォレットを接続",
+    "subtitle": "提案作成手数料の支払いに必要です。投票者はウォレット不要です。",
+    "or": "または",
+    "enterManually": "📋  アドレスを手動で入力",
+    "noWallet": "❓  まだウォレットを持っていません",
+    "walletConnectSoon": "🔗 WalletConnect に近日対応 — 600 以上のウォレットにワンタップで接続",
+    "openAlertTitle": "{{wallet}} を開きますか？",
+    "openAlertMessage": "{{wallet}} ウォレットアプリを開きます（またはダウンロードページに移動します）。\n\n接続したら、Cardano アドレス（addr_test1... で始まる）をコピーし、ここに戻って貼り付けてください。",
+    "openAlertButton": "{{wallet}} を開く",
+    "linkErrorTitle": "リンクを開けませんでした",
+    "linkErrorMessage": "Play ストアでウォレットを手動で検索してください。"
+  },
+  "walletManual": {
+    "welcomeBack": "👋 おかえりなさい！ウォレットアプリを開いてアドレス（addr_test1...）をコピーし、下に貼り付けてください。",
+    "addressLabel": "あなたの Cardano アドレス",
+    "addressHelper": "「addr_test1」で始まります · ウォレットの「受け取り」または「アドレス」で確認できます",
+    "back": "← 戻る",
+    "confirm": "アドレスを確認",
+    "invalidTitle": "無効なアドレス",
+    "invalidMessage": "有効な Cardano アドレスを入力してください。「addr_test1」（テストネット）で始まり、50 文字以上である必要があります。"
+  },
+  "walletConnected": {
+    "label": "ウォレット接続済み",
+    "removeButton": "削除してウォレットを変更",
+    "removeAlertTitle": "ウォレットを削除",
+    "removeAlertMessage": "ウォレットアドレスを削除してもよろしいですか？"
+  },
+  "noWallet": {
+    "title": "Cardano ウォレットを入手する",
+    "body": "Cardano ウォレットがあれば、ADA（Cardano の通貨）を保有し、提案を公開するための少額の手数料を支払えます。投票者には不要で、必要なのは提案の作成者だけです。",
+    "step1": "<bold>Vespr</bold> をダウンロードします。モバイル向けに作られた、初心者に最も使いやすい Cardano ウォレットです。",
+    "step2": "ウォレットを作成し、リカバリーフレーズを書き留めて安全に保管します。",
+    "step3": "ADA を入金します。数ドル分あれば提案を公開できます。",
+    "step4": "ここに戻って Vespr をタップし、アドレスを貼り付けます。",
+    "downloadButton": "⬇️  Vespr ウォレットをダウンロード",
+    "back": "← ウォレットの選択に戻る",
+    "linkErrorMessage": "Play ストアで「Vespr Wallet」を検索してください。"
+  },
+  "form": {
+    "titleLabel": "提案のタイトル *",
+    "titlePlaceholder": "明確で簡潔なタイトルを入力",
+    "characterCount": "{{current}}/{{max}} 文字",
+    "descriptionLabel": "説明 *",
+    "descriptionPlaceholder": "提案の内容を詳しく説明してください...",
+    "durationLabel": "投票期間（日）*",
+    "durationHelper": "推奨：7〜14 日",
+    "votersLabel": "想定投票者数 *",
+    "votersHelper": "参加者数の目安（最低 2 人）",
+    "customVotersPlaceholder": "または人数を入力（最低 2 人）",
+    "selectedVoters_other": "選択中：投票者 {{voters}} 人"
+  },
+  "attachments": {
+    "label": "添付ファイル（任意）",
+    "helper": "提案に画像を最大 {{max}} 枚添付できます",
+    "addPhoto": "+\n写真",
+    "limitTitle": "上限に達しました",
+    "limitMessage": "1 つの提案に添付できる画像は最大 {{max}} 枚です。",
+    "permissionTitle": "許可が必要です",
+    "permissionMessage": "画像を添付するには、写真ライブラリへのアクセスを許可してください。",
+    "errorTitle": "画像を追加できませんでした"
+  },
+  "validation": {
+    "missingInfoTitle": "未入力の項目があります",
+    "missingInfoMessage": "ウォレットアドレスを含め、すべての必須項目を先に入力してください",
+    "invalidVotersTitle": "投票者数が無効です",
+    "minVotersMessage": "想定投票者数は最低 2 人です",
+    "votersAtLeastMessage": "想定投票者数は 2 人以上にしてください",
+    "missingTitleTitle": "タイトルがありません",
+    "missingTitleMessage": "提案のタイトルを入力してください",
+    "missingDescriptionTitle": "説明がありません",
+    "missingDescriptionMessage": "提案の説明を入力してください",
+    "invalidDurationTitle": "期間が無効です",
+    "invalidDurationMessage": "期間は 1 日以上にしてください",
+    "walletRequiredTitle": "ウォレットが必要です",
+    "walletRequiredMessage": "作成手数料を支払うには Cardano ウォレットを接続してください"
+  },
+  "fees": {
+    "calculateButton": "合計費用を計算",
+    "breakdownTitle": "合計費用の内訳",
+    "gasCosts": "ガス代：",
+    "foundationFee": "財団手数料：",
+    "total": "合計：",
+    "minimumApplied": "プラットフォームの最低料金 1.2 ADA を適用",
+    "foundationInfo": "財団手数料は VoteBoxApp のオープンソース開発を支えます",
+    "alertTitle": "手数料の詳細",
+    "alertExpectedVoters": "想定投票者数：{{voters}}",
+    "alertGasCosts_other": "ガス代（{{count}} バッチ）：{{amount}} ADA",
+    "alertFoundationFee": "財団手数料：{{amount}} ADA",
+    "alertTotal": "合計：{{ada}} ADA（約 ${{usd}} USD）",
+    "alertMinimumApplied": "（プラットフォームの最低料金 1.2 ADA を適用）",
+    "alertFoundationInfo": "財団手数料は VoteBoxApp のオープンソース開発を支えます。",
+    "votingFree": "参加者は全員、無料で投票できます！"
+  },
+  "payment": {
+    "title": "支払いをして公開",
+    "instructions": "ご自身のウォレットアプリからこの金額を正確に送金し、下にトランザクションハッシュを貼り付けてください。",
+    "sendTo": "送金先",
+    "amount": "金額",
+    "copy": "コピー",
+    "txHashLabel": "トランザクションハッシュ",
+    "txHashPlaceholder": "ウォレットアプリの TX ハッシュを貼り付け",
+    "verifying": "支払いを確認しています...",
+    "verifyButton": "確認して公開",
+    "editProposal": "← 提案を編集",
+    "overpayTitle": "必要額を大幅に超えています",
+    "overpayMessage": "{{sent}} ADA が送金されましたが、必要額は {{required}} ADA です。差額は返金できません。続行しますか？",
+    "verifyErrors": {
+      "malformed_hash": "有効なトランザクションハッシュではないようです。16 進数 64 文字のはずなので、貼り付けた内容を確認してください。",
+      "not_found_or_pending": "まだオンチェーンで見つかりません。送金した直後の場合は、承認まで 30〜60 秒待ってから再度お試しください。",
+      "wrong_recipient": "このトランザクションは、上に表示された財団ウォレットのアドレスへの支払いではありません。",
+      "insufficient_amount": "送金額が必要額に足りません。上の金額をご確認ください。",
+      "already_used": "このトランザクションは、すでに別の提案で使用されています。",
+      "network_error": "確認のためにネットワークに接続できませんでした。接続を確認して、もう一度お試しください。",
+      "generic": "確認に失敗しました。もう一度お試しください。"
+    }
+  },
+  "publish": {
+    "statusInitializing": "ブロックチェーンサービスを初期化しています...",
+    "statusConnecting": "Cardano ネットワークに接続しています...",
+    "statusUploading": "IPFS にアップロードしています...",
+    "statusRecording": "ブロックチェーンに記録しています...",
+    "incompleteResponse": "ブロックチェーンサービスからの応答が不完全です",
+    "unknownError": "不明なエラー",
+    "queuedToast": "⏳ 接続がありません。提案はキューに追加され、オンラインに戻ったときに公開されます",
+    "failedTitle": "公開に失敗しました",
+    "failedMessage": "{{error}}\n\n詳しいログはコンソールを確認してください。",
+    "connectWalletButton": "ウォレットを接続して公開",
+    "continueButton": "支払いに進む"
+  },
+  "success": {
+    "title": "🎉 提案を公開しました！",
+    "live": "あなたの提案が公開されました！",
+    "ipfs": "IPFS：{{cid}}...",
+    "tx": "TX：{{hash}}...",
+    "verifyOn": "preprod.cardanoscan.io で確認",
+    "totalPaid": "お支払い合計：{{ada}} ADA（約 ${{usd}} USD）",
+    "configuredFor_other": "投票者 {{voters}} 人向けに設定済み",
+    "copyTxHash": "📋 TX ハッシュをコピー",
+    "share": "📢 共有"
+  },
+  "batching": {
+    "title": "投票バッチ処理システム",
+    "body": "ガス代節約のため、投票を最大 100 件ずつまとめて処理\n小さなバッチは 10 分ごとに自動送信\n提案の終了時にすべての投票を記録\n個別の投票に比べてコストを 80% 削減\n参加者の投票は完全に無料"
+  }
+}

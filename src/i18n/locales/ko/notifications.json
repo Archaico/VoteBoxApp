@@ -1,0 +1,48 @@
+{
+  "push": {
+    "deadline24h": {
+      "title": "24시간 후 투표 마감"
+    },
+    "deadline1h": {
+      "title": "1시간 후 투표 마감"
+    },
+    "voteSubmitted": {
+      "title": "투표 제출됨"
+    },
+    "voteConfirmed": {
+      "title": "온체인에서 투표 확정됨",
+      "body": "{{title}} · TX: {{txHash}}..."
+    },
+    "proposalLive": {
+      "title": "제안이 공개되었어요"
+    },
+    "commentPosted": {
+      "title": "댓글이 게시되었어요"
+    },
+    "newComment": {
+      "title": "제안에 새 댓글이 달렸어요"
+    },
+    "proposalFinalised": {
+      "titlePassed": "제안 가결",
+      "titleEnded": "제안 종료",
+      "body": "{{title}} · 찬성: {{yes}} / 반대: {{no}}"
+    },
+    "lowBalance": {
+      "title": "ADA 잔액 부족",
+      "body": "잔액이 1.5 ADA 미만이에요 — 제안을 만들려면 충전하세요"
+    },
+    "txFailed": {
+      "title": "트랜잭션 실패",
+      "body": "마지막 작업을 다시 시도해 주세요"
+    }
+  },
+  "toast": {
+    "offlineQueue": {
+      "voteSubmitted": "✅ 투표가 제출되었어요",
+      "proposalSubmitted": "✅ 제안이 제출되었어요",
+      "proposalPaymentRejected": "❌ 제안이 삭제되었어요 — 결제를 확인할 수 없어요({{reason}})",
+      "voteFailed_other": "❌ {{count}}번 시도했지만 투표에 실패했어요",
+      "proposalFailed_other": "❌ {{count}}번 시도했지만 제안에 실패했어요"
+    }
+  }
+}

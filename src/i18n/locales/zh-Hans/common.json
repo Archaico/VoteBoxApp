@@ -1,0 +1,7 @@
+{
+  "language": {
+    "title": "语言",
+    "restartTitle": "需要重启",
+    "restartMessage": "请关闭并重新打开 VoteBoxApp，以切换此语言的文字方向。"
+  }
+}
