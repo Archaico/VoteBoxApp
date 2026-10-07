@@ -5,6 +5,7 @@
 // before any screen renders. Components use `useTranslation('<namespace>')`;
 // services outside React use `i18n.t('<namespace>:<key>')`.
 
+import './intl-polyfill'; // must load before i18next — see that file
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import * as Localization from 'expo-localization';
