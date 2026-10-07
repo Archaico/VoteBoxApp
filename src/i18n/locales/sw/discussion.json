@@ -1,0 +1,25 @@
+{
+  "header": {
+    "title": "Majadiliano ({{count}})"
+  },
+  "loading": "Subiri kidogo… tunaleta maoni kutoka mtandao wa IPFS usio na mmiliki mmoja.",
+  "empty": {
+    "title": "Bado hakuna maoni.",
+    "subtitle": "Kuwa wa kwanza kujadili pendekezo hili!"
+  },
+  "comment": {
+    "reply": "Jibu"
+  },
+  "replying": {
+    "label": "Unajibu maoni...",
+    "cancel": "Ghairi"
+  },
+  "input": {
+    "placeholder": "Andika maoni...",
+    "post": "Tuma"
+  },
+  "toast": {
+    "savedOffline": "Maoni yamehifadhiwa — yatatumwa ukirudi mtandaoni",
+    "saveFailed": "Imeshindwa kuhifadhi maoni"
+  }
+}

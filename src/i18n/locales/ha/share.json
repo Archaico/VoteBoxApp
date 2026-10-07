@@ -1,0 +1,53 @@
+{
+  "invite": {
+    "heading": "🗳️ ANA BUƘATAR ƘURI'ARKU",
+    "closes_one": "⏰ Zaɓe zai rufe: {{date}} (saura kwana {{count}})",
+    "closes_other": "⏰ Zaɓe zai rufe: {{date}} (saura kwana {{count}})",
+    "secured": "🔒 An tsare shi a blockchain ta Cardano",
+    "free": "✅ Kaɗa ƙuri'a kyauta ne gaba ɗaya — ba a buƙatar walat",
+    "voteNow": "Ku kaɗa ƙuri'a yanzu a VoteBoxApp:",
+    "footer": "— An raba ta VoteBoxApp · Zaɓe na dimokuraɗiyya kyauta ga kowa",
+    "title": "Ku kaɗa ƙuri'a: {{title}}"
+  },
+  "voted": {
+    "heading": "✊ Yanzu na kaɗa ƙuri'a a VoteBoxApp",
+    "daysLeft_one": "Saura kwana {{count}} a kaɗa ƙuri'a — ku ƙara muryarku:",
+    "daysLeft_other": "Saura kwana {{count}} a kaɗa ƙuri'a — ku ƙara muryarku:",
+    "closed": "An rufe zaɓe — ku ƙara muryarku:",
+    "tagline": "🔒 Blockchain ce ke tsare shi · Kyauta 100% · Ba a buƙatar walat",
+    "footer": "— VoteBoxApp: Zaɓe na dimokuraɗiyya ga kowa",
+    "title": "Na kaɗa ƙuri'a: {{title}}"
+  },
+  "results": {
+    "noResults": "Babu sakamako tukuna",
+    "noVotes": "Ba a rubuta wata ƙuri'a ba tukuna",
+    "row_one": "{{bar}} {{option}}: ƙuri'a {{count}} ({{pct}}%)",
+    "row_other": "{{bar}} {{option}}: ƙuri'u {{count}} ({{pct}}%)",
+    "heading": "📊 SAKAMAKON ZAƁE",
+    "leading": "🏆 Kan gaba: \"{{option}}\" da {{pct}}%",
+    "total": "Jimillar ƙuri'un da aka kaɗa: {{count}}",
+    "verified": "🔒 An tabbatar a blockchain ta Cardano",
+    "seeFull": "Ku ga cikakken sakamako a VoteBoxApp:",
+    "footer": "— VoteBoxApp: Zaɓe na dimokuraɗiyya a bayyane, kuma kyauta",
+    "title": "Sakamako: {{title}}"
+  },
+  "urgent": {
+    "lessThanHour": "⚡ SAURA ƘASA DA AWA 1 A KAƊA ƘURI'A",
+    "hours": "⚡ SAURA AWA {{count}} A KAƊA ƘURI'A",
+    "days": "⏰ SAURA KWANA {{count}} A KAƊA ƘURI'A",
+    "votedSoFar_one": "Mutum {{count}} ya kaɗa ƙuri'a zuwa yanzu.",
+    "votedSoFar_other": "Mutane {{count}} sun kaɗa ƙuri'a zuwa yanzu.",
+    "stillCounts": "Muryarku har yanzu tana da muhimmanci — ku kaɗa ƙuri'a yanzu:",
+    "tagline": "✅ Kyauta · Ba a buƙatar walat · Daƙiƙa 10 kacal",
+    "footer": "— VoteBoxApp: Zaɓe na dimokuraɗiyya a blockchain",
+    "title": "Gaggawa: Ku kaɗa ƙuri'a kan \"{{title}}\""
+  },
+  "discovery": {
+    "heading": "🗳️ Ku duba wannan ƙuduri a VoteBoxApp",
+    "open": "🟢 Zaɓe A BUƊE yake",
+    "closed": "🔴 An rufe zaɓe",
+    "freeToVote": "✅ Kaɗa ƙuri'a kyauta ne — ba a buƙatar walat ko asusu",
+    "seeResults": "📊 Ku ga sakamako na ƙarshe",
+    "footer": "— VoteBoxApp: Zaɓe kyauta, a buɗe, kuma blockchain ce ke tsare shi"
+  }
+}

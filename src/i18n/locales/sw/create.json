@@ -1,0 +1,176 @@
+{
+  "header": {
+    "back": "Rudi",
+    "title": "Unda Pendekezo"
+  },
+  "infoBanner": "Imelindwa na Cardano · Okoa 80% ya ada za mtandao · Bure kwa wapiga kura",
+  "buttons": {
+    "cancel": "Ghairi",
+    "ok": "Sawa",
+    "continue": "Endelea",
+    "remove": "Ondoa",
+    "done": "Tayari"
+  },
+  "wallets": {
+    "eternl": {
+      "badge": "INASHAURIWA",
+      "description": "Wallet ya Cardano yenye uwezo mkubwa zaidi. Inatumia WalletConnect."
+    },
+    "vespr": {
+      "badge": "BORA KWA WANAOANZA",
+      "description": "Imeundwa kwa simu, ni ya haraka na rahisi kuanza kutumia."
+    },
+    "lace": {
+      "badge": "RASMI YA IOG",
+      "description": "Imeundwa na waanzilishi wa Cardano. Kila kitu cha Web3 mahali pamoja."
+    }
+  },
+  "walletSelect": {
+    "title": "Unganisha Wallet Yako",
+    "subtitle": "Inahitajika kulipa ada ya kuunda pendekezo. Wapiga kura hawahitaji wallet kamwe.",
+    "or": "au",
+    "enterManually": "📋  Andika anwani mwenyewe",
+    "noWallet": "❓  Bado sina wallet",
+    "walletConnectSoon": "🔗 WalletConnect inakuja hivi karibuni — unganisha kwa kugusa mara moja na wallet zaidi ya 600",
+    "openAlertTitle": "Fungua {{wallet}}?",
+    "openAlertMessage": "Hii itafungua programu ya wallet ya {{wallet}} (au itakupeleka mahali pa kuipakua).\n\nBaada ya kuunganisha, nakili anwani yako ya Cardano (inaanza na addr_test1...) kisha urudi hapa kuibandika.",
+    "openAlertButton": "Fungua {{wallet}}",
+    "linkErrorTitle": "Imeshindwa kufungua kiungo",
+    "linkErrorMessage": "Tafadhali tafuta wallet hiyo kwenye Play Store mwenyewe."
+  },
+  "walletManual": {
+    "welcomeBack": "👋 Karibu tena! Fungua programu ya wallet yako, nakili anwani yako (addr_test1...), kisha uibandike hapa chini.",
+    "addressLabel": "Anwani Yako ya Cardano",
+    "addressHelper": "Inaanza na \"addr_test1\" · Utaipata kwenye wallet yako chini ya \"Receive\" au \"Address\"",
+    "back": "← Rudi",
+    "confirm": "Thibitisha Anwani",
+    "invalidTitle": "Anwani Si Sahihi",
+    "invalidMessage": "Tafadhali weka anwani sahihi ya Cardano. Inapaswa kuanza na \"addr_test1\" (testnet) na iwe na herufi 50 au zaidi."
+  },
+  "walletConnected": {
+    "label": "Wallet Imeunganishwa",
+    "removeButton": "Ondoa na Badilisha Wallet",
+    "removeAlertTitle": "Ondoa Wallet",
+    "removeAlertMessage": "Una uhakika unataka kuondoa anwani ya wallet yako?"
+  },
+  "noWallet": {
+    "title": "Kupata Wallet ya Cardano",
+    "body": "Wallet ya Cardano inakuwezesha kuweka ADA (sarafu ya Cardano) na kulipa ada ndogo ya kuchapisha pendekezo. Wapiga kura hawaihitaji kamwe — ni wanaounda mapendekezo tu.",
+    "step1": "Pakua <bold>Vespr</bold> — ndiyo wallet ya Cardano rahisi zaidi kwa wanaoanza, imeundwa kwa simu.",
+    "step2": "Unda wallet yako na uandike maneno yako ya kurejesha (recovery phrase), uyahifadhi mahali salama.",
+    "step3": "Weka ADA kidogo — kiasi cha dola chache kinatosha kuchapisha mapendekezo.",
+    "step4": "Rudi hapa, gusa Vespr, kisha ubandike anwani yako.",
+    "downloadButton": "⬇️  Pakua Wallet ya Vespr",
+    "back": "← Rudi kwenye chaguo za wallet",
+    "linkErrorMessage": "Tafuta \"Vespr Wallet\" kwenye Play Store."
+  },
+  "form": {
+    "titleLabel": "Kichwa cha Pendekezo *",
+    "titlePlaceholder": "Andika kichwa kifupi na kilicho wazi",
+    "characterCount": "Herufi {{current}}/{{max}}",
+    "descriptionLabel": "Maelezo *",
+    "descriptionPlaceholder": "Eleza pendekezo lako kwa kina...",
+    "durationLabel": "Muda wa Kupiga Kura (siku) *",
+    "durationHelper": "Inashauriwa: siku 7–14",
+    "votersLabel": "Wapiga Kura Wanaotarajiwa *",
+    "votersHelper": "Kadiria idadi ya washiriki (angalau 2)",
+    "customVotersPlaceholder": "Au andika idadi yako (angalau 2)",
+    "selectedVoters_one": "Umechagua: mpiga kura {{voters}}",
+    "selectedVoters_other": "Umechagua: wapiga kura {{voters}}"
+  },
+  "attachments": {
+    "label": "Viambatisho (si lazima)",
+    "helper": "Hadi picha {{max}} za kuambatana na pendekezo lako",
+    "addPhoto": "+\nPicha",
+    "limitTitle": "Umefikia Kikomo",
+    "limitMessage": "Unaweza kuambatisha hadi picha {{max}} kwa kila pendekezo.",
+    "permissionTitle": "Ruhusa Inahitajika",
+    "permissionMessage": "Ruhusu programu kufikia picha zako ili kuambatisha picha.",
+    "errorTitle": "Imeshindwa kuongeza picha"
+  },
+  "validation": {
+    "missingInfoTitle": "Taarifa Hazijakamilika",
+    "missingInfoMessage": "Tafadhali jaza sehemu zote zinazohitajika kwanza, pamoja na anwani ya wallet yako",
+    "invalidVotersTitle": "Idadi ya Wapiga Kura Si Sahihi",
+    "minVotersMessage": "Idadi ya chini ya wapiga kura wanaotarajiwa ni 2",
+    "votersAtLeastMessage": "Wapiga kura wanaotarajiwa lazima wawe angalau 2",
+    "missingTitleTitle": "Kichwa Kinakosekana",
+    "missingTitleMessage": "Tafadhali andika kichwa cha pendekezo",
+    "missingDescriptionTitle": "Maelezo Yanakosekana",
+    "missingDescriptionMessage": "Tafadhali andika maelezo ya pendekezo",
+    "invalidDurationTitle": "Muda Si Sahihi",
+    "invalidDurationMessage": "Muda lazima uwe angalau siku 1",
+    "walletRequiredTitle": "Wallet Inahitajika",
+    "walletRequiredMessage": "Tafadhali unganisha wallet yako ya Cardano ili kulipa ada ya kuunda"
+  },
+  "fees": {
+    "calculateButton": "Hesabu Gharama Yote",
+    "breakdownTitle": "Mchanganuo wa Gharama Yote",
+    "gasCosts": "Ada za mtandao (gas):",
+    "foundationFee": "Ada ya Taasisi:",
+    "total": "Jumla:",
+    "minimumApplied": "Kiwango cha chini cha jukwaa cha 1.2 ADA kimetumika",
+    "foundationInfo": "Ada ya Taasisi inasaidia kuendeleza VoteBoxApp, programu huria",
+    "alertTitle": "Mchanganuo Kamili wa Ada",
+    "alertExpectedVoters": "Wapiga kura wanaotarajiwa: {{voters}}",
+    "alertGasCosts_one": "Ada za mtandao (kundi {{count}}): {{amount}} ADA",
+    "alertGasCosts_other": "Ada za mtandao (makundi {{count}}): {{amount}} ADA",
+    "alertFoundationFee": "Ada ya Taasisi: {{amount}} ADA",
+    "alertTotal": "JUMLA: {{ada}} ADA (~${{usd}} USD)",
+    "alertMinimumApplied": "(kiwango cha chini cha jukwaa cha 1.2 ADA kimetumika)",
+    "alertFoundationInfo": "Ada ya Taasisi inasaidia kuendeleza VoteBoxApp, programu huria.",
+    "votingFree": "Kupiga kura ni BURE kwa washiriki wote!"
+  },
+  "payment": {
+    "title": "Tuma Malipo Ili Kuchapisha",
+    "instructions": "Tuma kiasi hiki kamili kutoka kwenye programu ya wallet yako, kisha ubandike msimbo wa muamala hapa chini.",
+    "sendTo": "Tuma kwa",
+    "amount": "Kiasi",
+    "copy": "Nakili",
+    "txHashLabel": "Msimbo wa Muamala (hash)",
+    "txHashPlaceholder": "Bandika msimbo wa muamala kutoka kwenye wallet yako",
+    "verifying": "Inathibitisha malipo...",
+    "verifyButton": "Thibitisha na Uchapishe",
+    "editProposal": "← Hariri Pendekezo",
+    "overpayTitle": "Kiasi ni kikubwa mno kuliko kinachohitajika",
+    "overpayMessage": "Umetuma {{sent}} ADA, lakini kilichohitajika ni {{required}} ADA tu. Pesa hii haiwezi kurudishwa — uendelee hata hivyo?",
+    "verifyErrors": {
+      "malformed_hash": "Huu hauonekani kuwa msimbo sahihi wa muamala. Unapaswa kuwa na herufi 64 za hex — angalia ulichobandika.",
+      "not_found_or_pending": "Bado haujaonekana kwenye blockchain. Kama umetuma sasa hivi, subiri sekunde 30-60 uthibitishwe kisha ujaribu tena.",
+      "wrong_recipient": "Muamala huu haujalipwa kwa anwani ya wallet ya Taasisi iliyoonyeshwa hapo juu.",
+      "insufficient_amount": "Kiasi kilichotumwa ni kidogo kuliko kinachohitajika — angalia kiasi hapo juu.",
+      "already_used": "Muamala huu tayari umetumika kwa pendekezo jingine.",
+      "network_error": "Imeshindwa kufikia mtandao ili kuthibitisha — angalia muunganisho wako kisha ujaribu tena.",
+      "generic": "Uthibitisho umeshindikana — tafadhali jaribu tena."
+    }
+  },
+  "publish": {
+    "statusInitializing": "Inaanzisha huduma ya blockchain...",
+    "statusConnecting": "Inaunganisha na mtandao wa Cardano...",
+    "statusUploading": "Inapakia kwenye IPFS...",
+    "statusRecording": "Inarekodi kwenye blockchain...",
+    "incompleteResponse": "Jibu lisilokamilika kutoka kwa huduma ya blockchain",
+    "unknownError": "Hitilafu isiyojulikana",
+    "queuedToast": "⏳ Hakuna mtandao — pendekezo limewekwa foleni, litachapishwa ukirudi mtandaoni",
+    "failedTitle": "Kuchapisha Kumeshindikana",
+    "failedMessage": "{{error}}\n\nAngalia console kwa maelezo zaidi.",
+    "connectWalletButton": "Unganisha Wallet Ili Kuchapisha",
+    "continueButton": "Endelea kwa Malipo"
+  },
+  "success": {
+    "title": "🎉 Pendekezo Limechapishwa!",
+    "live": "Pendekezo lako sasa liko hewani!",
+    "ipfs": "IPFS: {{cid}}...",
+    "tx": "TX:   {{hash}}...",
+    "verifyOn": "Thibitisha kwenye preprod.cardanoscan.io",
+    "totalPaid": "Jumla uliyolipa: {{ada}} ADA (~${{usd}} USD)",
+    "configuredFor_one": "Limewekwa kwa mpiga kura {{voters}}",
+    "configuredFor_other": "Limewekwa kwa wapiga kura {{voters}}",
+    "copyTxHash": "📋 Nakili Msimbo wa TX",
+    "share": "📢 Shiriki"
+  },
+  "batching": {
+    "title": "Mfumo wa Kukusanya Kura",
+    "body": "Kura hukusanywa pamoja hadi 100 ili kupunguza ada za mtandao\nMakundi madogo hutumwa yenyewe kila dakika 10\nKura zote hurekodiwa pendekezo linapoisha\nGharama hupungua kwa 80% ukilinganisha na kura moja moja\nKupiga kura ni BURE kabisa kwa washiriki"
+  }
+}

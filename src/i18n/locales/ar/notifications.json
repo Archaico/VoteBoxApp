@@ -1,0 +1,58 @@
+{
+  "push": {
+    "deadline24h": {
+      "title": "يُغلق التصويت خلال 24 ساعة"
+    },
+    "deadline1h": {
+      "title": "يُغلق التصويت خلال ساعة واحدة"
+    },
+    "voteSubmitted": {
+      "title": "تم إرسال التصويت"
+    },
+    "voteConfirmed": {
+      "title": "تم تأكيد التصويت على البلوكتشين",
+      "body": "{{title}} · TX: {{txHash}}..."
+    },
+    "proposalLive": {
+      "title": "مقترحك متاح الآن"
+    },
+    "commentPosted": {
+      "title": "تم نشر التعليق"
+    },
+    "newComment": {
+      "title": "تعليق جديد على مقترح"
+    },
+    "proposalFinalised": {
+      "titlePassed": "تمت الموافقة على المقترح",
+      "titleEnded": "انتهى التصويت على المقترح",
+      "body": "{{title}} · نعم: {{yes}} / لا: {{no}}"
+    },
+    "lowBalance": {
+      "title": "رصيد ADA منخفض",
+      "body": "الرصيد أقل من 1.5 ADA — اشحن رصيدك لإنشاء مقترحات"
+    },
+    "txFailed": {
+      "title": "فشلت المعاملة",
+      "body": "أعد محاولة آخر إجراء قمت به"
+    }
+  },
+  "toast": {
+    "offlineQueue": {
+      "voteSubmitted": "✅ تم إرسال التصويت بنجاح",
+      "proposalSubmitted": "✅ تم إرسال المقترح بنجاح",
+      "proposalPaymentRejected": "❌ أُزيل المقترح — تعذّر التحقق من الدفع ({{reason}})",
+      "voteFailed_zero": "❌ فشل التصويت",
+      "voteFailed_one": "❌ فشل التصويت بعد محاولة واحدة",
+      "voteFailed_two": "❌ فشل التصويت بعد محاولتين",
+      "voteFailed_few": "❌ فشل التصويت بعد {{count}} محاولات",
+      "voteFailed_many": "❌ فشل التصويت بعد {{count}} محاولة",
+      "voteFailed_other": "❌ فشل التصويت بعد {{count}} محاولة",
+      "proposalFailed_zero": "❌ فشل إرسال المقترح",
+      "proposalFailed_one": "❌ فشل إرسال المقترح بعد محاولة واحدة",
+      "proposalFailed_two": "❌ فشل إرسال المقترح بعد محاولتين",
+      "proposalFailed_few": "❌ فشل إرسال المقترح بعد {{count}} محاولات",
+      "proposalFailed_many": "❌ فشل إرسال المقترح بعد {{count}} محاولة",
+      "proposalFailed_other": "❌ فشل إرسال المقترح بعد {{count}} محاولة"
+    }
+  }
+}

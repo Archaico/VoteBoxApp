@@ -1,0 +1,176 @@
+{
+  "header": {
+    "back": "ফিরে যান",
+    "title": "প্রস্তাব তৈরি করুন"
+  },
+  "infoBanner": "Cardano-তে সুরক্ষিত · 80% গ্যাস সাশ্রয় · ভোটারদের জন্য বিনামূল্যে",
+  "buttons": {
+    "cancel": "বাতিল",
+    "ok": "ঠিক আছে",
+    "continue": "চালিয়ে যান",
+    "remove": "সরান",
+    "done": "সম্পন্ন"
+  },
+  "wallets": {
+    "eternl": {
+      "badge": "সুপারিশকৃত",
+      "description": "সবচেয়ে শক্তিশালী Cardano ওয়ালেট। WalletConnect সমর্থিত।"
+    },
+    "vespr": {
+      "badge": "নতুনদের জন্য সেরা",
+      "description": "মোবাইলের জন্য তৈরি, দ্রুত এবং সেট আপ করা সহজ।"
+    },
+    "lace": {
+      "badge": "অফিশিয়াল IOG",
+      "description": "Cardano-র প্রতিষ্ঠাতাদের তৈরি। অল-ইন-ওয়ান Web3 হাব।"
+    }
+  },
+  "walletSelect": {
+    "title": "আপনার ওয়ালেট যুক্ত করুন",
+    "subtitle": "প্রস্তাব তৈরির ফি দিতে প্রয়োজন। ভোটারদের কখনো ওয়ালেট লাগে না।",
+    "or": "অথবা",
+    "enterManually": "📋  ঠিকানা নিজে লিখুন",
+    "noWallet": "❓  আমার এখনো ওয়ালেট নেই",
+    "walletConnectSoon": "🔗 WalletConnect সমর্থন শীঘ্রই আসছে — 600+ ওয়ালেটের সাথে এক ট্যাপে সংযোগ",
+    "openAlertTitle": "{{wallet}} খুলবেন?",
+    "openAlertMessage": "এটি {{wallet}} ওয়ালেট অ্যাপ খুলবে (অথবা ডাউনলোডের পাতায় নিয়ে যাবে)।\n\nসংযোগের পর আপনার Cardano ঠিকানা (addr_test1... দিয়ে শুরু) কপি করুন এবং পেস্ট করতে এখানে ফিরে আসুন।",
+    "openAlertButton": "{{wallet}} খুলুন",
+    "linkErrorTitle": "লিংক খোলা যায়নি",
+    "linkErrorMessage": "Play Store-এ ওয়ালেটটি নিজে খুঁজে নিন।"
+  },
+  "walletManual": {
+    "welcomeBack": "👋 আবার স্বাগতম! আপনার ওয়ালেট অ্যাপ খুলুন, ঠিকানা (addr_test1...) কপি করুন এবং নিচে পেস্ট করুন।",
+    "addressLabel": "আপনার Cardano ঠিকানা",
+    "addressHelper": "\"addr_test1\" দিয়ে শুরু হয় · ওয়ালেটের \"Receive\" বা \"Address\" অংশে পাবেন",
+    "back": "← ফিরে যান",
+    "confirm": "ঠিকানা নিশ্চিত করুন",
+    "invalidTitle": "অবৈধ ঠিকানা",
+    "invalidMessage": "একটি সঠিক Cardano ঠিকানা লিখুন। এটি \"addr_test1\" (টেস্টনেট) দিয়ে শুরু হবে এবং কমপক্ষে 50 অক্ষরের হবে।"
+  },
+  "walletConnected": {
+    "label": "ওয়ালেট যুক্ত হয়েছে",
+    "removeButton": "ওয়ালেট সরান ও বদলান",
+    "removeAlertTitle": "ওয়ালেট সরান",
+    "removeAlertMessage": "আপনি কি নিশ্চিত যে ওয়ালেটের ঠিকানা সরাতে চান?"
+  },
+  "noWallet": {
+    "title": "Cardano ওয়ালেট কীভাবে পাবেন",
+    "body": "Cardano ওয়ালেটে আপনি ADA (Cardano-র মুদ্রা) রাখতে পারেন এবং প্রস্তাব প্রকাশের ছোট ফি দিতে পারেন। ভোটারদের এটি কখনো লাগে না — শুধু যাঁরা প্রস্তাব তৈরি করেন তাঁদের লাগে।",
+    "step1": "<bold>Vespr</bold> ডাউনলোড করুন — নতুনদের জন্য সবচেয়ে সহজ Cardano ওয়ালেট, মোবাইলের জন্য তৈরি।",
+    "step2": "আপনার ওয়ালেট তৈরি করুন এবং রিকভারি ফ্রেজটি নিরাপদে লিখে রাখুন।",
+    "step3": "কিছু ADA যোগ করুন — কয়েক ডলারের সমান হলেই প্রস্তাব প্রকাশের জন্য যথেষ্ট।",
+    "step4": "এখানে ফিরে আসুন, Vespr-এ ট্যাপ করুন এবং আপনার ঠিকানা পেস্ট করুন।",
+    "downloadButton": "⬇️  Vespr ওয়ালেট ডাউনলোড করুন",
+    "back": "← ওয়ালেটের বিকল্পে ফিরে যান",
+    "linkErrorMessage": "Play Store-এ \"Vespr Wallet\" খুঁজুন।"
+  },
+  "form": {
+    "titleLabel": "প্রস্তাবের শিরোনাম *",
+    "titlePlaceholder": "একটি স্পষ্ট, সংক্ষিপ্ত শিরোনাম লিখুন",
+    "characterCount": "{{current}}/{{max}} অক্ষর",
+    "descriptionLabel": "বিবরণ *",
+    "descriptionPlaceholder": "আপনার প্রস্তাব বিস্তারিত ব্যাখ্যা করুন...",
+    "durationLabel": "ভোটের সময়কাল (দিন) *",
+    "durationHelper": "পরামর্শ: 7–14 দিন",
+    "votersLabel": "প্রত্যাশিত ভোটার *",
+    "votersHelper": "অংশগ্রহণকারীর সংখ্যা আন্দাজ করুন (কমপক্ষে 2)",
+    "customVotersPlaceholder": "অথবা নিজের সংখ্যা লিখুন (কমপক্ষে 2)",
+    "selectedVoters_one": "নির্বাচিত: {{voters}} জন ভোটার",
+    "selectedVoters_other": "নির্বাচিত: {{voters}} জন ভোটার"
+  },
+  "attachments": {
+    "label": "সংযুক্তি (ঐচ্ছিক)",
+    "helper": "প্রস্তাবের সাথে সর্বোচ্চ {{max}}টি ছবি",
+    "addPhoto": "+\nছবি",
+    "limitTitle": "সীমা পূর্ণ হয়েছে",
+    "limitMessage": "প্রতি প্রস্তাবে সর্বোচ্চ {{max}}টি ছবি যুক্ত করতে পারবেন।",
+    "permissionTitle": "অনুমতি প্রয়োজন",
+    "permissionMessage": "ছবি যুক্ত করতে ফটো লাইব্রেরিতে প্রবেশের অনুমতি দিন।",
+    "errorTitle": "ছবি যোগ করা যায়নি"
+  },
+  "validation": {
+    "missingInfoTitle": "তথ্য অসম্পূর্ণ",
+    "missingInfoMessage": "আগে ওয়ালেটের ঠিকানাসহ সব প্রয়োজনীয় ঘর পূরণ করুন",
+    "invalidVotersTitle": "ভোটার সংখ্যা সঠিক নয়",
+    "minVotersMessage": "প্রত্যাশিত ভোটার সর্বনিম্ন 2 জন",
+    "votersAtLeastMessage": "প্রত্যাশিত ভোটার কমপক্ষে 2 জন হতে হবে",
+    "missingTitleTitle": "শিরোনাম নেই",
+    "missingTitleMessage": "প্রস্তাবের একটি শিরোনাম লিখুন",
+    "missingDescriptionTitle": "বিবরণ নেই",
+    "missingDescriptionMessage": "প্রস্তাবের একটি বিবরণ লিখুন",
+    "invalidDurationTitle": "সময়কাল সঠিক নয়",
+    "invalidDurationMessage": "সময়কাল কমপক্ষে 1 দিন হতে হবে",
+    "walletRequiredTitle": "ওয়ালেট প্রয়োজন",
+    "walletRequiredMessage": "তৈরির ফি দিতে আপনার Cardano ওয়ালেট যুক্ত করুন"
+  },
+  "fees": {
+    "calculateButton": "মোট খরচ হিসাব করুন",
+    "breakdownTitle": "মোট খরচের বিবরণ",
+    "gasCosts": "গ্যাস খরচ:",
+    "foundationFee": "ফাউন্ডেশন ফি:",
+    "total": "মোট:",
+    "minimumApplied": "প্ল্যাটফর্মের সর্বনিম্ন 1.2 ADA প্রযোজ্য হয়েছে",
+    "foundationInfo": "ফাউন্ডেশন ফি VoteBoxApp-এর ওপেন-সোর্স উন্নয়নে সহায়তা করে",
+    "alertTitle": "ফির সম্পূর্ণ বিবরণ",
+    "alertExpectedVoters": "প্রত্যাশিত ভোটার: {{voters}}",
+    "alertGasCosts_one": "গ্যাস খরচ ({{count}}টি ব্যাচ): {{amount}} ADA",
+    "alertGasCosts_other": "গ্যাস খরচ ({{count}}টি ব্যাচ): {{amount}} ADA",
+    "alertFoundationFee": "ফাউন্ডেশন ফি: {{amount}} ADA",
+    "alertTotal": "মোট: {{ada}} ADA (~${{usd}} USD)",
+    "alertMinimumApplied": "(প্ল্যাটফর্মের সর্বনিম্ন 1.2 ADA প্রযোজ্য হয়েছে)",
+    "alertFoundationInfo": "ফাউন্ডেশন ফি VoteBoxApp-এর ওপেন-সোর্স উন্নয়নে সহায়তা করে।",
+    "votingFree": "সব অংশগ্রহণকারীর জন্য ভোট দেওয়া বিনামূল্যে!"
+  },
+  "payment": {
+    "title": "প্রকাশ করতে পেমেন্ট পাঠান",
+    "instructions": "আপনার নিজের ওয়ালেট অ্যাপ থেকে ঠিক এই পরিমাণ পাঠান, তারপর নিচে ট্রানজ্যাকশন হ্যাশ পেস্ট করুন।",
+    "sendTo": "যেখানে পাঠাবেন",
+    "amount": "পরিমাণ",
+    "copy": "কপি",
+    "txHashLabel": "ট্রানজ্যাকশন হ্যাশ",
+    "txHashPlaceholder": "ওয়ালেট অ্যাপ থেকে tx হ্যাশ পেস্ট করুন",
+    "verifying": "পেমেন্ট যাচাই করা হচ্ছে...",
+    "verifyButton": "যাচাই ও প্রকাশ করুন",
+    "editProposal": "← প্রস্তাব সম্পাদনা",
+    "overpayTitle": "পরিমাণ প্রয়োজনের চেয়ে অনেক বেশি",
+    "overpayMessage": "আপনি {{sent}} ADA পাঠিয়েছেন, কিন্তু প্রয়োজন ছিল মাত্র {{required}} ADA। এটি ফেরত দেওয়া যাবে না — তবুও চালিয়ে যাবেন?",
+    "verifyErrors": {
+      "malformed_hash": "এটি সঠিক ট্রানজ্যাকশন হ্যাশ মনে হচ্ছে না। এতে 64টি হেক্স অক্ষর থাকার কথা — কী পেস্ট করেছেন দেখে নিন।",
+      "not_found_or_pending": "ব্লকচেইনে এখনো পাওয়া যায়নি। এইমাত্র পাঠিয়ে থাকলে নিশ্চিত হওয়ার জন্য 30-60 সেকেন্ড অপেক্ষা করে আবার চেষ্টা করুন।",
+      "wrong_recipient": "এই ট্রানজ্যাকশনে উপরে দেখানো ফাউন্ডেশন ওয়ালেটের ঠিকানায় পেমেন্ট করা হয়নি।",
+      "insufficient_amount": "পাঠানো পরিমাণ প্রয়োজনের চেয়ে কম — উপরের পরিমাণ দেখুন।",
+      "already_used": "এই ট্রানজ্যাকশন আগেই অন্য একটি প্রস্তাবের জন্য ব্যবহার হয়েছে।",
+      "network_error": "যাচাইয়ের জন্য নেটওয়ার্কে পৌঁছানো যায়নি — সংযোগ দেখে আবার চেষ্টা করুন।",
+      "generic": "যাচাই ব্যর্থ হয়েছে — আবার চেষ্টা করুন।"
+    }
+  },
+  "publish": {
+    "statusInitializing": "ব্লকচেইন সেবা চালু হচ্ছে...",
+    "statusConnecting": "Cardano নেটওয়ার্কে সংযোগ হচ্ছে...",
+    "statusUploading": "IPFS-এ আপলোড হচ্ছে...",
+    "statusRecording": "ব্লকচেইনে রেকর্ড হচ্ছে...",
+    "incompleteResponse": "ব্লকচেইন সেবা থেকে অসম্পূর্ণ উত্তর",
+    "unknownError": "অজানা ত্রুটি",
+    "queuedToast": "⏳ সংযোগ নেই — প্রস্তাব সারিতে রাখা হয়েছে, অনলাইনে এলে প্রকাশিত হবে",
+    "failedTitle": "প্রকাশ ব্যর্থ হয়েছে",
+    "failedMessage": "{{error}}\n\nবিস্তারিত লগের জন্য কনসোল দেখুন।",
+    "connectWalletButton": "প্রকাশ করতে ওয়ালেট যুক্ত করুন",
+    "continueButton": "পেমেন্টে এগিয়ে যান"
+  },
+  "success": {
+    "title": "🎉 প্রস্তাব প্রকাশিত হয়েছে!",
+    "live": "আপনার প্রস্তাব এখন চালু!",
+    "ipfs": "IPFS: {{cid}}...",
+    "tx": "TX:   {{hash}}...",
+    "verifyOn": "preprod.cardanoscan.io-তে যাচাই করুন",
+    "totalPaid": "মোট পরিশোধ: {{ada}} ADA (~${{usd}} USD)",
+    "configuredFor_one": "{{voters}} জন ভোটারের জন্য সেট করা হয়েছে",
+    "configuredFor_other": "{{voters}} জন ভোটারের জন্য সেট করা হয়েছে",
+    "copyTxHash": "📋 TX হ্যাশ কপি করুন",
+    "share": "📢 শেয়ার করুন"
+  },
+  "batching": {
+    "title": "ভোট ব্যাচিং ব্যবস্থা",
+    "body": "গ্যাস সাশ্রয়ের জন্য 100টি পর্যন্ত ভোট এক ব্যাচে জমা হয়\nছোট ব্যাচগুলো প্রতি 10 মিনিটে নিজে থেকে জমা হয়\nপ্রস্তাব শেষ হলে সব ভোট রেকর্ড হয়\nআলাদা আলাদা ভোটের তুলনায় 80% কম খরচ\nঅংশগ্রহণকারীদের জন্য ভোট দেওয়া সম্পূর্ণ বিনামূল্যে"
+  }
+}

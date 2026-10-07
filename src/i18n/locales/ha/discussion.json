@@ -1,0 +1,25 @@
+{
+  "header": {
+    "title": "Tattaunawa ({{count}})"
+  },
+  "loading": "Ɗan jira kaɗan… ana kawo sharhohi daga IPFS, network da babu mai iko ɗaya a kansa.",
+  "empty": {
+    "title": "Babu sharhi tukuna.",
+    "subtitle": "Ku zama na farko da za ku tattauna wannan ƙuduri!"
+  },
+  "comment": {
+    "reply": "Amsa"
+  },
+  "replying": {
+    "label": "Ana amsa sharhi...",
+    "cancel": "Soke"
+  },
+  "input": {
+    "placeholder": "Rubuta sharhi...",
+    "post": "Aika"
+  },
+  "toast": {
+    "savedOffline": "An ajiye sharhi — za a tura shi idan intanet ya dawo",
+    "saveFailed": "Ba a iya ajiye sharhi ba"
+  }
+}

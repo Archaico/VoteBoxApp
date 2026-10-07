@@ -1,0 +1,63 @@
+{
+  "header": {
+    "updatedAt": "{{time}} अपडेट किया गया",
+    "createButton": "+ बनाएँ"
+  },
+  "loading": "प्रस्ताव लोड हो रहे हैं...",
+  "errors": {
+    "cannotConnect": "Cardano नेटवर्क से कनेक्ट नहीं हो सका। नीचे खींचें या \"फिर से कोशिश करें\" पर टैप करें।",
+    "connectionError": "कनेक्शन त्रुटि — फिर से कोशिश के लिए नीचे खींचें"
+  },
+  "emptyState": {
+    "loadFailedTitle": "प्रस्ताव लोड नहीं हो सके",
+    "retry": "फिर से कोशिश करें",
+    "noProposalsTitle": "अभी कोई प्रस्ताव नहीं",
+    "noProposalsText": "पहला प्रस्ताव बनाएँ और बातचीत शुरू करें!",
+    "createFirst": "पहला प्रस्ताव बनाएँ"
+  },
+  "card": {
+    "closed": "बंद",
+    "remainingDaysHours": "{{days}} दिन {{hours}} घंटे बाकी",
+    "remainingHours": "{{hours}} घंटे बाकी",
+    "remainingMinutes": "{{minutes}} मिनट बाकी",
+    "optionCount_one": "{{count}} विकल्प",
+    "optionCount_other": "{{count}} विकल्प",
+    "voteCount_one": "{{count}} वोट",
+    "voteCount_other": "{{count}} वोट"
+  },
+  "queue": {
+    "title": "📤 कतार में आइटम",
+    "votesQueued_one": "{{count}} वोट कतार में",
+    "votesQueued_other": "{{count}} वोट कतार में",
+    "proposalsQueued_one": "{{count}} प्रस्ताव कतार में",
+    "proposalsQueued_other": "{{count}} प्रस्ताव कतार में",
+    "autoSubmitNote": "स्थिर कनेक्शन मिलने पर ये अपने-आप भेज दिए जाएँगे।",
+    "oldestItem": "सबसे पुराना आइटम: {{time}}",
+    "retryNow": "अभी फिर से कोशिश करें",
+    "ok": "ठीक है"
+  },
+  "syncDiagnostic": {
+    "title": "🔄 बैकग्राउंड सिंक जाँच",
+    "registrationHeading": "── पंजीकरण ──",
+    "registered": "पंजीकृत: {{time}}",
+    "never": "कभी नहीं",
+    "osStatus": "OS स्थिति: {{status}}",
+    "unknown": "अज्ञात",
+    "lastRunHeading": "── पिछला बैकग्राउंड रन ──",
+    "lastRun": "पिछला रन: {{time}}",
+    "lastRunNever": "कभी नहीं — टास्क अभी तक नहीं चला",
+    "timeAgoParenthetical": "({{ago}})",
+    "result": "परिणाम: {{result}}",
+    "error": "त्रुटि: {{error}}",
+    "subscriptionsChecked": "जाँची गई सदस्यताएँ: {{count}}",
+    "explanation": "यह टास्क लगभग हर 15 मिनट पर चलने के लिए तय है। अगर \"पिछला रन\" लगभग 30-45 मिनट से ज़्यादा पुराना है (या ऐप इतनी देर बंद रहने पर भी \"कभी नहीं\" दिख रहा है), तो बहुत संभव है कि OS बैकग्राउंड टास्क को रोक रहा है — डिवाइस सेटिंग्स में VoteBoxApp के लिए बैटरी/बैकग्राउंड गतिविधि की पाबंदियाँ जाँचें।",
+    "ok": "ठीक है",
+    "timeAgo": {
+      "never": "कभी नहीं",
+      "justNow": "अभी-अभी",
+      "minutes": "{{minutes}} मिनट पहले",
+      "hoursMinutes": "{{hours}} घंटे {{minutes}} मिनट पहले",
+      "days": "{{days}} दिन पहले"
+    }
+  }
+}

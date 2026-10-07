@@ -1,0 +1,63 @@
+{
+  "header": {
+    "updatedAt": "Imesasishwa {{time}}",
+    "createButton": "+ Unda"
+  },
+  "loading": "Inapakia mapendekezo...",
+  "errors": {
+    "cannotConnect": "Imeshindwa kuunganisha na mtandao wa Cardano. Vuta chini au gusa Jaribu Tena.",
+    "connectionError": "Hitilafu ya mtandao — vuta chini ili kujaribu tena"
+  },
+  "emptyState": {
+    "loadFailedTitle": "Imeshindwa Kupakia Mapendekezo",
+    "retry": "Jaribu Tena",
+    "noProposalsTitle": "Bado Hakuna Mapendekezo",
+    "noProposalsText": "Kuwa wa kwanza kuunda pendekezo na kuanzisha mazungumzo!",
+    "createFirst": "Unda Pendekezo la Kwanza"
+  },
+  "card": {
+    "closed": "Imefungwa",
+    "remainingDaysHours": "Zimebaki siku {{days}} saa {{hours}}",
+    "remainingHours": "Zimebaki saa {{hours}}",
+    "remainingMinutes": "Zimebaki dakika {{minutes}}",
+    "optionCount_one": "chaguo {{count}}",
+    "optionCount_other": "machaguo {{count}}",
+    "voteCount_one": "kura {{count}}",
+    "voteCount_other": "kura {{count}}"
+  },
+  "queue": {
+    "title": "📤 Vinavyosubiri Kutumwa",
+    "votesQueued_one": "kura {{count}} inasubiri",
+    "votesQueued_other": "kura {{count}} zinasubiri",
+    "proposalsQueued_one": "pendekezo {{count}} linasubiri",
+    "proposalsQueued_other": "mapendekezo {{count}} yanasubiri",
+    "autoSubmitNote": "Vitatumwa vyenyewe utakapopata mtandao imara.",
+    "oldestItem": "Cha zamani zaidi: {{time}}",
+    "retryNow": "Jaribu Tena Sasa",
+    "ok": "Sawa"
+  },
+  "syncDiagnostic": {
+    "title": "🔄 Uchunguzi wa Usawazishaji wa Chinichini",
+    "registrationHeading": "── Usajili ──",
+    "registered": "Imesajiliwa: {{time}}",
+    "never": "haijawahi",
+    "osStatus": "Hali ya mfumo: {{status}}",
+    "unknown": "haijulikani",
+    "lastRunHeading": "── Mara ya Mwisho Kufanya Kazi Chinichini ──",
+    "lastRun": "Mara ya mwisho: {{time}}",
+    "lastRunNever": "HAIJAWAHI — kazi haijawahi kufanyika",
+    "timeAgoParenthetical": "({{ago}})",
+    "result": "Matokeo: {{result}}",
+    "error": "Hitilafu: {{error}}",
+    "subscriptionsChecked": "Ufuatiliaji uliokaguliwa: {{count}}",
+    "explanation": "Kazi hii imepangwa kufanyika takriban kila dakika 15. Ikiwa \"Mara ya mwisho\" ni zaidi ya takriban dakika 30-45 zilizopita (au ni \"haijawahi\" ingawa programu imefungwa muda wote huo), huenda mfumo wa simu unazuia kazi ya chinichini — angalia vizuizi vya betri/shughuli za chinichini kwa VoteBoxApp kwenye mipangilio ya simu.",
+    "ok": "Sawa",
+    "timeAgo": {
+      "never": "haijawahi",
+      "justNow": "sasa hivi",
+      "minutes": "dakika {{minutes}} zilizopita",
+      "hoursMinutes": "saa {{hours}} dakika {{minutes}} zilizopita",
+      "days": "siku {{days}} zilizopita"
+    }
+  }
+}

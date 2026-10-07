@@ -1,0 +1,79 @@
+{
+  "header": {
+    "updatedAt": "آخر تحديث {{time}}",
+    "createButton": "+ إنشاء"
+  },
+  "loading": "جارٍ تحميل المقترحات...",
+  "errors": {
+    "cannotConnect": "تعذّر الاتصال بشبكة Cardano. اسحب للأسفل أو اضغط \"إعادة المحاولة\".",
+    "connectionError": "خطأ في الاتصال — اسحب للأسفل لإعادة المحاولة"
+  },
+  "emptyState": {
+    "loadFailedTitle": "تعذّر تحميل المقترحات",
+    "retry": "إعادة المحاولة",
+    "noProposalsTitle": "لا توجد مقترحات بعد",
+    "noProposalsText": "كن أول من ينشئ مقترحًا ويبدأ النقاش!",
+    "createFirst": "أنشئ أول مقترح"
+  },
+  "card": {
+    "closed": "مغلق",
+    "remainingDaysHours": "متبقٍ: {{days}}ي {{hours}}س",
+    "remainingHours": "متبقٍ: {{hours}}س",
+    "remainingMinutes": "متبقٍ: {{minutes}}د",
+    "optionCount_zero": "لا خيارات",
+    "optionCount_one": "خيار واحد",
+    "optionCount_two": "خياران",
+    "optionCount_few": "{{count}} خيارات",
+    "optionCount_many": "{{count}} خيارًا",
+    "optionCount_other": "{{count}} خيار",
+    "voteCount_zero": "لا أصوات",
+    "voteCount_one": "صوت واحد",
+    "voteCount_two": "صوتان",
+    "voteCount_few": "{{count}} أصوات",
+    "voteCount_many": "{{count}} صوتًا",
+    "voteCount_other": "{{count}} صوت"
+  },
+  "queue": {
+    "title": "📤 عناصر في الانتظار",
+    "votesQueued_zero": "لا أصوات في الانتظار",
+    "votesQueued_one": "صوت واحد في الانتظار",
+    "votesQueued_two": "صوتان في الانتظار",
+    "votesQueued_few": "{{count}} أصوات في الانتظار",
+    "votesQueued_many": "{{count}} صوتًا في الانتظار",
+    "votesQueued_other": "{{count}} صوت في الانتظار",
+    "proposalsQueued_zero": "لا مقترحات في الانتظار",
+    "proposalsQueued_one": "مقترح واحد في الانتظار",
+    "proposalsQueued_two": "مقترحان في الانتظار",
+    "proposalsQueued_few": "{{count}} مقترحات في الانتظار",
+    "proposalsQueued_many": "{{count}} مقترحًا في الانتظار",
+    "proposalsQueued_other": "{{count}} مقترح في الانتظار",
+    "autoSubmitNote": "سيتم إرسالها تلقائيًا عند توفر اتصال مستقر.",
+    "oldestItem": "أقدم عنصر: {{time}}",
+    "retryNow": "أعد المحاولة الآن",
+    "ok": "حسنًا"
+  },
+  "syncDiagnostic": {
+    "title": "🔄 تشخيص المزامنة في الخلفية",
+    "registrationHeading": "── التسجيل ──",
+    "registered": "تاريخ التسجيل: {{time}}",
+    "never": "أبدًا",
+    "osStatus": "حالة النظام: {{status}}",
+    "unknown": "غير معروف",
+    "lastRunHeading": "── آخر تشغيل في الخلفية ──",
+    "lastRun": "آخر تشغيل: {{time}}",
+    "lastRunNever": "أبدًا — لم تُنفَّذ المهمة",
+    "timeAgoParenthetical": "({{ago}})",
+    "result": "النتيجة: {{result}}",
+    "error": "الخطأ: {{error}}",
+    "subscriptionsChecked": "الاشتراكات التي تم فحصها: {{count}}",
+    "explanation": "المهمة مجدولة كل 15 دقيقة تقريبًا. إذا مضى على \"آخر تشغيل\" أكثر من 30-45 دقيقة تقريبًا (أو كان \"أبدًا\" رغم إغلاق التطبيق طوال تلك المدة)، فالأرجح أن النظام يمنع المهمة في الخلفية — راجع قيود البطارية والنشاط في الخلفية لـ VoteBoxApp في إعدادات الجهاز.",
+    "ok": "حسنًا",
+    "timeAgo": {
+      "never": "أبدًا",
+      "justNow": "الآن",
+      "minutes": "قبل {{minutes}} د",
+      "hoursMinutes": "قبل {{hours}}س {{minutes}}د",
+      "days": "قبل {{days}}ي"
+    }
+  }
+}

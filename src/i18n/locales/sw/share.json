@@ -1,0 +1,53 @@
+{
+  "invite": {
+    "heading": "🗳️ KURA YAKO INAHITAJIKA",
+    "closes_one": "⏰ Upigaji kura unafungwa: {{date}} (imebaki siku {{count}})",
+    "closes_other": "⏰ Upigaji kura unafungwa: {{date}} (zimebaki siku {{count}})",
+    "secured": "🔒 Imelindwa kwenye blockchain ya Cardano",
+    "free": "✅ Kupiga kura ni bure kabisa — huhitaji wallet",
+    "voteNow": "Piga kura sasa kwenye VoteBoxApp:",
+    "footer": "— Imeshirikiwa kupitia VoteBoxApp · Upigaji kura wa kidemokrasia, bure kwa wote",
+    "title": "Piga kura: {{title}}"
+  },
+  "voted": {
+    "heading": "✊ Nimepiga kura sasa hivi kwenye VoteBoxApp",
+    "daysLeft_one": "Imebaki siku {{count}} kupiga kura — ongeza sauti yako:",
+    "daysLeft_other": "Zimebaki siku {{count}} kupiga kura — ongeza sauti yako:",
+    "closed": "Upigaji kura umefungwa — ongeza sauti yako:",
+    "tagline": "🔒 Imelindwa na blockchain · Bure 100% · Huhitaji wallet",
+    "footer": "— VoteBoxApp: Upigaji kura wa kidemokrasia kwa wote",
+    "title": "Nimepiga kura: {{title}}"
+  },
+  "results": {
+    "noResults": "Bado hakuna matokeo",
+    "noVotes": "Bado hakuna kura zilizorekodiwa",
+    "row_one": "{{bar}} {{option}}: kura {{count}} ({{pct}}%)",
+    "row_other": "{{bar}} {{option}}: kura {{count}} ({{pct}}%)",
+    "heading": "📊 MATOKEO YA KURA",
+    "leading": "🏆 Inaongoza: \"{{option}}\" kwa {{pct}}%",
+    "total": "Jumla ya kura zilizopigwa: {{count}}",
+    "verified": "🔒 Imethibitishwa kwenye blockchain ya Cardano",
+    "seeFull": "Tazama matokeo kamili kwenye VoteBoxApp:",
+    "footer": "— VoteBoxApp: Upigaji kura wa kidemokrasia, wazi na bure",
+    "title": "Matokeo: {{title}}"
+  },
+  "urgent": {
+    "lessThanHour": "⚡ IMEBAKI CHINI YA SAA 1 KUPIGA KURA",
+    "hours": "⚡ ZIMEBAKI SAA {{count}} KUPIGA KURA",
+    "days": "⏰ ZIMEBAKI SIKU {{count}} KUPIGA KURA",
+    "votedSoFar_one": "Mtu {{count}} amepiga kura hadi sasa.",
+    "votedSoFar_other": "Watu {{count}} wamepiga kura hadi sasa.",
+    "stillCounts": "Sauti yako bado ina thamani — piga kura sasa:",
+    "tagline": "✅ Bure · Huhitaji wallet · Inachukua sekunde 10",
+    "footer": "— VoteBoxApp: Upigaji kura wa kidemokrasia kwenye blockchain",
+    "title": "Haraka: Piga kura kuhusu \"{{title}}\""
+  },
+  "discovery": {
+    "heading": "🗳️ Angalia pendekezo hili kwenye VoteBoxApp",
+    "open": "🟢 Upigaji kura UNAENDELEA",
+    "closed": "🔴 Upigaji kura umefungwa",
+    "freeToVote": "✅ Kupiga kura ni bure — huhitaji wallet wala akaunti",
+    "seeResults": "📊 Tazama matokeo ya mwisho",
+    "footer": "— VoteBoxApp: Upigaji kura bure, wazi na uliolindwa na blockchain"
+  }
+}

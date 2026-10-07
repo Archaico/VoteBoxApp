@@ -1,0 +1,188 @@
+{
+  "header": {
+    "back": "رجوع",
+    "title": "إنشاء مقترح"
+  },
+  "infoBanner": "مؤمَّن على Cardano · توفير 80% من رسوم الشبكة · مجاني للمصوّتين",
+  "buttons": {
+    "cancel": "إلغاء",
+    "ok": "حسنًا",
+    "continue": "متابعة",
+    "remove": "إزالة",
+    "done": "تم"
+  },
+  "wallets": {
+    "eternl": {
+      "badge": "موصى بها",
+      "description": "أقوى محفظة لـ Cardano. تدعم WalletConnect."
+    },
+    "vespr": {
+      "badge": "الأفضل للمبتدئين",
+      "description": "مصممة للهاتف، سريعة وسهلة الإعداد."
+    },
+    "lace": {
+      "badge": "رسمية من IOG",
+      "description": "من تطوير مؤسسي Cardano. منصة Web3 متكاملة."
+    }
+  },
+  "walletSelect": {
+    "title": "اربط محفظتك",
+    "subtitle": "مطلوبة لدفع رسوم إنشاء المقترح. المصوّتون لا يحتاجون إلى محفظة أبدًا.",
+    "or": "أو",
+    "enterManually": "📋  أدخل العنوان يدويًا",
+    "noWallet": "❓  ليس لدي محفظة بعد",
+    "walletConnectSoon": "🔗 دعم WalletConnect قريبًا — ربط بلمسة واحدة مع أكثر من 600 محفظة",
+    "openAlertTitle": "فتح {{wallet}}؟",
+    "openAlertMessage": "سيفتح هذا تطبيق محفظة {{wallet}} (أو ينقلك إلى صفحة تنزيله).\n\nبعد الربط، انسخ عنوان Cardano الخاص بك (يبدأ بـ addr_test1...) وعُد إلى هنا للصقه.",
+    "openAlertButton": "فتح {{wallet}}",
+    "linkErrorTitle": "تعذّر فتح الرابط",
+    "linkErrorMessage": "ابحث عن المحفظة في متجر Play يدويًا."
+  },
+  "walletManual": {
+    "welcomeBack": "👋 أهلًا بعودتك! افتح تطبيق المحفظة، وانسخ عنوانك (addr_test1...)، ثم الصقه أدناه.",
+    "addressLabel": "عنوان Cardano الخاص بك",
+    "addressHelper": "يبدأ بـ \"addr_test1\" · تجده في محفظتك تحت \"Receive\" (استلام) أو \"Address\" (العنوان)",
+    "back": "→ رجوع",
+    "confirm": "تأكيد العنوان",
+    "invalidTitle": "عنوان غير صالح",
+    "invalidMessage": "أدخل عنوان Cardano صالحًا. يجب أن يبدأ بـ \"addr_test1\" (الشبكة التجريبية) وألا يقل طوله عن 50 حرفًا."
+  },
+  "walletConnected": {
+    "label": "المحفظة مرتبطة",
+    "removeButton": "إزالة المحفظة وتغييرها",
+    "removeAlertTitle": "إزالة المحفظة",
+    "removeAlertMessage": "هل تريد بالتأكيد إزالة عنوان محفظتك؟"
+  },
+  "noWallet": {
+    "title": "الحصول على محفظة Cardano",
+    "body": "تتيح لك محفظة Cardano الاحتفاظ بعملة ADA (عملة Cardano) ودفع رسوم صغيرة لنشر مقترح. المصوّتون لا يحتاجون إليها أبدًا — يحتاجها فقط من ينشئ المقترحات.",
+    "step1": "نزّل <bold>Vespr</bold> — أسهل محفظة Cardano للمبتدئين، ومصممة للهاتف.",
+    "step2": "أنشئ محفظتك واكتب عبارة الاسترداد واحفظها في مكان آمن.",
+    "step3": "أضف بعض ADA — ما يعادل بضعة دولارات يكفي لنشر المقترحات.",
+    "step4": "عُد إلى هنا، واضغط على Vespr، ثم الصق عنوانك.",
+    "downloadButton": "⬇️  تنزيل محفظة Vespr",
+    "back": "→ العودة إلى خيارات المحفظة",
+    "linkErrorMessage": "ابحث عن \"Vespr Wallet\" في متجر Play."
+  },
+  "form": {
+    "titleLabel": "عنوان المقترح *",
+    "titlePlaceholder": "اكتب عنوانًا واضحًا وموجزًا",
+    "characterCount": "{{current}}/{{max}} حرف",
+    "descriptionLabel": "الوصف *",
+    "descriptionPlaceholder": "اشرح مقترحك بالتفصيل...",
+    "durationLabel": "مدة التصويت (بالأيام) *",
+    "durationHelper": "الموصى به: 7–14 يومًا",
+    "votersLabel": "عدد المصوّتين المتوقع *",
+    "votersHelper": "قدّر عدد المشاركين (2 على الأقل)",
+    "customVotersPlaceholder": "أو أدخل عددًا آخر (2 على الأقل)",
+    "selectedVoters_zero": "عدد المصوّتين المحدد: {{voters}}",
+    "selectedVoters_one": "عدد المصوّتين المحدد: {{voters}}",
+    "selectedVoters_two": "عدد المصوّتين المحدد: {{voters}}",
+    "selectedVoters_few": "عدد المصوّتين المحدد: {{voters}}",
+    "selectedVoters_many": "عدد المصوّتين المحدد: {{voters}}",
+    "selectedVoters_other": "عدد المصوّتين المحدد: {{voters}}"
+  },
+  "attachments": {
+    "label": "مرفقات (اختياري)",
+    "helper": "أرفق صورًا مع مقترحك (الحد الأقصى: {{max}})",
+    "addPhoto": "+\nصورة",
+    "limitTitle": "تم بلوغ الحد",
+    "limitMessage": "الحد الأقصى للصور في كل مقترح: {{max}}.",
+    "permissionTitle": "يلزم الإذن",
+    "permissionMessage": "اسمح بالوصول إلى مكتبة الصور لإرفاق صورة.",
+    "errorTitle": "تعذّرت إضافة الصورة"
+  },
+  "validation": {
+    "missingInfoTitle": "معلومات ناقصة",
+    "missingInfoMessage": "املأ جميع الحقول المطلوبة أولًا، بما فيها عنوان محفظتك",
+    "invalidVotersTitle": "عدد مصوّتين غير صالح",
+    "minVotersMessage": "الحد الأدنى لعدد المصوّتين المتوقع هو 2",
+    "votersAtLeastMessage": "يجب ألا يقل عدد المصوّتين المتوقع عن 2",
+    "missingTitleTitle": "العنوان مفقود",
+    "missingTitleMessage": "أدخل عنوانًا للمقترح",
+    "missingDescriptionTitle": "الوصف مفقود",
+    "missingDescriptionMessage": "أدخل وصفًا للمقترح",
+    "invalidDurationTitle": "مدة غير صالحة",
+    "invalidDurationMessage": "يجب أن تكون المدة يومًا واحدًا على الأقل",
+    "walletRequiredTitle": "المحفظة مطلوبة",
+    "walletRequiredMessage": "اربط محفظة Cardano لدفع رسوم الإنشاء"
+  },
+  "fees": {
+    "calculateButton": "احسب التكلفة الإجمالية",
+    "breakdownTitle": "تفاصيل التكلفة الإجمالية",
+    "gasCosts": "رسوم الشبكة:",
+    "foundationFee": "رسوم المؤسسة:",
+    "total": "الإجمالي:",
+    "minimumApplied": "طُبّق الحد الأدنى للمنصة وهو 1.2 ADA",
+    "foundationInfo": "تدعم رسوم المؤسسة تطوير VoteBoxApp مفتوح المصدر",
+    "alertTitle": "التفاصيل الكاملة للرسوم",
+    "alertExpectedVoters": "عدد المصوّتين المتوقع: {{voters}}",
+    "alertGasCosts_zero": "رسوم الشبكة (بلا دفعات): {{amount}} ADA",
+    "alertGasCosts_one": "رسوم الشبكة (دفعة واحدة): {{amount}} ADA",
+    "alertGasCosts_two": "رسوم الشبكة (دفعتان): {{amount}} ADA",
+    "alertGasCosts_few": "رسوم الشبكة ({{count}} دفعات): {{amount}} ADA",
+    "alertGasCosts_many": "رسوم الشبكة ({{count}} دفعة): {{amount}} ADA",
+    "alertGasCosts_other": "رسوم الشبكة ({{count}} دفعة): {{amount}} ADA",
+    "alertFoundationFee": "رسوم المؤسسة: {{amount}} ADA",
+    "alertTotal": "الإجمالي: {{ada}} ADA (~${{usd}} USD)",
+    "alertMinimumApplied": "(طُبّق الحد الأدنى للمنصة وهو 1.2 ADA)",
+    "alertFoundationInfo": "تدعم رسوم المؤسسة تطوير VoteBoxApp مفتوح المصدر.",
+    "votingFree": "التصويت مجاني لجميع المشاركين!"
+  },
+  "payment": {
+    "title": "أرسل الدفعة للنشر",
+    "instructions": "أرسل هذا المبلغ بالضبط من تطبيق محفظتك، ثم الصق معرّف المعاملة أدناه.",
+    "sendTo": "أرسل إلى",
+    "amount": "المبلغ",
+    "copy": "نسخ",
+    "txHashLabel": "معرّف المعاملة (Hash)",
+    "txHashPlaceholder": "الصق معرّف المعاملة من تطبيق محفظتك",
+    "verifying": "جارٍ التحقق من الدفع...",
+    "verifyButton": "تحقّق وانشر",
+    "editProposal": "→ تعديل المقترح",
+    "overpayTitle": "المبلغ أعلى بكثير من المطلوب",
+    "overpayMessage": "أرسلت {{sent}} ADA، لكن المطلوب {{required}} ADA فقط. لا يمكن استرداد الفرق — هل تريد المتابعة؟",
+    "verifyErrors": {
+      "malformed_hash": "لا يبدو هذا معرّف معاملة صالحًا. يجب أن يتكون من 64 حرفًا ست عشريًا (hex) — تحقّق مما لصقته.",
+      "not_found_or_pending": "لم يُعثر عليها على البلوكتشين بعد. إذا أرسلتها للتو، فانتظر 30-60 ثانية حتى تُؤكَّد ثم حاول مجددًا.",
+      "wrong_recipient": "هذه المعاملة لا تدفع إلى عنوان محفظة المؤسسة الظاهر أعلاه.",
+      "insufficient_amount": "المبلغ المُرسَل أقل من المطلوب — راجع المبلغ أعلاه.",
+      "already_used": "استُخدمت هذه المعاملة من قبل لمقترح آخر.",
+      "network_error": "تعذّر الوصول إلى الشبكة للتحقق — تحقّق من اتصالك وحاول مجددًا.",
+      "generic": "فشل التحقق — حاول مجددًا."
+    }
+  },
+  "publish": {
+    "statusInitializing": "جارٍ تهيئة خدمة البلوكتشين...",
+    "statusConnecting": "جارٍ الاتصال بشبكة Cardano...",
+    "statusUploading": "جارٍ الرفع إلى IPFS...",
+    "statusRecording": "جارٍ التسجيل على البلوكتشين...",
+    "incompleteResponse": "استجابة غير مكتملة من خدمة البلوكتشين",
+    "unknownError": "خطأ غير معروف",
+    "queuedToast": "⏳ لا يوجد اتصال — المقترح في قائمة الانتظار وسيُنشر عند عودة الاتصال",
+    "failedTitle": "فشل النشر",
+    "failedMessage": "{{error}}\n\nراجع سجلّ وحدة التحكم (console) للتفاصيل.",
+    "connectWalletButton": "اربط المحفظة للنشر",
+    "continueButton": "المتابعة إلى الدفع"
+  },
+  "success": {
+    "title": "🎉 تم نشر المقترح!",
+    "live": "مقترحك متاح الآن!",
+    "ipfs": "IPFS: {{cid}}...",
+    "tx": "TX:   {{hash}}...",
+    "verifyOn": "تحقّق على preprod.cardanoscan.io",
+    "totalPaid": "إجمالي المدفوع: {{ada}} ADA (~${{usd}} USD)",
+    "configuredFor_zero": "عدد المصوّتين المُعَدّ: {{voters}}",
+    "configuredFor_one": "عدد المصوّتين المُعَدّ: {{voters}}",
+    "configuredFor_two": "عدد المصوّتين المُعَدّ: {{voters}}",
+    "configuredFor_few": "عدد المصوّتين المُعَدّ: {{voters}}",
+    "configuredFor_many": "عدد المصوّتين المُعَدّ: {{voters}}",
+    "configuredFor_other": "عدد المصوّتين المُعَدّ: {{voters}}",
+    "copyTxHash": "📋 نسخ معرّف المعاملة",
+    "share": "📢 مشاركة"
+  },
+  "batching": {
+    "title": "نظام تجميع الأصوات",
+    "body": "تُجمَّع الأصوات حتى 100 صوت لتقليل رسوم الشبكة\nتُرسَل الدفعات الأصغر تلقائيًا كل 10 دقائق\nتُسجَّل جميع الأصوات عند انتهاء المقترح\nتوفير 80% من التكلفة مقارنة بالتصويت الفردي\nالتصويت مجاني تمامًا للمشاركين"
+  }
+}

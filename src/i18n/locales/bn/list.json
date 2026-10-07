@@ -1,0 +1,63 @@
+{
+  "header": {
+    "updatedAt": "হালনাগাদ {{time}}",
+    "createButton": "+ তৈরি করুন"
+  },
+  "loading": "প্রস্তাব লোড হচ্ছে...",
+  "errors": {
+    "cannotConnect": "Cardano নেটওয়ার্কে সংযোগ করা যায়নি। নিচে টানুন বা \"আবার চেষ্টা\" ট্যাপ করুন।",
+    "connectionError": "সংযোগে ত্রুটি — আবার চেষ্টা করতে নিচে টানুন"
+  },
+  "emptyState": {
+    "loadFailedTitle": "প্রস্তাব লোড করা যায়নি",
+    "retry": "আবার চেষ্টা",
+    "noProposalsTitle": "এখনো কোনো প্রস্তাব নেই",
+    "noProposalsText": "প্রথম প্রস্তাব তৈরি করে আলোচনা শুরু করুন!",
+    "createFirst": "প্রথম প্রস্তাব তৈরি করুন"
+  },
+  "card": {
+    "closed": "বন্ধ",
+    "remainingDaysHours": "{{days}} দিন {{hours}} ঘণ্টা বাকি",
+    "remainingHours": "{{hours}} ঘণ্টা বাকি",
+    "remainingMinutes": "{{minutes}} মিনিট বাকি",
+    "optionCount_one": "{{count}}টি বিকল্প",
+    "optionCount_other": "{{count}}টি বিকল্প",
+    "voteCount_one": "{{count}}টি ভোট",
+    "voteCount_other": "{{count}}টি ভোট"
+  },
+  "queue": {
+    "title": "📤 সারিতে থাকা আইটেম",
+    "votesQueued_one": "{{count}}টি ভোট সারিতে",
+    "votesQueued_other": "{{count}}টি ভোট সারিতে",
+    "proposalsQueued_one": "{{count}}টি প্রস্তাব সারিতে",
+    "proposalsQueued_other": "{{count}}টি প্রস্তাব সারিতে",
+    "autoSubmitNote": "স্থিতিশীল সংযোগ পেলে এগুলো নিজে থেকে জমা হবে।",
+    "oldestItem": "সবচেয়ে পুরোনো আইটেম: {{time}}",
+    "retryNow": "এখনই আবার চেষ্টা করুন",
+    "ok": "ঠিক আছে"
+  },
+  "syncDiagnostic": {
+    "title": "🔄 ব্যাকগ্রাউন্ড সিঙ্ক পরীক্ষা",
+    "registrationHeading": "── নিবন্ধন ──",
+    "registered": "নিবন্ধিত: {{time}}",
+    "never": "কখনো না",
+    "osStatus": "OS অবস্থা: {{status}}",
+    "unknown": "অজানা",
+    "lastRunHeading": "── শেষ ব্যাকগ্রাউন্ড রান ──",
+    "lastRun": "শেষ রান: {{time}}",
+    "lastRunNever": "কখনো না — টাস্কটি এখনো চলেনি",
+    "timeAgoParenthetical": "({{ago}})",
+    "result": "ফলাফল: {{result}}",
+    "error": "ত্রুটি: {{error}}",
+    "subscriptionsChecked": "পরীক্ষিত সাবস্ক্রিপশন: {{count}}",
+    "explanation": "টাস্কটি প্রায় প্রতি 15 মিনিটে চলার কথা। যদি \"শেষ রান\" প্রায় 30-45 মিনিটের বেশি পুরোনো হয় (অথবা অ্যাপ এতক্ষণ বন্ধ থাকার পরও \"কখনো না\" দেখায়), তাহলে খুব সম্ভবত OS ব্যাকগ্রাউন্ড টাস্কটি আটকে দিচ্ছে — ডিভাইস সেটিংসে VoteBoxApp-এর ব্যাটারি/ব্যাকগ্রাউন্ড কার্যকলাপের বিধিনিষেধ দেখুন।",
+    "ok": "ঠিক আছে",
+    "timeAgo": {
+      "never": "কখনো না",
+      "justNow": "এইমাত্র",
+      "minutes": "{{minutes}} মিনিট আগে",
+      "hoursMinutes": "{{hours}} ঘণ্টা {{minutes}} মিনিট আগে",
+      "days": "{{days}} দিন আগে"
+    }
+  }
+}

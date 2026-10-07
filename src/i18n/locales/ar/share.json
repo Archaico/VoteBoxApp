@@ -1,0 +1,69 @@
+{
+  "invite": {
+    "heading": "🗳️ صوتك مطلوب",
+    "closes_zero": "⏰ يُغلق التصويت: {{date}} (أقل من يوم)",
+    "closes_one": "⏰ يُغلق التصويت: {{date}} (بقي يوم واحد)",
+    "closes_two": "⏰ يُغلق التصويت: {{date}} (بقي يومان)",
+    "closes_few": "⏰ يُغلق التصويت: {{date}} (بقيت {{count}} أيام)",
+    "closes_many": "⏰ يُغلق التصويت: {{date}} (بقي {{count}} يومًا)",
+    "closes_other": "⏰ يُغلق التصويت: {{date}} (بقي {{count}} يوم)",
+    "secured": "🔒 مؤمَّن على بلوكتشين Cardano",
+    "free": "✅ التصويت مجاني تمامًا — لا حاجة لمحفظة",
+    "voteNow": "صوّت الآن على VoteBoxApp:",
+    "footer": "— تمت المشاركة عبر VoteBoxApp · تصويت ديمقراطي مجاني للجميع",
+    "title": "صوّت على: {{title}}"
+  },
+  "voted": {
+    "heading": "✊ أدليت بصوتي للتو على VoteBoxApp",
+    "daysLeft_zero": "اليوم هو آخر يوم للتصويت — أضف صوتك:",
+    "daysLeft_one": "بقي يوم واحد للتصويت — أضف صوتك:",
+    "daysLeft_two": "بقي يومان للتصويت — أضف صوتك:",
+    "daysLeft_few": "بقيت {{count}} أيام للتصويت — أضف صوتك:",
+    "daysLeft_many": "بقي {{count}} يومًا للتصويت — أضف صوتك:",
+    "daysLeft_other": "بقي {{count}} يوم للتصويت — أضف صوتك:",
+    "closed": "انتهى التصويت — شارك برأيك:",
+    "tagline": "🔒 مؤمَّن بالبلوكتشين · مجاني 100% · لا حاجة لمحفظة",
+    "footer": "— VoteBoxApp: تصويت ديمقراطي للجميع",
+    "title": "أدليت بصوتي: {{title}}"
+  },
+  "results": {
+    "noResults": "لا توجد نتائج بعد",
+    "noVotes": "لم تُسجَّل أي أصوات بعد",
+    "row_zero": "{{bar}} {{option}}: لا أصوات ({{pct}}%)",
+    "row_one": "{{bar}} {{option}}: صوت واحد ({{pct}}%)",
+    "row_two": "{{bar}} {{option}}: صوتان ({{pct}}%)",
+    "row_few": "{{bar}} {{option}}: {{count}} أصوات ({{pct}}%)",
+    "row_many": "{{bar}} {{option}}: {{count}} صوتًا ({{pct}}%)",
+    "row_other": "{{bar}} {{option}}: {{count}} صوت ({{pct}}%)",
+    "heading": "📊 نتائج التصويت",
+    "leading": "🏆 في المقدمة: \"{{option}}\" بنسبة {{pct}}%",
+    "total": "إجمالي الأصوات: {{count}}",
+    "verified": "🔒 تم التحقق على بلوكتشين Cardano",
+    "seeFull": "شاهد النتائج كاملة على VoteBoxApp:",
+    "footer": "— VoteBoxApp: تصويت ديمقراطي شفاف ومجاني",
+    "title": "النتائج: {{title}}"
+  },
+  "urgent": {
+    "lessThanHour": "⚡ بقيت أقل من ساعة للتصويت",
+    "hours": "⚡ الساعات المتبقية للتصويت: {{count}}",
+    "days": "⏰ الأيام المتبقية للتصويت: {{count}}",
+    "votedSoFar_zero": "لم يصوّت أحد حتى الآن.",
+    "votedSoFar_one": "صوّت شخص واحد حتى الآن.",
+    "votedSoFar_two": "صوّت شخصان حتى الآن.",
+    "votedSoFar_few": "صوّت {{count}} أشخاص حتى الآن.",
+    "votedSoFar_many": "صوّت {{count}} شخصًا حتى الآن.",
+    "votedSoFar_other": "صوّت {{count}} شخص حتى الآن.",
+    "stillCounts": "صوتك ما زال مهمًا — صوّت الآن:",
+    "tagline": "✅ مجاني · لا حاجة لمحفظة · يستغرق 10 ثوانٍ",
+    "footer": "— VoteBoxApp: تصويت ديمقراطي على البلوكتشين",
+    "title": "عاجل: صوّت على \"{{title}}\""
+  },
+  "discovery": {
+    "heading": "🗳️ اطّلع على هذا المقترح في VoteBoxApp",
+    "open": "🟢 التصويت مفتوح",
+    "closed": "🔴 انتهى التصويت",
+    "freeToVote": "✅ التصويت مجاني — لا حاجة لمحفظة أو حساب",
+    "seeResults": "📊 شاهد النتائج النهائية",
+    "footer": "— VoteBoxApp: تصويت مجاني ومفتوح ومؤمَّن بالبلوكتشين"
+  }
+}

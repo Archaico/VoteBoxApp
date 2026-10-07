@@ -1,0 +1,86 @@
+{
+  "choices": {
+    "yes": "نعم",
+    "no": "لا",
+    "abstain": "امتناع"
+  },
+  "votingScreen": {
+    "tabs": {
+      "vote": "التصويت",
+      "discussion": "النقاش",
+      "discussionWithCount": "النقاش ({{count}})"
+    },
+    "back": "→ رجوع",
+    "loading": "جارٍ تحميل المقترح...",
+    "unknownCreator": "غير معروف",
+    "createdBy": "أنشأه:",
+    "deadline": "الموعد النهائي:",
+    "daysRemaining_zero": "ينتهي اليوم",
+    "daysRemaining_one": "بقي يوم واحد",
+    "daysRemaining_two": "بقي يومان",
+    "daysRemaining_few": "بقيت {{count}} أيام",
+    "daysRemaining_many": "بقي {{count}} يومًا",
+    "daysRemaining_other": "بقي {{count}} يوم",
+    "results": {
+      "title": "النتائج الحالية",
+      "totalVotes_zero": "المجموع: لا أصوات",
+      "totalVotes_one": "المجموع: صوت واحد",
+      "totalVotes_two": "المجموع: صوتان",
+      "totalVotes_few": "المجموع: {{count}} أصوات",
+      "totalVotes_many": "المجموع: {{count}} صوتًا",
+      "totalVotes_other": "المجموع: {{count}} صوت"
+    },
+    "alreadyVoted": {
+      "title": "✅ لقد أدليت بصوتك بالفعل",
+      "yourVote": "تصويتك: <bold>{{choice}}</bold>",
+      "note": "لا يمكنك تغيير تصويتك بعد إرساله."
+    },
+    "closed": {
+      "title": "🔒 انتهى التصويت",
+      "note": "انتهى الموعد النهائي لهذا المقترح. لم تعد الأصوات مقبولة."
+    },
+    "castVote": {
+      "title": "أدلِ بصوتك",
+      "privacyNotice": "🔒 تصويتك مجهول الهوية تمامًا ولا يمكن ربطه بك",
+      "yes": "✅ نعم",
+      "no": "❌ لا",
+      "abstain": "⚪ امتناع",
+      "submit": "إرسال التصويت"
+    },
+    "status": {
+      "preparing": "جارٍ تجهيز تصويتك...",
+      "connecting": "جارٍ الاتصال بشبكة Cardano...",
+      "submitting": "جارٍ إرسال التصويت إلى البلوكتشين..."
+    },
+    "toasts": {
+      "selectVoteFirst": "اختر تصويتك أولًا",
+      "votingClosed": "انتهى التصويت على هذا المقترح",
+      "voteQueued": "⚠️ التصويت في قائمة الانتظار — سيُرسَل عند عودة الاتصال",
+      "voteFailed": "❌ فشل التصويت: {{message}}",
+      "unknownError": "خطأ غير معروف"
+    }
+  },
+  "successModal": {
+    "title": "تم إرسال التصويت",
+    "subtitle": "مُسجَّل على بلوكتشين Cardano",
+    "proposalId": "معرّف المقترح",
+    "transactionHash": "معرّف المعاملة",
+    "yourVote": "تصويتك",
+    "sharePrompt": "أخبر الآخرين أنك أدليت بصوتك 👇",
+    "done": "تم",
+    "copy": "⎘ نسخ",
+    "copied": "✓ تم النسخ",
+    "copyFailedTitle": "فشل النسخ",
+    "copyFailedMessage": "انسخ يدويًا: {{value}}"
+  },
+  "shareButton": {
+    "moments": {
+      "invite": "ادعُ الناس للتصويت",
+      "voted": "شارك أنك أدليت بصوتك",
+      "results": "مشاركة النتائج",
+      "urgency": "مشاركة — التصويت يُغلق قريبًا",
+      "discovery": "مشاركة المقترح"
+    },
+    "shareFailedTitle": "فشلت المشاركة"
+  }
+}

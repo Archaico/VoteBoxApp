@@ -1,0 +1,50 @@
+{
+  "push": {
+    "deadline24h": {
+      "title": "24 ঘণ্টার মধ্যে ভোট বন্ধ হবে"
+    },
+    "deadline1h": {
+      "title": "1 ঘণ্টার মধ্যে ভোট বন্ধ হবে"
+    },
+    "voteSubmitted": {
+      "title": "ভোট জমা হয়েছে"
+    },
+    "voteConfirmed": {
+      "title": "ব্লকচেইনে ভোট নিশ্চিত হয়েছে",
+      "body": "{{title}} · TX: {{txHash}}..."
+    },
+    "proposalLive": {
+      "title": "আপনার প্রস্তাব এখন চালু"
+    },
+    "commentPosted": {
+      "title": "মন্তব্য পোস্ট হয়েছে"
+    },
+    "newComment": {
+      "title": "প্রস্তাবে নতুন মন্তব্য"
+    },
+    "proposalFinalised": {
+      "titlePassed": "প্রস্তাব পাস হয়েছে",
+      "titleEnded": "প্রস্তাবের ভোট শেষ হয়েছে",
+      "body": "{{title}} · হ্যাঁ: {{yes}} / না: {{no}}"
+    },
+    "lowBalance": {
+      "title": "ADA ব্যালেন্স কম",
+      "body": "ব্যালেন্স 1.5 ADA-র নিচে — প্রস্তাব তৈরি করতে টপ আপ করুন"
+    },
+    "txFailed": {
+      "title": "ট্রানজ্যাকশন ব্যর্থ",
+      "body": "আপনার শেষ কাজটি আবার চেষ্টা করুন"
+    }
+  },
+  "toast": {
+    "offlineQueue": {
+      "voteSubmitted": "✅ ভোট সফলভাবে জমা হয়েছে",
+      "proposalSubmitted": "✅ প্রস্তাব সফলভাবে জমা হয়েছে",
+      "proposalPaymentRejected": "❌ প্রস্তাব সরানো হয়েছে — পেমেন্ট যাচাই করা যায়নি ({{reason}})",
+      "voteFailed_one": "❌ {{count}} বার চেষ্টার পর ভোট ব্যর্থ হয়েছে",
+      "voteFailed_other": "❌ {{count}} বার চেষ্টার পর ভোট ব্যর্থ হয়েছে",
+      "proposalFailed_one": "❌ {{count}} বার চেষ্টার পর প্রস্তাব ব্যর্থ হয়েছে",
+      "proposalFailed_other": "❌ {{count}} বার চেষ্টার পর প্রস্তাব ব্যর্থ হয়েছে"
+    }
+  }
+}

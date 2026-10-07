@@ -1,0 +1,78 @@
+{
+  "choices": {
+    "yes": "Eh",
+    "no": "A'a",
+    "abstain": "Ƙauracewa"
+  },
+  "votingScreen": {
+    "tabs": {
+      "vote": "Ƙuri'a",
+      "discussion": "Tattaunawa",
+      "discussionWithCount": "Tattaunawa ({{count}})"
+    },
+    "back": "← Koma",
+    "loading": "Ana loda ƙuduri...",
+    "unknownCreator": "Ba a sani ba",
+    "createdBy": "Wanda ya ƙirƙira:",
+    "deadline": "Wa'adi:",
+    "daysRemaining_one": "Saura kwana {{count}}",
+    "daysRemaining_other": "Saura kwana {{count}}",
+    "results": {
+      "title": "Sakamakon Yanzu",
+      "totalVotes_one": "Jimilla: ƙuri'a {{count}}",
+      "totalVotes_other": "Jimilla: ƙuri'u {{count}}"
+    },
+    "alreadyVoted": {
+      "title": "✅ Kun Riga Kun Kaɗa Ƙuri'a",
+      "yourVote": "Ƙuri'arku: <bold>{{choice}}</bold>",
+      "note": "Ba za ku iya canza ƙuri'arku ba bayan kun aika ta."
+    },
+    "closed": {
+      "title": "🔒 An Rufe Zaɓe",
+      "note": "Wa'adin wannan ƙuduri ya wuce. Ba a karɓar ƙuri'u kuma."
+    },
+    "castVote": {
+      "title": "Kaɗa Ƙuri'arku",
+      "privacyNotice": "🔒 Ƙuri'arku sirri ce gaba ɗaya, ba za a iya gano cewa daga gare ku ta fito ba",
+      "yes": "✅ Eh",
+      "no": "❌ A'a",
+      "abstain": "⚪ Ƙauracewa",
+      "submit": "Aika Ƙuri'a"
+    },
+    "status": {
+      "preparing": "Ana shirya ƙuri'arku...",
+      "connecting": "Ana haɗawa da network ɗin Cardano...",
+      "submitting": "Ana aika ƙuri'a zuwa blockchain..."
+    },
+    "toasts": {
+      "selectVoteFirst": "Ku zaɓi ƙuri'arku tukuna",
+      "votingClosed": "An rufe zaɓe a kan wannan ƙuduri",
+      "voteQueued": "⚠️ Ƙuri'a na jira - za a aika idan intanet ya dawo",
+      "voteFailed": "❌ Ƙuri'a ta gaza: {{message}}",
+      "unknownError": "Kuskuren da ba a sani ba"
+    }
+  },
+  "successModal": {
+    "title": "An Aika Ƙuri'a",
+    "subtitle": "An rubuta a blockchain ta Cardano",
+    "proposalId": "Lambar Ƙuduri",
+    "transactionHash": "Lambar mu'amala",
+    "yourVote": "Ƙuri'arku",
+    "sharePrompt": "Ku sanar da wasu cewa kun kaɗa ƙuri'a 👇",
+    "done": "An gama",
+    "copy": "⎘ Kwafi",
+    "copied": "✓ An kwafa",
+    "copyFailedTitle": "Kwafi ya gaza",
+    "copyFailedMessage": "Ku kwafa da hannu: {{value}}"
+  },
+  "shareButton": {
+    "moments": {
+      "invite": "Gayyaci Mutane Su Kaɗa Ƙuri'a",
+      "voted": "Sanar Cewa Kun Kaɗa Ƙuri'a",
+      "results": "Raba Sakamako",
+      "urgency": "Raba — Zaɓe Na Daf da Rufewa",
+      "discovery": "Raba Ƙuduri"
+    },
+    "shareFailedTitle": "Raba Ya Gaza"
+  }
+}

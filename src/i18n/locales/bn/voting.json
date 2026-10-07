@@ -1,0 +1,78 @@
+{
+  "choices": {
+    "yes": "হ্যাঁ",
+    "no": "না",
+    "abstain": "বিরত"
+  },
+  "votingScreen": {
+    "tabs": {
+      "vote": "ভোট",
+      "discussion": "আলোচনা",
+      "discussionWithCount": "আলোচনা ({{count}})"
+    },
+    "back": "← ফিরে যান",
+    "loading": "প্রস্তাব লোড হচ্ছে...",
+    "unknownCreator": "অজানা",
+    "createdBy": "তৈরি করেছেন:",
+    "deadline": "শেষ সময়:",
+    "daysRemaining_one": "{{count}} দিন বাকি",
+    "daysRemaining_other": "{{count}} দিন বাকি",
+    "results": {
+      "title": "বর্তমান ফলাফল",
+      "totalVotes_one": "মোট {{count}}টি ভোট",
+      "totalVotes_other": "মোট {{count}}টি ভোট"
+    },
+    "alreadyVoted": {
+      "title": "✅ আপনি ইতিমধ্যে ভোট দিয়েছেন",
+      "yourVote": "আপনার ভোট: <bold>{{choice}}</bold>",
+      "note": "একবার জমা দেওয়ার পর ভোট বদলানো যায় না।"
+    },
+    "closed": {
+      "title": "🔒 ভোট বন্ধ হয়ে গেছে",
+      "note": "এই প্রস্তাবের শেষ সময় পেরিয়ে গেছে। আর ভোট নেওয়া হচ্ছে না।"
+    },
+    "castVote": {
+      "title": "আপনার ভোট দিন",
+      "privacyNotice": "🔒 আপনার ভোট সম্পূর্ণ গোপন, এটি আপনার সাথে মেলানো যাবে না",
+      "yes": "✅ হ্যাঁ",
+      "no": "❌ না",
+      "abstain": "⚪ বিরত",
+      "submit": "ভোট জমা দিন"
+    },
+    "status": {
+      "preparing": "আপনার ভোট প্রস্তুত হচ্ছে...",
+      "connecting": "Cardano নেটওয়ার্কে সংযোগ হচ্ছে...",
+      "submitting": "ব্লকচেইনে ভোট জমা হচ্ছে..."
+    },
+    "toasts": {
+      "selectVoteFirst": "আগে আপনার ভোট বেছে নিন",
+      "votingClosed": "এই প্রস্তাবে ভোট বন্ধ হয়ে গেছে",
+      "voteQueued": "⚠️ ভোট সারিতে রাখা হয়েছে - অনলাইনে এলে জমা হবে",
+      "voteFailed": "❌ ভোট ব্যর্থ: {{message}}",
+      "unknownError": "অজানা ত্রুটি"
+    }
+  },
+  "successModal": {
+    "title": "ভোট জমা হয়েছে",
+    "subtitle": "Cardano ব্লকচেইনে রেকর্ড করা হয়েছে",
+    "proposalId": "প্রস্তাব ID",
+    "transactionHash": "ট্রানজ্যাকশন হ্যাশ",
+    "yourVote": "আপনার ভোট",
+    "sharePrompt": "অন্যদের জানান যে আপনি ভোট দিয়েছেন 👇",
+    "done": "সম্পন্ন",
+    "copy": "⎘ কপি",
+    "copied": "✓ কপি হয়েছে",
+    "copyFailedTitle": "কপি ব্যর্থ",
+    "copyFailedMessage": "নিজে কপি করুন: {{value}}"
+  },
+  "shareButton": {
+    "moments": {
+      "invite": "ভোট দিতে সবাইকে আমন্ত্রণ জানান",
+      "voted": "জানান যে আপনি ভোট দিয়েছেন",
+      "results": "ফলাফল শেয়ার করুন",
+      "urgency": "শেয়ার করুন — ভোট শীঘ্রই বন্ধ হবে",
+      "discovery": "প্রস্তাব শেয়ার করুন"
+    },
+    "shareFailedTitle": "শেয়ার ব্যর্থ"
+  }
+}

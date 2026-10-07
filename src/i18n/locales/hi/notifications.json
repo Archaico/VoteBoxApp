@@ -1,0 +1,50 @@
+{
+  "push": {
+    "deadline24h": {
+      "title": "मतदान 24 घंटे में बंद होगा"
+    },
+    "deadline1h": {
+      "title": "मतदान 1 घंटे में बंद होगा"
+    },
+    "voteSubmitted": {
+      "title": "वोट भेज दिया गया"
+    },
+    "voteConfirmed": {
+      "title": "ब्लॉकचेन पर वोट की पुष्टि हुई",
+      "body": "{{title}} · TX: {{txHash}}..."
+    },
+    "proposalLive": {
+      "title": "आपका प्रस्ताव लाइव है"
+    },
+    "commentPosted": {
+      "title": "टिप्पणी पोस्ट हो गई"
+    },
+    "newComment": {
+      "title": "प्रस्ताव पर नई टिप्पणी"
+    },
+    "proposalFinalised": {
+      "titlePassed": "प्रस्ताव पास हुआ",
+      "titleEnded": "प्रस्ताव समाप्त हुआ",
+      "body": "{{title}} · हाँ: {{yes}} / नहीं: {{no}}"
+    },
+    "lowBalance": {
+      "title": "ADA बैलेंस कम है",
+      "body": "बैलेंस 1.5 ADA से कम है — प्रस्ताव बनाने के लिए टॉप-अप करें"
+    },
+    "txFailed": {
+      "title": "ट्रांज़ैक्शन विफल",
+      "body": "कृपया अपनी पिछली कार्रवाई फिर से करें"
+    }
+  },
+  "toast": {
+    "offlineQueue": {
+      "voteSubmitted": "✅ वोट सफलतापूर्वक भेजा गया",
+      "proposalSubmitted": "✅ प्रस्ताव सफलतापूर्वक भेजा गया",
+      "proposalPaymentRejected": "❌ प्रस्ताव हटा दिया गया — भुगतान की पुष्टि नहीं हो सकी ({{reason}})",
+      "voteFailed_one": "❌ {{count}} कोशिश के बाद वोट विफल",
+      "voteFailed_other": "❌ {{count}} कोशिशों के बाद वोट विफल",
+      "proposalFailed_one": "❌ {{count}} कोशिश के बाद प्रस्ताव विफल",
+      "proposalFailed_other": "❌ {{count}} कोशिशों के बाद प्रस्ताव विफल"
+    }
+  }
+}

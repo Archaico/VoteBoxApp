@@ -1,0 +1,78 @@
+{
+  "choices": {
+    "yes": "हाँ",
+    "no": "नहीं",
+    "abstain": "तटस्थ"
+  },
+  "votingScreen": {
+    "tabs": {
+      "vote": "वोट",
+      "discussion": "चर्चा",
+      "discussionWithCount": "चर्चा ({{count}})"
+    },
+    "back": "← वापस",
+    "loading": "प्रस्ताव लोड हो रहा है...",
+    "unknownCreator": "अज्ञात",
+    "createdBy": "बनाने वाले:",
+    "deadline": "अंतिम तिथि:",
+    "daysRemaining_one": "{{count}} दिन बाकी",
+    "daysRemaining_other": "{{count}} दिन बाकी",
+    "results": {
+      "title": "मौजूदा परिणाम",
+      "totalVotes_one": "कुल {{count}} वोट",
+      "totalVotes_other": "कुल {{count}} वोट"
+    },
+    "alreadyVoted": {
+      "title": "✅ आप पहले ही वोट दे चुके हैं",
+      "yourVote": "आपका वोट: <bold>{{choice}}</bold>",
+      "note": "एक बार भेजने के बाद आप अपना वोट नहीं बदल सकते।"
+    },
+    "closed": {
+      "title": "🔒 मतदान बंद हो गया है",
+      "note": "इस प्रस्ताव की अंतिम तिथि निकल चुकी है। अब वोट स्वीकार नहीं किए जा रहे।"
+    },
+    "castVote": {
+      "title": "अपना वोट डालें",
+      "privacyNotice": "🔒 आपका वोट पूरी तरह गुमनाम है और इसे आप तक ट्रेस नहीं किया जा सकता",
+      "yes": "✅ हाँ",
+      "no": "❌ नहीं",
+      "abstain": "⚪ तटस्थ",
+      "submit": "वोट भेजें"
+    },
+    "status": {
+      "preparing": "आपका वोट तैयार हो रहा है...",
+      "connecting": "Cardano नेटवर्क से जुड़ रहे हैं...",
+      "submitting": "वोट ब्लॉकचेन पर भेजा जा रहा है..."
+    },
+    "toasts": {
+      "selectVoteFirst": "कृपया पहले अपना वोट चुनें",
+      "votingClosed": "इस प्रस्ताव पर मतदान बंद हो चुका है",
+      "voteQueued": "⚠️ वोट कतार में है - ऑनलाइन होने पर भेजा जाएगा",
+      "voteFailed": "❌ वोट विफल: {{message}}",
+      "unknownError": "अज्ञात त्रुटि"
+    }
+  },
+  "successModal": {
+    "title": "वोट भेज दिया गया",
+    "subtitle": "Cardano ब्लॉकचेन पर दर्ज",
+    "proposalId": "प्रस्ताव ID",
+    "transactionHash": "ट्रांज़ैक्शन हैश",
+    "yourVote": "आपका वोट",
+    "sharePrompt": "दूसरों को बताएँ कि आपने वोट दिया 👇",
+    "done": "हो गया",
+    "copy": "⎘ कॉपी करें",
+    "copied": "✓ कॉपी हो गया",
+    "copyFailedTitle": "कॉपी नहीं हो सका",
+    "copyFailedMessage": "कृपया खुद कॉपी करें: {{value}}"
+  },
+  "shareButton": {
+    "moments": {
+      "invite": "लोगों को वोट के लिए बुलाएँ",
+      "voted": "बताएँ कि आपने वोट दिया",
+      "results": "परिणाम शेयर करें",
+      "urgency": "शेयर करें — मतदान जल्द बंद होगा",
+      "discovery": "प्रस्ताव शेयर करें"
+    },
+    "shareFailedTitle": "शेयर नहीं हो सका"
+  }
+}

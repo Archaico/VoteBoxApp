@@ -1,0 +1,50 @@
+{
+  "push": {
+    "deadline24h": {
+      "title": "Zaɓe zai rufe cikin awa 24"
+    },
+    "deadline1h": {
+      "title": "Zaɓe zai rufe cikin awa 1"
+    },
+    "voteSubmitted": {
+      "title": "An aika ƙuri'a"
+    },
+    "voteConfirmed": {
+      "title": "An tabbatar da ƙuri'a a blockchain",
+      "body": "{{title}} · TX: {{txHash}}..."
+    },
+    "proposalLive": {
+      "title": "Ƙudurinku yana kan layi"
+    },
+    "commentPosted": {
+      "title": "An wallafa sharhi"
+    },
+    "newComment": {
+      "title": "Sabon sharhi a kan ƙuduri"
+    },
+    "proposalFinalised": {
+      "titlePassed": "Ƙuduri YA WUCE",
+      "titleEnded": "Zaɓen ƙuduri ya ƙare",
+      "body": "{{title}} · Eh: {{yes}} / A'a: {{no}}"
+    },
+    "lowBalance": {
+      "title": "Kuɗin ADA ya yi ƙasa",
+      "body": "Kuɗi bai kai 1.5 ADA ba — ku ƙara kuɗi don ƙirƙirar ƙudurori"
+    },
+    "txFailed": {
+      "title": "Mu'amala ta gaza",
+      "body": "Ku sake gwada abin da kuka yi na ƙarshe"
+    }
+  },
+  "toast": {
+    "offlineQueue": {
+      "voteSubmitted": "✅ An aika ƙuri'a cikin nasara",
+      "proposalSubmitted": "✅ An aika ƙuduri cikin nasara",
+      "proposalPaymentRejected": "❌ An cire ƙuduri — ba a iya tabbatar da biyan kuɗi ba ({{reason}})",
+      "voteFailed_one": "❌ Ƙuri'a ta gaza bayan gwaji {{count}}",
+      "voteFailed_other": "❌ Ƙuri'a ta gaza bayan gwaje-gwaje {{count}}",
+      "proposalFailed_one": "❌ Ƙuduri ya gaza bayan gwaji {{count}}",
+      "proposalFailed_other": "❌ Ƙuduri ya gaza bayan gwaje-gwaje {{count}}"
+    }
+  }
+}

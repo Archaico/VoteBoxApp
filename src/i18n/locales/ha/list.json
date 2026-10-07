@@ -1,0 +1,63 @@
+{
+  "header": {
+    "updatedAt": "An sabunta {{time}}",
+    "createButton": "+ Ƙirƙira"
+  },
+  "loading": "Ana loda ƙudurori...",
+  "errors": {
+    "cannotConnect": "Ba a iya haɗawa da network ɗin Cardano ba. Ja ƙasa ko taɓa Sake Gwadawa.",
+    "connectionError": "Matsalar haɗi — ja ƙasa don sake gwadawa"
+  },
+  "emptyState": {
+    "loadFailedTitle": "Ba a Iya Loda Ƙudurori Ba",
+    "retry": "Sake Gwadawa",
+    "noProposalsTitle": "Babu Ƙudurori Tukuna",
+    "noProposalsText": "Ku zama na farko da za ku ƙirƙiri ƙuduri ku fara tattaunawa!",
+    "createFirst": "Ƙirƙiri Ƙuduri na Farko"
+  },
+  "card": {
+    "closed": "An Rufe",
+    "remainingDaysHours": "Saura kwana {{days}} da awa {{hours}}",
+    "remainingHours": "Saura awa {{hours}}",
+    "remainingMinutes": "Saura minti {{minutes}}",
+    "optionCount_one": "zaɓi {{count}}",
+    "optionCount_other": "zaɓuɓɓuka {{count}}",
+    "voteCount_one": "ƙuri'a {{count}}",
+    "voteCount_other": "ƙuri'u {{count}}"
+  },
+  "queue": {
+    "title": "📤 Abubuwan da ke Jira",
+    "votesQueued_one": "ƙuri'a {{count}} na jira",
+    "votesQueued_other": "ƙuri'u {{count}} na jira",
+    "proposalsQueued_one": "ƙuduri {{count}} na jira",
+    "proposalsQueued_other": "ƙudurori {{count}} na jira",
+    "autoSubmitNote": "Za a aika su da kansu idan kuna da ingantaccen haɗin intanet.",
+    "oldestItem": "Abu mafi daɗewa: {{time}}",
+    "retryNow": "Sake Gwadawa Yanzu",
+    "ok": "To"
+  },
+  "syncDiagnostic": {
+    "title": "🔄 Binciken Aiki a Bayan Fage",
+    "registrationHeading": "── Rajista ──",
+    "registered": "An yi rajista: {{time}}",
+    "never": "ba a taɓa ba",
+    "osStatus": "Matsayin OS: {{status}}",
+    "unknown": "ba a sani ba",
+    "lastRunHeading": "── Aiki na Ƙarshe a Bayan Fage ──",
+    "lastRun": "Aiki na ƙarshe: {{time}}",
+    "lastRunNever": "BA A TAƁA BA — aikin bai gudana ba tukuna",
+    "timeAgoParenthetical": "({{ago}})",
+    "result": "Sakamako: {{result}}",
+    "error": "Kuskure: {{error}}",
+    "subscriptionsChecked": "Abubuwan da ake bibiya da aka duba: {{count}}",
+    "explanation": "An tsara aikin ya gudana kusan kowane minti 15. Idan \"Aiki na ƙarshe\" ya wuce kusan minti 30-45 (ko yana nuna \"ba a taɓa ba\" duk da cewa an rufe manhajar tsawon wannan lokaci), da alama wayar ce ke hana aikin a bayan fage — ku duba ƙa'idojin batir/aiki a bayan fage na VoteBoxApp a saitunan waya.",
+    "ok": "To",
+    "timeAgo": {
+      "never": "ba a taɓa ba",
+      "justNow": "yanzu-yanzu",
+      "minutes": "minti {{minutes}} da suka wuce",
+      "hoursMinutes": "awa {{hours}} da minti {{minutes}} da suka wuce",
+      "days": "kwana {{days}} da suka wuce"
+    }
+  }
+}

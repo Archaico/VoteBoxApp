@@ -1,0 +1,50 @@
+{
+  "push": {
+    "deadline24h": {
+      "title": "Upigaji kura unafungwa baada ya saa 24"
+    },
+    "deadline1h": {
+      "title": "Upigaji kura unafungwa baada ya saa 1"
+    },
+    "voteSubmitted": {
+      "title": "Kura imetumwa"
+    },
+    "voteConfirmed": {
+      "title": "Kura imethibitishwa kwenye blockchain",
+      "body": "{{title}} · TX: {{txHash}}..."
+    },
+    "proposalLive": {
+      "title": "Pendekezo lako liko hewani"
+    },
+    "commentPosted": {
+      "title": "Maoni yametumwa"
+    },
+    "newComment": {
+      "title": "Maoni mapya kwenye pendekezo"
+    },
+    "proposalFinalised": {
+      "titlePassed": "Pendekezo LIMEPITA",
+      "titleEnded": "Pendekezo limeisha",
+      "body": "{{title}} · Ndiyo: {{yes}} / Hapana: {{no}}"
+    },
+    "lowBalance": {
+      "title": "Salio la ADA ni dogo",
+      "body": "Salio liko chini ya 1.5 ADA — ongeza salio ili uunde mapendekezo"
+    },
+    "txFailed": {
+      "title": "Muamala umeshindikana",
+      "body": "Tafadhali jaribu tena ulichofanya mwisho"
+    }
+  },
+  "toast": {
+    "offlineQueue": {
+      "voteSubmitted": "✅ Kura imetumwa",
+      "proposalSubmitted": "✅ Pendekezo limetumwa",
+      "proposalPaymentRejected": "❌ Pendekezo limeondolewa — malipo hayakuweza kuthibitishwa ({{reason}})",
+      "voteFailed_one": "❌ Kura imeshindikana baada ya jaribio {{count}}",
+      "voteFailed_other": "❌ Kura imeshindikana baada ya majaribio {{count}}",
+      "proposalFailed_one": "❌ Pendekezo limeshindikana baada ya jaribio {{count}}",
+      "proposalFailed_other": "❌ Pendekezo limeshindikana baada ya majaribio {{count}}"
+    }
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "choices": {
+    "yes": "Ndiyo",
+    "no": "Hapana",
+    "abstain": "Sina upande"
+  },
+  "votingScreen": {
+    "tabs": {
+      "vote": "Kura",
+      "discussion": "Majadiliano",
+      "discussionWithCount": "Majadiliano ({{count}})"
+    },
+    "back": "← Rudi",
+    "loading": "Inapakia pendekezo...",
+    "unknownCreator": "Haijulikani",
+    "createdBy": "Limeundwa na:",
+    "deadline": "Mwisho:",
+    "daysRemaining_one": "Imebaki siku {{count}}",
+    "daysRemaining_other": "Zimebaki siku {{count}}",
+    "results": {
+      "title": "Matokeo ya Sasa",
+      "totalVotes_one": "Jumla: kura {{count}}",
+      "totalVotes_other": "Jumla: kura {{count}}"
+    },
+    "alreadyVoted": {
+      "title": "✅ Umeshapiga Kura",
+      "yourVote": "Kura yako: <bold>{{choice}}</bold>",
+      "note": "Huwezi kubadilisha kura yako baada ya kuituma."
+    },
+    "closed": {
+      "title": "🔒 Upigaji Kura Umefungwa",
+      "note": "Muda wa mwisho wa pendekezo hili umepita. Kura hazipokelewi tena."
+    },
+    "castVote": {
+      "title": "Piga Kura Yako",
+      "privacyNotice": "🔒 Kura yako ni siri kabisa na haiwezi kufuatiliwa hadi kwako",
+      "yes": "✅ Ndiyo",
+      "no": "❌ Hapana",
+      "abstain": "⚪ Sina upande",
+      "submit": "Tuma Kura"
+    },
+    "status": {
+      "preparing": "Inaandaa kura yako...",
+      "connecting": "Inaunganisha na mtandao wa Cardano...",
+      "submitting": "Inatuma kura kwenye blockchain..."
+    },
+    "toasts": {
+      "selectVoteFirst": "Tafadhali chagua kura yako kwanza",
+      "votingClosed": "Upigaji kura wa pendekezo hili umefungwa",
+      "voteQueued": "⚠️ Kura iko foleni - itatumwa ukirudi mtandaoni",
+      "voteFailed": "❌ Kura imeshindikana: {{message}}",
+      "unknownError": "Hitilafu isiyojulikana"
+    }
+  },
+  "successModal": {
+    "title": "Kura Imetumwa",
+    "subtitle": "Imerekodiwa kwenye blockchain ya Cardano",
+    "proposalId": "Namba ya Pendekezo",
+    "transactionHash": "Msimbo wa muamala",
+    "yourVote": "Kura yako",
+    "sharePrompt": "Waambie wengine kwamba umepiga kura 👇",
+    "done": "Tayari",
+    "copy": "⎘ Nakili",
+    "copied": "✓ Imenakiliwa",
+    "copyFailedTitle": "Imeshindwa kunakili",
+    "copyFailedMessage": "Tafadhali nakili mwenyewe: {{value}}"
+  },
+  "shareButton": {
+    "moments": {
+      "invite": "Alika Watu Kupiga Kura",
+      "voted": "Shiriki Kwamba Umepiga Kura",
+      "results": "Shiriki Matokeo",
+      "urgency": "Shiriki — Kura Zinafungwa Karibuni",
+      "discovery": "Shiriki Pendekezo"
+    },
+    "shareFailedTitle": "Imeshindwa Kushiriki"
+  }
+}
