@@ -14,6 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { blockchainService } from '../services/BlockchainService';
 import { QueueIndicator } from '../components/QueueIndicator';
 import { SyncDiagnosticBadge } from '../components/SyncDiagnosticBadge';
+import { LanguagePicker } from '../components/LanguagePicker';
 
 interface Proposal {
   id: string;
@@ -204,6 +205,7 @@ export default function ProposalListScreen({
           )}
         </View>
         <View style={styles.headerActions}>
+          <LanguagePicker />
           <SyncDiagnosticBadge />
           <QueueIndicator />
           <TouchableOpacity style={styles.createButton} onPress={onCreateProposal}>

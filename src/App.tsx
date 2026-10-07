@@ -1,4 +1,5 @@
 // App.tsx
+import './i18n'; // must run before any screen renders
 import React, { useState, useEffect, useRef } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { View } from 'react-native';
@@ -7,6 +8,7 @@ import * as Linking from 'expo-linking';
 import * as Notifications from 'expo-notifications';
 import { WalletConnectModal } from '@walletconnect/modal-react-native';
 import { notificationService } from './services/NotificationService';
+import { loadSavedLanguage } from './i18n';
 import { registerBackgroundSync } from './services/BackgroundSyncService';
 import { offlineQueueService } from './services/OfflineQueueService';
 import { discussionService } from './services/DiscussionService';
@@ -62,6 +64,7 @@ export default function App() {
 
   // Request notification permissions + register background sync + start offline queue on mount
   useEffect(() => {
+    loadSavedLanguage();
     notificationService.requestPermissions()
       .then(granted => granted ? notificationService.reregisterPushTokens() : undefined)
       .catch(() => {});
