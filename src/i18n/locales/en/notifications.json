@@ -1,1 +1,50 @@
-{}
+{
+  "push": {
+    "deadline24h": {
+      "title": "Voting closes in 24 hours"
+    },
+    "deadline1h": {
+      "title": "Voting closes in 1 hour"
+    },
+    "voteSubmitted": {
+      "title": "Vote submitted"
+    },
+    "voteConfirmed": {
+      "title": "Vote confirmed on-chain",
+      "body": "{{title}} · TX: {{txHash}}..."
+    },
+    "proposalLive": {
+      "title": "Your proposal is live"
+    },
+    "commentPosted": {
+      "title": "Comment posted"
+    },
+    "newComment": {
+      "title": "New comment on proposal"
+    },
+    "proposalFinalised": {
+      "titlePassed": "Proposal PASSED",
+      "titleEnded": "Proposal ended",
+      "body": "{{title}} · Yes: {{yes}} / No: {{no}}"
+    },
+    "lowBalance": {
+      "title": "Low ADA balance",
+      "body": "Balance below 1.5 ADA — top up to create proposals"
+    },
+    "txFailed": {
+      "title": "Transaction failed",
+      "body": "Please retry your last action"
+    }
+  },
+  "toast": {
+    "offlineQueue": {
+      "voteSubmitted": "✅ Vote submitted successfully",
+      "proposalSubmitted": "✅ Proposal submitted successfully",
+      "proposalPaymentRejected": "❌ Proposal removed — payment could not be verified ({{reason}})",
+      "voteFailed_one": "❌ Vote failed after {{count}} attempt",
+      "voteFailed_other": "❌ Vote failed after {{count}} attempts",
+      "proposalFailed_one": "❌ Proposal failed after {{count}} attempt",
+      "proposalFailed_other": "❌ Proposal failed after {{count}} attempts"
+    }
+  }
+}

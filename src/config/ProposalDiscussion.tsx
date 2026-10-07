@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import * as Haptics from 'expo-haptics';
+import { useTranslation } from 'react-i18next';
 import { discussionService, Comment } from '../services/DiscussionService';
 import { notificationService } from '../services/NotificationService';
 import { toastService } from '../services/ToastService';
@@ -24,6 +25,7 @@ interface ProposalDiscussionProps {
 }
 
 export default function ProposalDiscussion({ proposalId, userAddress, proposalTitle, proposalDeadline }: ProposalDiscussionProps) {
+  const { t } = useTranslation('discussion');
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState('');
   const [replyingTo, setReplyingTo] = useState<string | undefined>(undefined);
@@ -70,7 +72,7 @@ export default function ProposalDiscussion({ proposalId, userAddress, proposalTi
       await loadComments();
       if (!netState.isConnected) {
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
-        toastService.warning('Comment saved — will sync when back online');
+        toastService.warning(t('toast.savedOffline'));
       } else if (proposalTitle) {
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
         const deadline = proposalDeadline ?? 0;
@@ -78,7 +80,7 @@ export default function ProposalDiscussion({ proposalId, userAddress, proposalTi
       }
     } catch (error) {
       console.error('Failed to post comment:', error);
-      toastService.error('Failed to save comment');
+      toastService.error(t('toast.saveFailed'));
     } finally {
       setIsLoading(false);
     }
@@ -111,7 +113,7 @@ export default function ProposalDiscussion({ proposalId, userAddress, proposalTi
             style={styles.replyButton}
             onPress={() => setReplyingTo(comment.id)}
           >
-            <Text style={styles.replyButtonText}>Reply</Text>
+            <Text style={styles.replyButtonText}>{t('comment.reply')}</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -129,19 +131,19 @@ export default function ProposalDiscussion({ proposalId, userAddress, proposalTi
     >
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.title}>Discussion ({comments.length})</Text>
+        <Text style={styles.title}>{t('header.title', { count: comments.length })}</Text>
       </View>
 
       {/* Comments List */}
       <ScrollView style={styles.commentsList} contentContainerStyle={styles.commentsListContent}>
         {!hasLoaded && comments.length === 0 ? (
           <View style={styles.emptyState}>
-            <Text style={styles.emptySubtext}>One moment… fetching comments from the decentralised IPFS network.</Text>
+            <Text style={styles.emptySubtext}>{t('loading')}</Text>
           </View>
         ) : getTopLevelComments().length === 0 ? (
           <View style={styles.emptyState}>
-            <Text style={styles.emptyText}>No comments yet.</Text>
-            <Text style={styles.emptySubtext}>Be the first to discuss this proposal!</Text>
+            <Text style={styles.emptyText}>{t('empty.title')}</Text>
+            <Text style={styles.emptySubtext}>{t('empty.subtitle')}</Text>
           </View>
         ) : (
           getTopLevelComments().map(comment => renderComment(comment))
@@ -152,10 +154,10 @@ export default function ProposalDiscussion({ proposalId, userAddress, proposalTi
       {replyingTo && (
         <View style={styles.replyingIndicator}>
           <Text style={styles.replyingText}>
-            Replying to comment...
+            {t('replying.label')}
           </Text>
           <TouchableOpacity onPress={() => setReplyingTo(undefined)}>
-            <Text style={styles.cancelReplyText}>Cancel</Text>
+            <Text style={styles.cancelReplyText}>{t('replying.cancel')}</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -164,7 +166,7 @@ export default function ProposalDiscussion({ proposalId, userAddress, proposalTi
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
-          placeholder="Add a comment..."
+          placeholder={t('input.placeholder')}
           placeholderTextColor="#999"
           value={newComment}
           onChangeText={setNewComment}
@@ -177,7 +179,7 @@ export default function ProposalDiscussion({ proposalId, userAddress, proposalTi
           disabled={!newComment.trim() || isLoading}
         >
           <Text style={styles.submitButtonText}>
-            {isLoading ? '...' : 'Post'}
+            {isLoading ? '...' : t('input.post')}
           </Text>
         </TouchableOpacity>
       </View>

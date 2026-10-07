@@ -1,1 +1,25 @@
-{}
+{
+  "header": {
+    "title": "Discussion ({{count}})"
+  },
+  "loading": "One moment… fetching comments from the decentralised IPFS network.",
+  "empty": {
+    "title": "No comments yet.",
+    "subtitle": "Be the first to discuss this proposal!"
+  },
+  "comment": {
+    "reply": "Reply"
+  },
+  "replying": {
+    "label": "Replying to comment...",
+    "cancel": "Cancel"
+  },
+  "input": {
+    "placeholder": "Add a comment...",
+    "post": "Post"
+  },
+  "toast": {
+    "savedOffline": "Comment saved — will sync when back online",
+    "saveFailed": "Failed to save comment"
+  }
+}

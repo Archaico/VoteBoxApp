@@ -17,6 +17,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
 import { toastService } from './ToastService';
 import { blockchainService } from './BlockchainService';
+import i18n from '../i18n';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -204,8 +205,9 @@ class OfflineQueueService {
           await this.processItem(item);
           await this.removeFromQueue(item.id);
           
-          const type = this.isVote(item) ? 'Vote' : 'Proposal';
-          toastService.success(`✅ ${type} submitted successfully`);
+          toastService.success(this.isVote(item)
+            ? i18n.t('notifications:toast.offlineQueue.voteSubmitted')
+            : i18n.t('notifications:toast.offlineQueue.proposalSubmitted'));
         } catch (error) {
           console.error('[OfflineQueue] Failed to process item:', error);
 
@@ -215,7 +217,7 @@ class OfflineQueueService {
             await this.removeFromQueue(item.id);
             const reason = (error instanceof Error ? error.message : String(error))
               .replace('Payment verification failed: ', '');
-            toastService.error(`❌ Proposal removed — payment could not be verified (${reason})`);
+            toastService.error(i18n.t('notifications:toast.offlineQueue.proposalPaymentRejected', { reason }));
           } else {
             await this.updateItemAttempt(item, error as Error);
           }
@@ -263,8 +265,9 @@ class OfflineQueueService {
         queue[index].error = error.message;
         
         if (queue[index].attempts >= this.MAX_ATTEMPTS) {
-          const type = this.isVote(queue[index]) ? 'Vote' : 'Proposal';
-          toastService.error(`❌ ${type} failed after ${this.MAX_ATTEMPTS} attempts`);
+          toastService.error(this.isVote(queue[index])
+            ? i18n.t('notifications:toast.offlineQueue.voteFailed', { count: this.MAX_ATTEMPTS })
+            : i18n.t('notifications:toast.offlineQueue.proposalFailed', { count: this.MAX_ATTEMPTS }));
         }
         
         await AsyncStorage.setItem(this.QUEUE_KEY, JSON.stringify(queue));

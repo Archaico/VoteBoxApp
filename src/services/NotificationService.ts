@@ -6,6 +6,7 @@ import Constants from 'expo-constants';
 import { getApps } from 'firebase/app';
 import { getFirestore, doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { cidRegistryService } from './CIDRegistryService';
+import i18n from '../i18n';
 
 const blakejs = require('blakejs') as typeof import('blakejs');
 
@@ -210,13 +211,13 @@ class NotificationService {
     try {
       if (h24 > now) {
         ids.h24 = await Notifications.scheduleNotificationAsync({
-          content: { title: 'Voting closes in 24 hours', body, data: { proposalId, type: 'deadline_24h' } },
+          content: { title: i18n.t('notifications:push.deadline24h.title'), body, data: { proposalId, type: 'deadline_24h' } },
           trigger: { type: Notifications.SchedulableTriggerInputTypes.DATE, date: new Date(h24) },
         });
       }
       if (h1 > now) {
         ids.h1 = await Notifications.scheduleNotificationAsync({
-          content: { title: 'Voting closes in 1 hour', body, data: { proposalId, type: 'deadline_1h' } },
+          content: { title: i18n.t('notifications:push.deadline1h.title'), body, data: { proposalId, type: 'deadline_1h' } },
           trigger: { type: Notifications.SchedulableTriggerInputTypes.DATE, date: new Date(h1) },
         });
       }
@@ -238,28 +239,32 @@ class NotificationService {
 
   async notifyVoteSubmitted(proposalId: string, proposalTitle: string): Promise<void> {
     if (!(await this.isEnabled('voteConfirmations'))) return;
-    await this.send('Vote submitted', proposalTitle, { type: 'vote_submitted', proposalId });
+    await this.send(i18n.t('notifications:push.voteSubmitted.title'), proposalTitle, { type: 'vote_submitted', proposalId });
   }
 
   async notifyVoteConfirmed(proposalId: string, proposalTitle: string, txHash: string): Promise<void> {
     if (!(await this.isEnabled('voteConfirmations'))) return;
     const short = proposalTitle.length > 35 ? proposalTitle.slice(0, 32) + '...' : proposalTitle;
-    await this.send('Vote confirmed on-chain', `${short} · TX: ${txHash.slice(0, 12)}...`, { type: 'vote_confirmed', proposalId });
+    await this.send(
+      i18n.t('notifications:push.voteConfirmed.title'),
+      i18n.t('notifications:push.voteConfirmed.body', { title: short, txHash: txHash.slice(0, 12) }),
+      { type: 'vote_confirmed', proposalId }
+    );
   }
 
   async notifyProposalLive(proposalId: string, proposalTitle: string): Promise<void> {
     if (!(await this.isEnabled())) return;
-    await this.send('Your proposal is live', proposalTitle, { type: 'proposal_live', proposalId });
+    await this.send(i18n.t('notifications:push.proposalLive.title'), proposalTitle, { type: 'proposal_live', proposalId });
   }
 
   async notifyCommentPosted(proposalId: string, proposalTitle: string): Promise<void> {
     if (!(await this.isEnabled('comments'))) return;
-    await this.send('Comment posted', proposalTitle, { type: 'comment_posted', proposalId });
+    await this.send(i18n.t('notifications:push.commentPosted.title'), proposalTitle, { type: 'comment_posted', proposalId });
   }
 
   async notifyNewComment(proposalId: string, proposalTitle: string): Promise<void> {
     if (!(await this.isEnabled('comments'))) return;
-    await this.send('New comment on proposal', proposalTitle, { type: 'new_comment', proposalId });
+    await this.send(i18n.t('notifications:push.newComment.title'), proposalTitle, { type: 'new_comment', proposalId });
   }
 
   async notifyProposalFinalised(
@@ -278,8 +283,10 @@ class NotificationService {
     const passed = yes > no;
     const short  = proposalTitle.length > 35 ? proposalTitle.slice(0, 32) + '...' : proposalTitle;
     await this.send(
-      passed ? 'Proposal PASSED' : 'Proposal ended',
-      `${short} · Yes: ${yes} / No: ${no}`,
+      passed
+        ? i18n.t('notifications:push.proposalFinalised.titlePassed')
+        : i18n.t('notifications:push.proposalFinalised.titleEnded'),
+      i18n.t('notifications:push.proposalFinalised.body', { title: short, yes, no }),
       { type: 'proposal_finalised', proposalId, passed }
     );
 
@@ -290,12 +297,20 @@ class NotificationService {
 
   async notifyLowBalance(): Promise<void> {
     if (!(await this.isEnabled())) return;
-    await this.send('Low ADA balance', 'Balance below 1.5 ADA — top up to create proposals', { type: 'low_balance' });
+    await this.send(
+      i18n.t('notifications:push.lowBalance.title'),
+      i18n.t('notifications:push.lowBalance.body'),
+      { type: 'low_balance' }
+    );
   }
 
   async notifyTxFailed(context?: string): Promise<void> {
     if (!(await this.isEnabled())) return;
-    await this.send('Transaction failed', context ?? 'Please retry your last action', { type: 'tx_failed' });
+    await this.send(
+      i18n.t('notifications:push.txFailed.title'),
+      context ?? i18n.t('notifications:push.txFailed.body'),
+      { type: 'tx_failed' }
+    );
   }
 
   // ── Finalised Proposals Check ──────────────────────────────────────────
