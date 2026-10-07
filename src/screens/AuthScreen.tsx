@@ -9,6 +9,8 @@ import {
 } from 'react-native';
 import * as LocalAuthentication from 'expo-local-authentication';
 import { useTranslation } from 'react-i18next';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { LanguagePicker } from '../components/LanguagePicker';
 
 interface AuthScreenProps {
   onAuthenticate: () => void;
@@ -16,6 +18,7 @@ interface AuthScreenProps {
 
 const AuthScreen = ({ onAuthenticate }: AuthScreenProps) => {
   const { t } = useTranslation('auth');
+  const insets = useSafeAreaInsets();
   const [isAuthenticating, setIsAuthenticating] = useState(false);
   const [biometricAvailable, setBiometricAvailable] = useState(false);
   const [checking, setChecking] = useState(true);
@@ -74,6 +77,11 @@ const AuthScreen = ({ onAuthenticate }: AuthScreenProps) => {
 
   return (
     <View style={styles.container}>
+      {/* Language choice before login — the phone's language may not be one we offer */}
+      <View style={[styles.languageCorner, { top: insets.top + 12 }]}>
+        <LanguagePicker />
+      </View>
+
       {/* Logo / Brand Area */}
       <View style={styles.brandArea}>
         <View style={styles.logoCircle}>
@@ -145,6 +153,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     justifyContent: 'space-between',
     padding: 32,
+  },
+  languageCorner: {
+    position: 'absolute',
+    end: 16,
+    zIndex: 1,
   },
   brandArea: {
     flex: 1,
