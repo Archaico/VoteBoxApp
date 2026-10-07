@@ -17,7 +17,10 @@ export const LanguagePicker: React.FC = () => {
     setOpen(false);
     const needsRestart = await setLanguage(code);
     notificationService.reregisterPushTokens().catch(() => {});
-    if (needsRestart) Alert.alert(t('language.restartTitle'), t('language.restartMessage'));
+    if (needsRestart) {
+      const tNew = i18n.getFixedT(code, 'common');
+      Alert.alert(tNew('language.restartTitle'), tNew('language.restartMessage'));
+    }
   };
 
   return (
