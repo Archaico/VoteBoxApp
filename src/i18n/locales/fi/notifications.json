@@ -1,0 +1,50 @@
+{
+  "push": {
+    "deadline24h": {
+      "title": "Äänestys päättyy 24 tunnin kuluttua"
+    },
+    "deadline1h": {
+      "title": "Äänestys päättyy tunnin kuluttua"
+    },
+    "voteSubmitted": {
+      "title": "Ääni lähetetty"
+    },
+    "voteConfirmed": {
+      "title": "Ääni vahvistettu lohkoketjussa",
+      "body": "{{title}} · TX: {{txHash}}..."
+    },
+    "proposalLive": {
+      "title": "Ehdotuksesi on julkaistu"
+    },
+    "commentPosted": {
+      "title": "Kommentti lähetetty"
+    },
+    "newComment": {
+      "title": "Uusi kommentti ehdotukseen"
+    },
+    "proposalFinalised": {
+      "titlePassed": "Ehdotus HYVÄKSYTTY",
+      "titleEnded": "Ehdotus päättyi",
+      "body": "{{title}} · Kyllä: {{yes}} / Ei: {{no}}"
+    },
+    "lowBalance": {
+      "title": "ADA-saldo vähissä",
+      "body": "Saldo alle 1,5 ADA – lisää varoja, jotta voit luoda ehdotuksia"
+    },
+    "txFailed": {
+      "title": "Transaktio epäonnistui",
+      "body": "Yritä viimeisintä toimintoa uudelleen"
+    }
+  },
+  "toast": {
+    "offlineQueue": {
+      "voteSubmitted": "✅ Ääni lähetetty",
+      "proposalSubmitted": "✅ Ehdotus lähetetty",
+      "proposalPaymentRejected": "❌ Ehdotus poistettu – maksua ei voitu vahvistaa ({{reason}})",
+      "voteFailed_one": "❌ Äänen lähetys epäonnistui {{count}} yrityksen jälkeen",
+      "voteFailed_other": "❌ Äänen lähetys epäonnistui {{count}} yrityksen jälkeen",
+      "proposalFailed_one": "❌ Ehdotuksen lähetys epäonnistui {{count}} yrityksen jälkeen",
+      "proposalFailed_other": "❌ Ehdotuksen lähetys epäonnistui {{count}} yrityksen jälkeen"
+    }
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "choices": {
+    "yes": "Kyllä",
+    "no": "Ei",
+    "abstain": "Tyhjä"
+  },
+  "votingScreen": {
+    "tabs": {
+      "vote": "Äänestä",
+      "discussion": "Keskustelu",
+      "discussionWithCount": "Keskustelu ({{count}})"
+    },
+    "back": "← Takaisin",
+    "loading": "Ladataan ehdotusta...",
+    "unknownCreator": "Tuntematon",
+    "createdBy": "Tekijä:",
+    "deadline": "Päättyy:",
+    "daysRemaining_one": "{{count}} päivä jäljellä",
+    "daysRemaining_other": "{{count}} päivää jäljellä",
+    "results": {
+      "title": "Nykyiset tulokset",
+      "totalVotes_one": "{{count}} ääni yhteensä",
+      "totalVotes_other": "{{count}} ääntä yhteensä"
+    },
+    "alreadyVoted": {
+      "title": "✅ Olet jo äänestänyt",
+      "yourVote": "Äänesi: <bold>{{choice}}</bold>",
+      "note": "Ääntä ei voi muuttaa lähettämisen jälkeen."
+    },
+    "closed": {
+      "title": "🔒 Äänestys on päättynyt",
+      "note": "Tämän ehdotuksen määräaika on umpeutunut. Ääniä ei enää oteta vastaan."
+    },
+    "castVote": {
+      "title": "Anna äänesi",
+      "privacyNotice": "🔒 Äänesi on täysin anonyymi, eikä sitä voi jäljittää sinuun",
+      "yes": "✅ Kyllä",
+      "no": "❌ Ei",
+      "abstain": "⚪ Tyhjä",
+      "submit": "Lähetä ääni"
+    },
+    "status": {
+      "preparing": "Valmistellaan ääntäsi...",
+      "connecting": "Yhdistetään Cardano-verkkoon...",
+      "submitting": "Lähetetään ääntä lohkoketjuun..."
+    },
+    "toasts": {
+      "selectVoteFirst": "Valitse ensin vaihtoehto",
+      "votingClosed": "Tämän ehdotuksen äänestys on päättynyt",
+      "voteQueued": "⚠️ Ääni jonossa – lähetetään, kun yhteys palaa",
+      "voteFailed": "❌ Äänestys epäonnistui: {{message}}",
+      "unknownError": "Tuntematon virhe"
+    }
+  },
+  "successModal": {
+    "title": "Ääni lähetetty",
+    "subtitle": "Tallennettu Cardano-lohkoketjuun",
+    "proposalId": "Ehdotuksen tunniste",
+    "transactionHash": "Transaktiotunniste",
+    "yourVote": "Äänesi",
+    "sharePrompt": "Kerro muille, että äänestit 👇",
+    "done": "Valmis",
+    "copy": "⎘ Kopioi",
+    "copied": "✓ Kopioitu",
+    "copyFailedTitle": "Kopiointi epäonnistui",
+    "copyFailedMessage": "Kopioi käsin: {{value}}"
+  },
+  "shareButton": {
+    "moments": {
+      "invite": "Kutsu muita äänestämään",
+      "voted": "Kerro, että äänestit",
+      "results": "Jaa tulokset",
+      "urgency": "Jaa – äänestys päättyy pian",
+      "discovery": "Jaa ehdotus"
+    },
+    "shareFailedTitle": "Jakaminen epäonnistui"
+  }
+}

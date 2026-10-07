@@ -1,0 +1,50 @@
+{
+  "push": {
+    "deadline24h": {
+      "title": "Η ψηφοφορία κλείνει σε 24 ώρες"
+    },
+    "deadline1h": {
+      "title": "Η ψηφοφορία κλείνει σε 1 ώρα"
+    },
+    "voteSubmitted": {
+      "title": "Η ψήφος υποβλήθηκε"
+    },
+    "voteConfirmed": {
+      "title": "Η ψήφος επιβεβαιώθηκε στο blockchain",
+      "body": "{{title}} · TX: {{txHash}}..."
+    },
+    "proposalLive": {
+      "title": "Η πρότασή σου είναι ενεργή"
+    },
+    "commentPosted": {
+      "title": "Το σχόλιο δημοσιεύτηκε"
+    },
+    "newComment": {
+      "title": "Νέο σχόλιο σε πρόταση"
+    },
+    "proposalFinalised": {
+      "titlePassed": "Η πρόταση ΕΓΚΡΙΘΗΚΕ",
+      "titleEnded": "Η πρόταση έληξε",
+      "body": "{{title}} · Ναι: {{yes}} / Όχι: {{no}}"
+    },
+    "lowBalance": {
+      "title": "Χαμηλό υπόλοιπο ADA",
+      "body": "Υπόλοιπο κάτω από 1,5 ADA — πρόσθεσε ADA για να δημιουργείς προτάσεις"
+    },
+    "txFailed": {
+      "title": "Η συναλλαγή απέτυχε",
+      "body": "Δοκίμασε ξανά την τελευταία σου ενέργεια"
+    }
+  },
+  "toast": {
+    "offlineQueue": {
+      "voteSubmitted": "✅ Η ψήφος υποβλήθηκε με επιτυχία",
+      "proposalSubmitted": "✅ Η πρόταση υποβλήθηκε με επιτυχία",
+      "proposalPaymentRejected": "❌ Η πρόταση αφαιρέθηκε — η πληρωμή δεν επαληθεύτηκε ({{reason}})",
+      "voteFailed_one": "❌ Η ψήφος απέτυχε μετά από {{count}} προσπάθεια",
+      "voteFailed_other": "❌ Η ψήφος απέτυχε μετά από {{count}} προσπάθειες",
+      "proposalFailed_one": "❌ Η πρόταση απέτυχε μετά από {{count}} προσπάθεια",
+      "proposalFailed_other": "❌ Η πρόταση απέτυχε μετά από {{count}} προσπάθειες"
+    }
+  }
+}

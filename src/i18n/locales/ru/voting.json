@@ -1,0 +1,82 @@
+{
+  "choices": {
+    "yes": "Да",
+    "no": "Нет",
+    "abstain": "Воздержаться"
+  },
+  "votingScreen": {
+    "tabs": {
+      "vote": "Голосование",
+      "discussion": "Обсуждение",
+      "discussionWithCount": "Обсуждение ({{count}})"
+    },
+    "back": "← Назад",
+    "loading": "Загрузка предложения...",
+    "unknownCreator": "Неизвестно",
+    "createdBy": "Автор:",
+    "deadline": "Срок:",
+    "daysRemaining_one": "Остался {{count}} день",
+    "daysRemaining_few": "Осталось {{count}} дня",
+    "daysRemaining_many": "Осталось {{count}} дней",
+    "daysRemaining_other": "Осталось {{count}} дня",
+    "results": {
+      "title": "Текущие результаты",
+      "totalVotes_one": "Всего {{count}} голос",
+      "totalVotes_few": "Всего {{count}} голоса",
+      "totalVotes_many": "Всего {{count}} голосов",
+      "totalVotes_other": "Всего {{count}} голоса"
+    },
+    "alreadyVoted": {
+      "title": "✅ Вы уже проголосовали",
+      "yourVote": "Ваш голос: <bold>{{choice}}</bold>",
+      "note": "После отправки голос изменить нельзя."
+    },
+    "closed": {
+      "title": "🔒 Голосование завершено",
+      "note": "Срок этого предложения истёк. Голоса больше не принимаются."
+    },
+    "castVote": {
+      "title": "Проголосуйте",
+      "privacyNotice": "🔒 Ваш голос полностью анонимен, его невозможно связать с вами",
+      "yes": "✅ Да",
+      "no": "❌ Нет",
+      "abstain": "⚪ Воздержаться",
+      "submit": "Отправить голос"
+    },
+    "status": {
+      "preparing": "Подготовка голоса...",
+      "connecting": "Подключение к сети Cardano...",
+      "submitting": "Отправка голоса в блокчейн..."
+    },
+    "toasts": {
+      "selectVoteFirst": "Сначала выберите вариант",
+      "votingClosed": "Голосование по этому предложению завершено",
+      "voteQueued": "⚠️ Голос в очереди — будет отправлен, когда появится связь",
+      "voteFailed": "❌ Ошибка голосования: {{message}}",
+      "unknownError": "Неизвестная ошибка"
+    }
+  },
+  "successModal": {
+    "title": "Голос отправлен",
+    "subtitle": "Записан в блокчейн Cardano",
+    "proposalId": "ID предложения",
+    "transactionHash": "Хеш транзакции",
+    "yourVote": "Ваш голос",
+    "sharePrompt": "Расскажите другим, что вы проголосовали 👇",
+    "done": "Готово",
+    "copy": "⎘ Копировать",
+    "copied": "✓ Скопировано",
+    "copyFailedTitle": "Не удалось скопировать",
+    "copyFailedMessage": "Скопируйте вручную: {{value}}"
+  },
+  "shareButton": {
+    "moments": {
+      "invite": "Пригласить к голосованию",
+      "voted": "Рассказать о своём голосе",
+      "results": "Поделиться результатами",
+      "urgency": "Поделиться — голосование скоро закончится",
+      "discovery": "Поделиться предложением"
+    },
+    "shareFailedTitle": "Не удалось поделиться"
+  }
+}

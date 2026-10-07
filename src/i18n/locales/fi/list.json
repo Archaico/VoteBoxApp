@@ -1,0 +1,63 @@
+{
+  "header": {
+    "updatedAt": "Päivitetty {{time}}",
+    "createButton": "+ Luo"
+  },
+  "loading": "Ladataan ehdotuksia...",
+  "errors": {
+    "cannotConnect": "Cardano-verkkoon ei saatu yhteyttä. Vedä alas tai napauta Yritä uudelleen.",
+    "connectionError": "Yhteysvirhe – vedä alas yrittääksesi uudelleen"
+  },
+  "emptyState": {
+    "loadFailedTitle": "Ehdotuksia ei voitu ladata",
+    "retry": "Yritä uudelleen",
+    "noProposalsTitle": "Ei vielä ehdotuksia",
+    "noProposalsText": "Luo ensimmäinen ehdotus ja aloita keskustelu!",
+    "createFirst": "Luo ensimmäinen ehdotus"
+  },
+  "card": {
+    "closed": "Päättynyt",
+    "remainingDaysHours": "{{days}} pv {{hours}} h jäljellä",
+    "remainingHours": "{{hours}} h jäljellä",
+    "remainingMinutes": "{{minutes}} min jäljellä",
+    "optionCount_one": "{{count}} vaihtoehto",
+    "optionCount_other": "{{count}} vaihtoehtoa",
+    "voteCount_one": "{{count}} ääni",
+    "voteCount_other": "{{count}} ääntä"
+  },
+  "queue": {
+    "title": "📤 Jonossa",
+    "votesQueued_one": "{{count}} ääni jonossa",
+    "votesQueued_other": "{{count}} ääntä jonossa",
+    "proposalsQueued_one": "{{count}} ehdotus jonossa",
+    "proposalsQueued_other": "{{count}} ehdotusta jonossa",
+    "autoSubmitNote": "Nämä lähetetään automaattisesti, kun yhteys on vakaa.",
+    "oldestItem": "Vanhin: {{time}}",
+    "retryNow": "Yritä nyt",
+    "ok": "OK"
+  },
+  "syncDiagnostic": {
+    "title": "🔄 Taustasynkronoinnin diagnostiikka",
+    "registrationHeading": "── Rekisteröinti ──",
+    "registered": "Rekisteröity: {{time}}",
+    "never": "ei koskaan",
+    "osStatus": "Käyttöjärjestelmän tila: {{status}}",
+    "unknown": "tuntematon",
+    "lastRunHeading": "── Viimeisin taustasuoritus ──",
+    "lastRun": "Viimeksi suoritettu: {{time}}",
+    "lastRunNever": "EI KOSKAAN – tehtävää ei ole suoritettu",
+    "timeAgoParenthetical": "({{ago}})",
+    "result": "Tulos: {{result}}",
+    "error": "Virhe: {{error}}",
+    "subscriptionsChecked": "Tarkistettuja tilauksia: {{count}}",
+    "explanation": "Tehtävä on ajastettu noin 15 minuutin välein. Jos \"Viimeksi suoritettu\" on yli 30–45 minuuttia vanha (tai \"ei koskaan\", vaikka sovellus on ollut suljettuna niin kauan), käyttöjärjestelmä todennäköisesti estää taustatehtävän – tarkista VoteBoxAppin akku- ja taustatoimintarajoitukset laitteen asetuksista.",
+    "ok": "OK",
+    "timeAgo": {
+      "never": "ei koskaan",
+      "justNow": "juuri nyt",
+      "minutes": "{{minutes}} min sitten",
+      "hoursMinutes": "{{hours}} h {{minutes}} min sitten",
+      "days": "{{days}} pv sitten"
+    }
+  }
+}

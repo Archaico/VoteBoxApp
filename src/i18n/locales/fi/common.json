@@ -1,0 +1,7 @@
+{
+  "language": {
+    "title": "Kieli",
+    "restartTitle": "Uudelleenkäynnistys tarvitaan",
+    "restartMessage": "Sulje VoteBoxApp ja avaa se uudelleen, jotta tämän kielen tekstisuunta vaihtuu."
+  }
+}

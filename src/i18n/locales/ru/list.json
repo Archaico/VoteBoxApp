@@ -1,0 +1,71 @@
+{
+  "header": {
+    "updatedAt": "Обновлено {{time}}",
+    "createButton": "+ Создать"
+  },
+  "loading": "Загрузка предложений...",
+  "errors": {
+    "cannotConnect": "Не удалось подключиться к сети Cardano. Потяните вниз или нажмите «Повторить».",
+    "connectionError": "Ошибка соединения — потяните вниз, чтобы повторить"
+  },
+  "emptyState": {
+    "loadFailedTitle": "Не удалось загрузить предложения",
+    "retry": "Повторить",
+    "noProposalsTitle": "Предложений пока нет",
+    "noProposalsText": "Создайте первое предложение и начните обсуждение!",
+    "createFirst": "Создать первое предложение"
+  },
+  "card": {
+    "closed": "Завершено",
+    "remainingDaysHours": "Осталось {{days}} д {{hours}} ч",
+    "remainingHours": "Осталось {{hours}} ч",
+    "remainingMinutes": "Осталось {{minutes}} мин",
+    "optionCount_one": "{{count}} вариант",
+    "optionCount_few": "{{count}} варианта",
+    "optionCount_many": "{{count}} вариантов",
+    "optionCount_other": "{{count}} варианта",
+    "voteCount_one": "{{count}} голос",
+    "voteCount_few": "{{count}} голоса",
+    "voteCount_many": "{{count}} голосов",
+    "voteCount_other": "{{count}} голоса"
+  },
+  "queue": {
+    "title": "📤 В очереди",
+    "votesQueued_one": "{{count}} голос в очереди",
+    "votesQueued_few": "{{count}} голоса в очереди",
+    "votesQueued_many": "{{count}} голосов в очереди",
+    "votesQueued_other": "{{count}} голоса в очереди",
+    "proposalsQueued_one": "{{count}} предложение в очереди",
+    "proposalsQueued_few": "{{count}} предложения в очереди",
+    "proposalsQueued_many": "{{count}} предложений в очереди",
+    "proposalsQueued_other": "{{count}} предложения в очереди",
+    "autoSubmitNote": "Они будут отправлены автоматически, когда появится стабильное соединение.",
+    "oldestItem": "Самый старый элемент: {{time}}",
+    "retryNow": "Повторить сейчас",
+    "ok": "OK"
+  },
+  "syncDiagnostic": {
+    "title": "🔄 Диагностика фоновой синхронизации",
+    "registrationHeading": "── Регистрация ──",
+    "registered": "Зарегистрировано: {{time}}",
+    "never": "никогда",
+    "osStatus": "Статус ОС: {{status}}",
+    "unknown": "неизвестно",
+    "lastRunHeading": "── Последний фоновый запуск ──",
+    "lastRun": "Последний запуск: {{time}}",
+    "lastRunNever": "НИКОГДА — задача ещё не выполнялась",
+    "timeAgoParenthetical": "({{ago}})",
+    "result": "Результат: {{result}}",
+    "error": "Ошибка: {{error}}",
+    "subscriptionsChecked": "Проверено подписок: {{count}}",
+    "explanation": "Задача запускается примерно каждые 15 мин. Если «Последний запуск» был более ~30–45 мин назад (или «никогда», хотя приложение было закрыто так долго), скорее всего, ОС блокирует фоновую задачу — проверьте ограничения батареи и фоновой активности для VoteBoxApp в настройках устройства.",
+    "ok": "OK",
+    "timeAgo": {
+      "never": "никогда",
+      "justNow": "только что",
+      "minutes": "{{minutes}} мин назад",
+      "hoursMinutes": "{{hours}} ч {{minutes}} мин назад",
+      "days": "{{days}} дн. назад"
+    }
+  }
+}

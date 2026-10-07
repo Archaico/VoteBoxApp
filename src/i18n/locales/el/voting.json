@@ -1,0 +1,78 @@
+{
+  "choices": {
+    "yes": "Ναι",
+    "no": "Όχι",
+    "abstain": "Αποχή"
+  },
+  "votingScreen": {
+    "tabs": {
+      "vote": "Ψηφοφορία",
+      "discussion": "Συζήτηση",
+      "discussionWithCount": "Συζήτηση ({{count}})"
+    },
+    "back": "← Πίσω",
+    "loading": "Φόρτωση πρότασης...",
+    "unknownCreator": "Άγνωστος",
+    "createdBy": "Δημιουργός:",
+    "deadline": "Λήξη:",
+    "daysRemaining_one": "Απομένει {{count}} ημέρα",
+    "daysRemaining_other": "Απομένουν {{count}} ημέρες",
+    "results": {
+      "title": "Τρέχοντα αποτελέσματα",
+      "totalVotes_one": "{{count}} ψήφος συνολικά",
+      "totalVotes_other": "{{count}} ψήφοι συνολικά"
+    },
+    "alreadyVoted": {
+      "title": "✅ Έχεις ήδη ψηφίσει",
+      "yourVote": "Η ψήφος σου: <bold>{{choice}}</bold>",
+      "note": "Δεν μπορείς να αλλάξεις την ψήφο σου αφού υποβληθεί."
+    },
+    "closed": {
+      "title": "🔒 Η ψηφοφορία έκλεισε",
+      "note": "Η προθεσμία αυτής της πρότασης έχει λήξει. Δεν γίνονται πλέον δεκτές ψήφοι."
+    },
+    "castVote": {
+      "title": "Ψήφισε",
+      "privacyNotice": "🔒 Η ψήφος σου είναι εντελώς ανώνυμη και δεν μπορεί να συνδεθεί μαζί σου",
+      "yes": "✅ Ναι",
+      "no": "❌ Όχι",
+      "abstain": "⚪ Αποχή",
+      "submit": "Υποβολή ψήφου"
+    },
+    "status": {
+      "preparing": "Προετοιμασία της ψήφου σου...",
+      "connecting": "Σύνδεση στο δίκτυο Cardano...",
+      "submitting": "Υποβολή ψήφου στο blockchain..."
+    },
+    "toasts": {
+      "selectVoteFirst": "Επίλεξε πρώτα την ψήφο σου",
+      "votingClosed": "Η ψηφοφορία για αυτή την πρόταση έκλεισε",
+      "voteQueued": "⚠️ Η ψήφος είναι σε αναμονή - θα υποβληθεί όταν συνδεθείς",
+      "voteFailed": "❌ Η ψήφος απέτυχε: {{message}}",
+      "unknownError": "Άγνωστο σφάλμα"
+    }
+  },
+  "successModal": {
+    "title": "Η ψήφος υποβλήθηκε",
+    "subtitle": "Καταγράφηκε στο blockchain του Cardano",
+    "proposalId": "ID πρότασης",
+    "transactionHash": "Hash συναλλαγής",
+    "yourVote": "Η ψήφος σου",
+    "sharePrompt": "Πες στους άλλους ότι ψήφισες 👇",
+    "done": "Τέλος",
+    "copy": "⎘ Αντιγραφή",
+    "copied": "✓ Αντιγράφηκε",
+    "copyFailedTitle": "Η αντιγραφή απέτυχε",
+    "copyFailedMessage": "Αντίγραψέ το χειροκίνητα: {{value}}"
+  },
+  "shareButton": {
+    "moments": {
+      "invite": "Κάλεσε άλλους να ψηφίσουν",
+      "voted": "Πες ότι ψήφισες",
+      "results": "Κοινοποίηση αποτελεσμάτων",
+      "urgency": "Κοινοποίηση — Η ψηφοφορία κλείνει σύντομα",
+      "discovery": "Κοινοποίηση πρότασης"
+    },
+    "shareFailedTitle": "Η κοινοποίηση απέτυχε"
+  }
+}

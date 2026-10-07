@@ -1,0 +1,25 @@
+{
+  "header": {
+    "title": "Keskustelu ({{count}})"
+  },
+  "loading": "Hetki… haetaan kommentteja hajautetusta IPFS-verkosta.",
+  "empty": {
+    "title": "Ei vielä kommentteja.",
+    "subtitle": "Aloita keskustelu tästä ehdotuksesta ensimmäisenä!"
+  },
+  "comment": {
+    "reply": "Vastaa"
+  },
+  "replying": {
+    "label": "Vastataan kommenttiin...",
+    "cancel": "Peruuta"
+  },
+  "input": {
+    "placeholder": "Kirjoita kommentti...",
+    "post": "Lähetä"
+  },
+  "toast": {
+    "savedOffline": "Kommentti tallennettu – synkronoidaan, kun yhteys palaa",
+    "saveFailed": "Kommentin tallentaminen epäonnistui"
+  }
+}

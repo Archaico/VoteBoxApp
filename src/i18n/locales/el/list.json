@@ -1,0 +1,63 @@
+{
+  "header": {
+    "updatedAt": "Ενημέρωση {{time}}",
+    "createButton": "+ Νέα"
+  },
+  "loading": "Φόρτωση προτάσεων...",
+  "errors": {
+    "cannotConnect": "Δεν ήταν δυνατή η σύνδεση στο δίκτυο Cardano. Σύρε προς τα κάτω ή πάτησε Επανάληψη.",
+    "connectionError": "Σφάλμα σύνδεσης — σύρε προς τα κάτω για επανάληψη"
+  },
+  "emptyState": {
+    "loadFailedTitle": "Δεν ήταν δυνατή η φόρτωση των προτάσεων",
+    "retry": "Επανάληψη",
+    "noProposalsTitle": "Δεν υπάρχουν προτάσεις ακόμη",
+    "noProposalsText": "Δημιούργησε την πρώτη πρόταση και ξεκίνα τη συζήτηση!",
+    "createFirst": "Δημιουργία πρώτης πρότασης"
+  },
+  "card": {
+    "closed": "Έκλεισε",
+    "remainingDaysHours": "Απομένουν {{days}} ημ. {{hours}} ώρ.",
+    "remainingHours": "Απομένουν {{hours}} ώρ.",
+    "remainingMinutes": "Απομένουν {{minutes}} λεπ.",
+    "optionCount_one": "{{count}} επιλογή",
+    "optionCount_other": "{{count}} επιλογές",
+    "voteCount_one": "{{count}} ψήφος",
+    "voteCount_other": "{{count}} ψήφοι"
+  },
+  "queue": {
+    "title": "📤 Σε αναμονή",
+    "votesQueued_one": "{{count}} ψήφος σε αναμονή",
+    "votesQueued_other": "{{count}} ψήφοι σε αναμονή",
+    "proposalsQueued_one": "{{count}} πρόταση σε αναμονή",
+    "proposalsQueued_other": "{{count}} προτάσεις σε αναμονή",
+    "autoSubmitNote": "Θα υποβληθούν αυτόματα μόλις έχεις σταθερή σύνδεση.",
+    "oldestItem": "Παλαιότερο στοιχείο: {{time}}",
+    "retryNow": "Επανάληψη τώρα",
+    "ok": "OK"
+  },
+  "syncDiagnostic": {
+    "title": "🔄 Διαγνωστικά συγχρονισμού στο παρασκήνιο",
+    "registrationHeading": "── Εγγραφή ──",
+    "registered": "Εγγραφή: {{time}}",
+    "never": "ποτέ",
+    "osStatus": "Κατάσταση συστήματος: {{status}}",
+    "unknown": "άγνωστη",
+    "lastRunHeading": "── Τελευταία εκτέλεση στο παρασκήνιο ──",
+    "lastRun": "Τελευταία εκτέλεση: {{time}}",
+    "lastRunNever": "ΠΟΤΕ — η εργασία δεν έχει εκτελεστεί",
+    "timeAgoParenthetical": "({{ago}})",
+    "result": "Αποτέλεσμα: {{result}}",
+    "error": "Σφάλμα: {{error}}",
+    "subscriptionsChecked": "Συνδρομές που ελέγχθηκαν: {{count}}",
+    "explanation": "Η εργασία είναι προγραμματισμένη περίπου κάθε 15 λεπτά. Αν η «Τελευταία εκτέλεση» είναι παλαιότερη από ~30–45 λεπτά (ή «ποτέ», παρόλο που η εφαρμογή έμεινε κλειστή τόσο καιρό), το σύστημα πιθανότατα μπλοκάρει την εργασία παρασκηνίου — έλεγξε τους περιορισμούς μπαταρίας και δραστηριότητας παρασκηνίου για το VoteBoxApp στις ρυθμίσεις της συσκευής.",
+    "ok": "OK",
+    "timeAgo": {
+      "never": "ποτέ",
+      "justNow": "μόλις τώρα",
+      "minutes": "πριν από {{minutes}} λεπ.",
+      "hoursMinutes": "πριν από {{hours}} ώρ. {{minutes}} λεπ.",
+      "days": "πριν από {{days}} ημ."
+    }
+  }
+}

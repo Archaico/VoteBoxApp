@@ -1,0 +1,61 @@
+{
+  "invite": {
+    "heading": "🗳️ POTRZEBNY JEST TWÓJ GŁOS",
+    "closes_one": "⏰ Koniec głosowania: {{date}} (został {{count}} dzień)",
+    "closes_few": "⏰ Koniec głosowania: {{date}} (zostały {{count}} dni)",
+    "closes_many": "⏰ Koniec głosowania: {{date}} (zostało {{count}} dni)",
+    "closes_other": "⏰ Koniec głosowania: {{date}} (zostało {{count}} dnia)",
+    "secured": "🔒 Zabezpieczone w blockchainie Cardano",
+    "free": "✅ Głosowanie całkowicie za darmo — bez portfela",
+    "voteNow": "Zagłosuj teraz w VoteBoxApp:",
+    "footer": "— Udostępnione przez VoteBoxApp · Darmowe głosowanie demokratyczne dla wszystkich",
+    "title": "Zagłosuj: {{title}}"
+  },
+  "voted": {
+    "heading": "✊ Mój głos jest już w VoteBoxApp",
+    "daysLeft_one": "Na głosowanie został {{count}} dzień — dodaj swój głos:",
+    "daysLeft_few": "Na głosowanie zostały {{count}} dni — dodaj swój głos:",
+    "daysLeft_many": "Na głosowanie zostało {{count}} dni — dodaj swój głos:",
+    "daysLeft_other": "Na głosowanie zostało {{count}} dnia — dodaj swój głos:",
+    "closed": "Głosowanie zakończone — dodaj swój głos:",
+    "tagline": "🔒 Zabezpieczone blockchainem · 100% za darmo · Bez portfela",
+    "footer": "— VoteBoxApp: Demokratyczne głosowanie dla wszystkich",
+    "title": "Mój głos: {{title}}"
+  },
+  "results": {
+    "noResults": "Brak dostępnych wyników",
+    "noVotes": "Brak oddanych głosów",
+    "row_one": "{{bar}} {{option}}: {{count}} głos ({{pct}}%)",
+    "row_few": "{{bar}} {{option}}: {{count}} głosy ({{pct}}%)",
+    "row_many": "{{bar}} {{option}}: {{count}} głosów ({{pct}}%)",
+    "row_other": "{{bar}} {{option}}: {{count}} głosu ({{pct}}%)",
+    "heading": "📊 WYNIKI GŁOSOWANIA",
+    "leading": "🏆 Prowadzi: „{{option}}” z wynikiem {{pct}}%",
+    "total": "Łącznie oddanych głosów: {{count}}",
+    "verified": "🔒 Zweryfikowano w blockchainie Cardano",
+    "seeFull": "Zobacz pełne wyniki w VoteBoxApp:",
+    "footer": "— VoteBoxApp: Przejrzyste, darmowe głosowanie demokratyczne",
+    "title": "Wyniki: {{title}}"
+  },
+  "urgent": {
+    "lessThanHour": "⚡ MNIEJ NIŻ GODZINA NA GŁOSOWANIE",
+    "hours": "⚡ DO KOŃCA GŁOSOWANIA: {{count}} GODZ.",
+    "days": "⏰ DO KOŃCA GŁOSOWANIA: {{count}} DNI",
+    "votedSoFar_one": "Do tej pory zagłosowała {{count}} osoba.",
+    "votedSoFar_few": "Do tej pory zagłosowały {{count}} osoby.",
+    "votedSoFar_many": "Do tej pory zagłosowało {{count}} osób.",
+    "votedSoFar_other": "Do tej pory zagłosowało {{count}} osoby.",
+    "stillCounts": "Twój głos wciąż się liczy — zagłosuj teraz:",
+    "tagline": "✅ Za darmo · Bez portfela · Zajmuje 10 sekund",
+    "footer": "— VoteBoxApp: Demokratyczne głosowanie w blockchainie",
+    "title": "Pilne: zagłosuj w sprawie „{{title}}”"
+  },
+  "discovery": {
+    "heading": "🗳️ Zobacz tę propozycję w VoteBoxApp",
+    "open": "🟢 Głosowanie jest OTWARTE",
+    "closed": "🔴 Głosowanie zakończone",
+    "freeToVote": "✅ Głosowanie za darmo — bez portfela i konta",
+    "seeResults": "📊 Zobacz ostateczne wyniki",
+    "footer": "— VoteBoxApp: Darmowe, otwarte głosowanie zabezpieczone blockchainem"
+  }
+}

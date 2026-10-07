@@ -1,0 +1,71 @@
+{
+  "header": {
+    "updatedAt": "Zaktualizowano {{time}}",
+    "createButton": "+ Utwórz"
+  },
+  "loading": "Ładowanie propozycji...",
+  "errors": {
+    "cannotConnect": "Nie udało się połączyć z siecią Cardano. Przeciągnij w dół lub dotknij Ponów.",
+    "connectionError": "Błąd połączenia — przeciągnij w dół, aby ponowić"
+  },
+  "emptyState": {
+    "loadFailedTitle": "Nie udało się wczytać propozycji",
+    "retry": "Ponów",
+    "noProposalsTitle": "Brak propozycji",
+    "noProposalsText": "Utwórz pierwszą propozycję i rozpocznij rozmowę!",
+    "createFirst": "Utwórz pierwszą propozycję"
+  },
+  "card": {
+    "closed": "Zakończone",
+    "remainingDaysHours": "Pozostało: {{days}} d {{hours}} godz.",
+    "remainingHours": "Pozostało: {{hours}} godz.",
+    "remainingMinutes": "Pozostało: {{minutes}} min",
+    "optionCount_one": "{{count}} opcja",
+    "optionCount_few": "{{count}} opcje",
+    "optionCount_many": "{{count}} opcji",
+    "optionCount_other": "{{count}} opcji",
+    "voteCount_one": "{{count}} głos",
+    "voteCount_few": "{{count}} głosy",
+    "voteCount_many": "{{count}} głosów",
+    "voteCount_other": "{{count}} głosu"
+  },
+  "queue": {
+    "title": "📤 W kolejce",
+    "votesQueued_one": "{{count}} głos w kolejce",
+    "votesQueued_few": "{{count}} głosy w kolejce",
+    "votesQueued_many": "{{count}} głosów w kolejce",
+    "votesQueued_other": "{{count}} głosu w kolejce",
+    "proposalsQueued_one": "{{count}} propozycja w kolejce",
+    "proposalsQueued_few": "{{count}} propozycje w kolejce",
+    "proposalsQueued_many": "{{count}} propozycji w kolejce",
+    "proposalsQueued_other": "{{count}} propozycji w kolejce",
+    "autoSubmitNote": "Zostaną wysłane automatycznie, gdy połączenie będzie stabilne.",
+    "oldestItem": "Najstarszy element: {{time}}",
+    "retryNow": "Ponów teraz",
+    "ok": "OK"
+  },
+  "syncDiagnostic": {
+    "title": "🔄 Diagnostyka synchronizacji w tle",
+    "registrationHeading": "── Rejestracja ──",
+    "registered": "Zarejestrowano: {{time}}",
+    "never": "nigdy",
+    "osStatus": "Status systemu: {{status}}",
+    "unknown": "nieznany",
+    "lastRunHeading": "── Ostatnie uruchomienie w tle ──",
+    "lastRun": "Ostatnie uruchomienie: {{time}}",
+    "lastRunNever": "NIGDY — zadanie nie zostało wykonane",
+    "timeAgoParenthetical": "({{ago}})",
+    "result": "Wynik: {{result}}",
+    "error": "Błąd: {{error}}",
+    "subscriptionsChecked": "Sprawdzone subskrypcje: {{count}}",
+    "explanation": "Zadanie jest zaplanowane co ok. 15 min. Jeśli „Ostatnie uruchomienie” było ponad ok. 30–45 min temu (lub nigdy, mimo że aplikacja była tak długo zamknięta), system najpewniej blokuje zadanie w tle — sprawdź ograniczenia baterii i aktywności w tle dla VoteBoxApp w ustawieniach urządzenia.",
+    "ok": "OK",
+    "timeAgo": {
+      "never": "nigdy",
+      "justNow": "przed chwilą",
+      "minutes": "{{minutes}} min temu",
+      "hoursMinutes": "{{hours}} godz. {{minutes}} min temu",
+      "days": "{{days}} d temu"
+    }
+  }
+}

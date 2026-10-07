@@ -1,0 +1,176 @@
+{
+  "header": {
+    "back": "Takaisin",
+    "title": "Luo ehdotus"
+  },
+  "infoBanner": "Cardanon suojaama · 80 % pienemmät gas-kulut · Ilmainen äänestäjille",
+  "buttons": {
+    "cancel": "Peruuta",
+    "ok": "OK",
+    "continue": "Jatka",
+    "remove": "Poista",
+    "done": "Valmis"
+  },
+  "wallets": {
+    "eternl": {
+      "badge": "SUOSITELTU",
+      "description": "Cardanon tehokkain lompakko. WalletConnect-tuki."
+    },
+    "vespr": {
+      "badge": "PARAS ALOITTELIJOILLE",
+      "description": "Tehty mobiiliin, nopea ja helppo ottaa käyttöön."
+    },
+    "lace": {
+      "badge": "VIRALLINEN IOG",
+      "description": "Cardanon perustajien tekemä. Kaikki Web3-palvelut yhdessä."
+    }
+  },
+  "walletSelect": {
+    "title": "Yhdistä lompakkosi",
+    "subtitle": "Tarvitaan ehdotuksen luontimaksun maksamiseen. Äänestäjät eivät koskaan tarvitse lompakkoa.",
+    "or": "tai",
+    "enterManually": "📋  Syötä osoite käsin",
+    "noWallet": "❓  Minulla ei ole vielä lompakkoa",
+    "walletConnectSoon": "🔗 WalletConnect-tuki tulossa pian – yhdistä yhdellä napautuksella yli 600 lompakkoon",
+    "openAlertTitle": "Avataanko {{wallet}}?",
+    "openAlertMessage": "Tämä avaa {{wallet}}-lompakkosovelluksen (tai vie sinut lataamaan sen).\n\nKun olet yhdistänyt, kopioi Cardano-osoitteesi (alkaa addr_test1...) ja palaa tänne liittämään se.",
+    "openAlertButton": "Avaa {{wallet}}",
+    "linkErrorTitle": "Linkin avaaminen epäonnistui",
+    "linkErrorMessage": "Etsi lompakko Google Play -kaupasta itse."
+  },
+  "walletManual": {
+    "welcomeBack": "👋 Tervetuloa takaisin! Avaa lompakkosovelluksesi, kopioi osoitteesi (addr_test1...) ja liitä se alle.",
+    "addressLabel": "Cardano-osoitteesi",
+    "addressHelper": "Alkaa \"addr_test1\" · Löytyy lompakosta kohdasta \"Vastaanota\" tai \"Osoite\"",
+    "back": "← Takaisin",
+    "confirm": "Vahvista osoite",
+    "invalidTitle": "Virheellinen osoite",
+    "invalidMessage": "Anna kelvollinen Cardano-osoite. Sen pitää alkaa \"addr_test1\" (testnet) ja olla vähintään 50 merkkiä pitkä."
+  },
+  "walletConnected": {
+    "label": "Lompakko yhdistetty",
+    "removeButton": "Poista ja vaihda lompakko",
+    "removeAlertTitle": "Poista lompakko",
+    "removeAlertMessage": "Haluatko varmasti poistaa lompakko-osoitteesi?"
+  },
+  "noWallet": {
+    "title": "Näin hankit Cardano-lompakon",
+    "body": "Cardano-lompakossa voit säilyttää ADAa (Cardanon valuutta) ja maksaa pienen maksun ehdotuksen julkaisemisesta. Äänestäjät eivät tarvitse lompakkoa – vain ehdotusten tekijät.",
+    "step1": "Lataa <bold>Vespr</bold> – se on aloittelijoille helpoin Cardano-lompakko ja tehty mobiilikäyttöön.",
+    "step2": "Luo lompakko ja kirjoita palautuslauseesi turvallisesti talteen.",
+    "step3": "Lisää vähän ADAa – pieni summa riittää ehdotusten julkaisemiseen.",
+    "step4": "Palaa tänne, napauta Vespr ja liitä osoitteesi.",
+    "downloadButton": "⬇️  Lataa Vespr-lompakko",
+    "back": "← Takaisin lompakkovaihtoehtoihin",
+    "linkErrorMessage": "Hae Google Play -kaupasta \"Vespr Wallet\"."
+  },
+  "form": {
+    "titleLabel": "Ehdotuksen otsikko *",
+    "titlePlaceholder": "Kirjoita selkeä ja ytimekäs otsikko",
+    "characterCount": "{{current}}/{{max}} merkkiä",
+    "descriptionLabel": "Kuvaus *",
+    "descriptionPlaceholder": "Kerro ehdotuksestasi tarkemmin...",
+    "durationLabel": "Äänestyksen kesto (päivää) *",
+    "durationHelper": "Suositus: 7–14 päivää",
+    "votersLabel": "Odotettu äänestäjämäärä *",
+    "votersHelper": "Arvioi osallistujien määrä (vähintään 2)",
+    "customVotersPlaceholder": "Tai anna oma määrä (väh. 2)",
+    "selectedVoters_one": "Valittu: {{voters}} äänestäjä",
+    "selectedVoters_other": "Valittu: {{voters}} äänestäjää"
+  },
+  "attachments": {
+    "label": "Liitteet (valinnainen)",
+    "helper": "Enintään {{max}} kuvaa ehdotuksesi tueksi",
+    "addPhoto": "+\nKuva",
+    "limitTitle": "Raja saavutettu",
+    "limitMessage": "Voit liittää ehdotukseen enintään {{max}} kuvaa.",
+    "permissionTitle": "Lupa tarvitaan",
+    "permissionMessage": "Salli pääsy kuviin, jotta voit liittää kuvan.",
+    "errorTitle": "Kuvan lisääminen epäonnistui"
+  },
+  "validation": {
+    "missingInfoTitle": "Tietoja puuttuu",
+    "missingInfoMessage": "Täytä ensin kaikki pakolliset kentät, myös lompakko-osoitteesi",
+    "invalidVotersTitle": "Virheellinen äänestäjämäärä",
+    "minVotersMessage": "Odotettujen äänestäjien vähimmäismäärä on 2",
+    "votersAtLeastMessage": "Odotetun äänestäjämäärän on oltava vähintään 2",
+    "missingTitleTitle": "Otsikko puuttuu",
+    "missingTitleMessage": "Anna ehdotukselle otsikko",
+    "missingDescriptionTitle": "Kuvaus puuttuu",
+    "missingDescriptionMessage": "Anna ehdotukselle kuvaus",
+    "invalidDurationTitle": "Virheellinen kesto",
+    "invalidDurationMessage": "Keston on oltava vähintään 1 päivä",
+    "walletRequiredTitle": "Lompakko tarvitaan",
+    "walletRequiredMessage": "Yhdistä Cardano-lompakkosi maksaaksesi luontimaksun"
+  },
+  "fees": {
+    "calculateButton": "Laske kokonaiskustannus",
+    "breakdownTitle": "Kustannusten erittely",
+    "gasCosts": "Gas-kulut:",
+    "foundationFee": "Säätiön maksu:",
+    "total": "Yhteensä:",
+    "minimumApplied": "Alustan vähimmäismaksu 1,2 ADA sovellettu",
+    "foundationInfo": "Säätiön maksu tukee VoteBoxAppin avoimen lähdekoodin kehitystä",
+    "alertTitle": "Maksujen täydellinen erittely",
+    "alertExpectedVoters": "Odotetut äänestäjät: {{voters}}",
+    "alertGasCosts_one": "Gas-kulut ({{count}} erä): {{amount}} ADA",
+    "alertGasCosts_other": "Gas-kulut ({{count}} erää): {{amount}} ADA",
+    "alertFoundationFee": "Säätiön maksu: {{amount}} ADA",
+    "alertTotal": "YHTEENSÄ: {{ada}} ADA (~{{usd}} USD)",
+    "alertMinimumApplied": "(alustan vähimmäismaksu 1,2 ADA sovellettu)",
+    "alertFoundationInfo": "Säätiön maksu tukee VoteBoxAppin avoimen lähdekoodin kehitystä.",
+    "votingFree": "Äänestäminen on ILMAISTA kaikille osallistujille!"
+  },
+  "payment": {
+    "title": "Lähetä maksu julkaistaksesi",
+    "instructions": "Lähetä täsmälleen tämä summa omasta lompakkosovelluksestasi ja liitä sitten transaktiotunniste (hash) alle.",
+    "sendTo": "Vastaanottaja",
+    "amount": "Summa",
+    "copy": "Kopioi",
+    "txHashLabel": "Transaktiotunniste (hash)",
+    "txHashPlaceholder": "Liitä tx hash lompakkosovelluksestasi",
+    "verifying": "Tarkistetaan maksua...",
+    "verifyButton": "Tarkista ja julkaise",
+    "editProposal": "← Muokkaa ehdotusta",
+    "overpayTitle": "Summa on paljon vaadittua suurempi",
+    "overpayMessage": "Lähetit {{sent}} ADA, mutta vain {{required}} ADA vaadittiin. Ylimenevää osaa ei voi palauttaa – jatketaanko silti?",
+    "verifyErrors": {
+      "malformed_hash": "Tämä ei näytä kelvolliselta transaktiotunnisteelta. Sen pitäisi olla 64 heksadesimaalimerkkiä – tarkista, mitä liitit.",
+      "not_found_or_pending": "Ei vielä löydy lohkoketjusta. Jos lähetit maksun juuri, odota 30–60 sekuntia vahvistusta ja yritä uudelleen.",
+      "wrong_recipient": "Tätä transaktiota ei ole maksettu yllä näkyvään säätiön lompakko-osoitteeseen.",
+      "insufficient_amount": "Lähetetty summa on vaadittua pienempi – katso summa yltä.",
+      "already_used": "Tätä transaktiota on jo käytetty toiseen ehdotukseen.",
+      "network_error": "Verkkoon ei saatu yhteyttä tarkistusta varten – tarkista yhteytesi ja yritä uudelleen.",
+      "generic": "Tarkistus epäonnistui – yritä uudelleen."
+    }
+  },
+  "publish": {
+    "statusInitializing": "Käynnistetään lohkoketjupalvelua...",
+    "statusConnecting": "Yhdistetään Cardano-verkkoon...",
+    "statusUploading": "Ladataan IPFS:ään...",
+    "statusRecording": "Tallennetaan lohkoketjuun...",
+    "incompleteResponse": "Lohkoketjupalvelun vastaus oli puutteellinen",
+    "unknownError": "Tuntematon virhe",
+    "queuedToast": "⏳ Ei yhteyttä – ehdotus on jonossa ja julkaistaan, kun yhteys palaa",
+    "failedTitle": "Julkaisu epäonnistui",
+    "failedMessage": "{{error}}\n\nKatso tarkemmat lokit konsolista.",
+    "connectWalletButton": "Yhdistä lompakko julkaistaksesi",
+    "continueButton": "Jatka maksuun"
+  },
+  "success": {
+    "title": "🎉 Ehdotus julkaistu!",
+    "live": "Ehdotuksesi on nyt julkaistu!",
+    "ipfs": "IPFS: {{cid}}...",
+    "tx": "TX:   {{hash}}...",
+    "verifyOn": "Tarkista: preprod.cardanoscan.io",
+    "totalPaid": "Maksettu yhteensä: {{ada}} ADA (~{{usd}} USD)",
+    "configuredFor_one": "Määritetty {{voters}} äänestäjälle",
+    "configuredFor_other": "Määritetty {{voters}} äänestäjälle",
+    "copyTxHash": "📋 Kopioi TX-tunniste",
+    "share": "📢 Jaa"
+  },
+  "batching": {
+    "title": "Äänten niputus",
+    "body": "Äänet niputetaan enintään 100 äänen erissä gas-kulujen säästämiseksi\nPienemmät erät lähetetään automaattisesti 10 min välein\nKaikki äänet tallennetaan, kun ehdotus päättyy\n80 % pienemmät kulut kuin yksittäisillä äänillä\nÄänestäminen on osallistujille täysin ILMAISTA"
+  }
+}

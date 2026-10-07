@@ -1,0 +1,53 @@
+{
+  "invite": {
+    "heading": "🗳️ ÄÄNESI TARVITAAN",
+    "closes_one": "⏰ Äänestys päättyy: {{date}} ({{count}} päivä jäljellä)",
+    "closes_other": "⏰ Äänestys päättyy: {{date}} ({{count}} päivää jäljellä)",
+    "secured": "🔒 Suojattu Cardano-lohkoketjussa",
+    "free": "✅ Äänestäminen on täysin ilmaista – lompakkoa ei tarvita",
+    "voteNow": "Äänestä nyt VoteBoxAppissa:",
+    "footer": "— Jaettu VoteBoxAppista · Ilmaista demokraattista äänestämistä kaikille",
+    "title": "Äänestä: {{title}}"
+  },
+  "voted": {
+    "heading": "✊ Äänestin juuri VoteBoxAppissa",
+    "daysLeft_one": "{{count}} päivä aikaa äänestää – anna äänesi kuulua:",
+    "daysLeft_other": "{{count}} päivää aikaa äänestää – anna äänesi kuulua:",
+    "closed": "Äänestys on päättynyt – anna äänesi kuulua:",
+    "tagline": "🔒 Lohkoketjulla suojattu · 100 % ilmainen · Ei lompakkoa",
+    "footer": "— VoteBoxApp: Demokraattista äänestämistä kaikille",
+    "title": "Äänestin: {{title}}"
+  },
+  "results": {
+    "noResults": "Tuloksia ei ole vielä saatavilla",
+    "noVotes": "Ääniä ei ole vielä annettu",
+    "row_one": "{{bar}} {{option}}: {{count}} ääni ({{pct}} %)",
+    "row_other": "{{bar}} {{option}}: {{count}} ääntä ({{pct}} %)",
+    "heading": "📊 ÄÄNESTYKSEN TULOKSET",
+    "leading": "🏆 Johdossa: \"{{option}}\", {{pct}} %",
+    "total": "Ääniä annettu yhteensä: {{count}}",
+    "verified": "🔒 Vahvistettu Cardano-lohkoketjussa",
+    "seeFull": "Katso kaikki tulokset VoteBoxAppissa:",
+    "footer": "— VoteBoxApp: Läpinäkyvää ja ilmaista demokraattista äänestämistä",
+    "title": "Tulokset: {{title}}"
+  },
+  "urgent": {
+    "lessThanHour": "⚡ ALLE TUNTI AIKAA ÄÄNESTÄÄ",
+    "hours": "⚡ {{count}} TUNTIA AIKAA ÄÄNESTÄÄ",
+    "days": "⏰ {{count}} PÄIVÄÄ AIKAA ÄÄNESTÄÄ",
+    "votedSoFar_one": "{{count}} henkilö on äänestänyt tähän mennessä.",
+    "votedSoFar_other": "{{count}} henkilöä on äänestänyt tähän mennessä.",
+    "stillCounts": "Äänelläsi on yhä merkitystä – äänestä nyt:",
+    "tagline": "✅ Ilmainen · Ei lompakkoa · Vie 10 sekuntia",
+    "footer": "— VoteBoxApp: Demokraattista äänestämistä lohkoketjussa",
+    "title": "Kiireellinen: äänestä ehdotuksesta \"{{title}}\""
+  },
+  "discovery": {
+    "heading": "🗳️ Katso tämä ehdotus VoteBoxAppissa",
+    "open": "🟢 Äänestys on AUKI",
+    "closed": "🔴 Äänestys on päättynyt",
+    "freeToVote": "✅ Ilmainen äänestää – ei lompakkoa eikä tiliä",
+    "seeResults": "📊 Katso lopulliset tulokset",
+    "footer": "— VoteBoxApp: Ilmaista, avointa, lohkoketjulla suojattua äänestämistä"
+  }
+}

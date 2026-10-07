@@ -1,0 +1,54 @@
+{
+  "push": {
+    "deadline24h": {
+      "title": "Głosowanie kończy się za 24 godziny"
+    },
+    "deadline1h": {
+      "title": "Głosowanie kończy się za godzinę"
+    },
+    "voteSubmitted": {
+      "title": "Głos wysłany"
+    },
+    "voteConfirmed": {
+      "title": "Głos potwierdzony w blockchainie",
+      "body": "{{title}} · TX: {{txHash}}..."
+    },
+    "proposalLive": {
+      "title": "Twoja propozycja jest aktywna"
+    },
+    "commentPosted": {
+      "title": "Komentarz opublikowany"
+    },
+    "newComment": {
+      "title": "Nowy komentarz do propozycji"
+    },
+    "proposalFinalised": {
+      "titlePassed": "Propozycja PRZYJĘTA",
+      "titleEnded": "Głosowanie nad propozycją zakończone",
+      "body": "{{title}} · Tak: {{yes}} / Nie: {{no}}"
+    },
+    "lowBalance": {
+      "title": "Niskie saldo ADA",
+      "body": "Saldo poniżej 1,5 ADA — doładuj portfel, aby tworzyć propozycje"
+    },
+    "txFailed": {
+      "title": "Transakcja nie powiodła się",
+      "body": "Ponów ostatnią czynność"
+    }
+  },
+  "toast": {
+    "offlineQueue": {
+      "voteSubmitted": "✅ Głos wysłany pomyślnie",
+      "proposalSubmitted": "✅ Propozycja wysłana pomyślnie",
+      "proposalPaymentRejected": "❌ Propozycja usunięta — nie udało się zweryfikować płatności ({{reason}})",
+      "voteFailed_one": "❌ Nie udało się wysłać głosu po {{count}} próbie",
+      "voteFailed_few": "❌ Nie udało się wysłać głosu po {{count}} próbach",
+      "voteFailed_many": "❌ Nie udało się wysłać głosu po {{count}} próbach",
+      "voteFailed_other": "❌ Nie udało się wysłać głosu po {{count}} próbach",
+      "proposalFailed_one": "❌ Nie udało się wysłać propozycji po {{count}} próbie",
+      "proposalFailed_few": "❌ Nie udało się wysłać propozycji po {{count}} próbach",
+      "proposalFailed_many": "❌ Nie udało się wysłać propozycji po {{count}} próbach",
+      "proposalFailed_other": "❌ Nie udało się wysłać propozycji po {{count}} próbach"
+    }
+  }
+}

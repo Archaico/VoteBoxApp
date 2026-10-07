@@ -1,0 +1,82 @@
+{
+  "choices": {
+    "yes": "Tak",
+    "no": "Nie",
+    "abstain": "Wstrzymuję się"
+  },
+  "votingScreen": {
+    "tabs": {
+      "vote": "Głosuj",
+      "discussion": "Dyskusja",
+      "discussionWithCount": "Dyskusja ({{count}})"
+    },
+    "back": "← Wstecz",
+    "loading": "Ładowanie propozycji...",
+    "unknownCreator": "Nieznany",
+    "createdBy": "Autor:",
+    "deadline": "Termin:",
+    "daysRemaining_one": "Został {{count}} dzień",
+    "daysRemaining_few": "Zostały {{count}} dni",
+    "daysRemaining_many": "Zostało {{count}} dni",
+    "daysRemaining_other": "Zostało {{count}} dnia",
+    "results": {
+      "title": "Aktualne wyniki",
+      "totalVotes_one": "Łącznie {{count}} głos",
+      "totalVotes_few": "Łącznie {{count}} głosy",
+      "totalVotes_many": "Łącznie {{count}} głosów",
+      "totalVotes_other": "Łącznie {{count}} głosu"
+    },
+    "alreadyVoted": {
+      "title": "✅ Twój głos został już oddany",
+      "yourVote": "Twój głos: <bold>{{choice}}</bold>",
+      "note": "Po wysłaniu głosu nie można go zmienić."
+    },
+    "closed": {
+      "title": "🔒 Głosowanie zakończone",
+      "note": "Termin tej propozycji minął. Głosy nie są już przyjmowane."
+    },
+    "castVote": {
+      "title": "Oddaj swój głos",
+      "privacyNotice": "🔒 Twój głos jest w pełni anonimowy i nie da się go powiązać z tobą",
+      "yes": "✅ Tak",
+      "no": "❌ Nie",
+      "abstain": "⚪ Wstrzymuję się",
+      "submit": "Wyślij głos"
+    },
+    "status": {
+      "preparing": "Przygotowywanie głosu...",
+      "connecting": "Łączenie z siecią Cardano...",
+      "submitting": "Wysyłanie głosu do blockchaina..."
+    },
+    "toasts": {
+      "selectVoteFirst": "Najpierw wybierz swój głos",
+      "votingClosed": "Głosowanie nad tą propozycją zostało zakończone",
+      "voteQueued": "⚠️ Głos w kolejce — zostanie wysłany po połączeniu",
+      "voteFailed": "❌ Błąd głosowania: {{message}}",
+      "unknownError": "Nieznany błąd"
+    }
+  },
+  "successModal": {
+    "title": "Głos wysłany",
+    "subtitle": "Zapisany w blockchainie Cardano",
+    "proposalId": "ID propozycji",
+    "transactionHash": "Hash transakcji",
+    "yourVote": "Twój głos",
+    "sharePrompt": "Daj innym znać, że już głosujesz 👇",
+    "done": "Gotowe",
+    "copy": "⎘ Kopiuj",
+    "copied": "✓ Skopiowano",
+    "copyFailedTitle": "Nie udało się skopiować",
+    "copyFailedMessage": "Skopiuj ręcznie: {{value}}"
+  },
+  "shareButton": {
+    "moments": {
+      "invite": "Zaproś do głosowania",
+      "voted": "Pochwal się głosem",
+      "results": "Udostępnij wyniki",
+      "urgency": "Udostępnij — koniec głosowania już wkrótce",
+      "discovery": "Udostępnij propozycję"
+    },
+    "shareFailedTitle": "Nie udało się udostępnić"
+  }
+}

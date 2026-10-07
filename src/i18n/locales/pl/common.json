@@ -1,0 +1,7 @@
+{
+  "language": {
+    "title": "Język",
+    "restartTitle": "Wymagane ponowne uruchomienie",
+    "restartMessage": "Zamknij i ponownie otwórz VoteBoxApp, aby zmienić kierunek tekstu dla tego języka."
+  }
+}
