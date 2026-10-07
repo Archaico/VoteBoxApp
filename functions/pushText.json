@@ -1,5 +1,71 @@
 {
+  "ar": {
+    "newCommentTitle": "تعليق جديد على مقترح"
+  },
+  "bn": {
+    "newCommentTitle": "প্রস্তাবে নতুন মন্তব্য"
+  },
+  "da": {
+    "newCommentTitle": "Ny kommentar til forslag"
+  },
+  "de": {
+    "newCommentTitle": "Neuer Kommentar zum Vorschlag"
+  },
+  "el": {
+    "newCommentTitle": "Νέο σχόλιο σε πρόταση"
+  },
   "en": {
     "newCommentTitle": "New comment on proposal"
+  },
+  "es": {
+    "newCommentTitle": "Nuevo comentario en la propuesta"
+  },
+  "fi": {
+    "newCommentTitle": "Uusi kommentti ehdotukseen"
+  },
+  "fr": {
+    "newCommentTitle": "Nouveau commentaire sur la proposition"
+  },
+  "ha": {
+    "newCommentTitle": "Sabon sharhi a kan ƙuduri"
+  },
+  "hi": {
+    "newCommentTitle": "प्रस्ताव पर नई टिप्पणी"
+  },
+  "it": {
+    "newCommentTitle": "Nuovo commento sulla proposta"
+  },
+  "ja": {
+    "newCommentTitle": "提案に新しいコメントがあります"
+  },
+  "ko": {
+    "newCommentTitle": "제안에 새 댓글이 달렸어요"
+  },
+  "nb": {
+    "newCommentTitle": "Ny kommentar på forslaget"
+  },
+  "nl": {
+    "newCommentTitle": "Nieuwe reactie op voorstel"
+  },
+  "pl": {
+    "newCommentTitle": "Nowy komentarz do propozycji"
+  },
+  "pt-BR": {
+    "newCommentTitle": "Novo comentário na proposta"
+  },
+  "pt-PT": {
+    "newCommentTitle": "Novo comentário na proposta"
+  },
+  "ru": {
+    "newCommentTitle": "Новый комментарий к предложению"
+  },
+  "sv": {
+    "newCommentTitle": "Ny kommentar på förslaget"
+  },
+  "sw": {
+    "newCommentTitle": "Maoni mapya kwenye pendekezo"
+  },
+  "zh-Hans": {
+    "newCommentTitle": "提案有新评论"
   }
 }

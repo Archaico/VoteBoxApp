@@ -12,9 +12,207 @@ import en_list from './en/list.json';
 import en_notifications from './en/notifications.json';
 import en_share from './en/share.json';
 import en_voting from './en/voting.json';
+import ar_auth from './ar/auth.json';
+import ar_common from './ar/common.json';
+import ar_create from './ar/create.json';
+import ar_discussion from './ar/discussion.json';
+import ar_list from './ar/list.json';
+import ar_notifications from './ar/notifications.json';
+import ar_share from './ar/share.json';
+import ar_voting from './ar/voting.json';
+import bn_auth from './bn/auth.json';
+import bn_common from './bn/common.json';
+import bn_create from './bn/create.json';
+import bn_discussion from './bn/discussion.json';
+import bn_list from './bn/list.json';
+import bn_notifications from './bn/notifications.json';
+import bn_share from './bn/share.json';
+import bn_voting from './bn/voting.json';
+import da_auth from './da/auth.json';
+import da_common from './da/common.json';
+import da_create from './da/create.json';
+import da_discussion from './da/discussion.json';
+import da_list from './da/list.json';
+import da_notifications from './da/notifications.json';
+import da_share from './da/share.json';
+import da_voting from './da/voting.json';
+import de_auth from './de/auth.json';
+import de_common from './de/common.json';
+import de_create from './de/create.json';
+import de_discussion from './de/discussion.json';
+import de_list from './de/list.json';
+import de_notifications from './de/notifications.json';
+import de_share from './de/share.json';
+import de_voting from './de/voting.json';
+import el_auth from './el/auth.json';
+import el_common from './el/common.json';
+import el_create from './el/create.json';
+import el_discussion from './el/discussion.json';
+import el_list from './el/list.json';
+import el_notifications from './el/notifications.json';
+import el_share from './el/share.json';
+import el_voting from './el/voting.json';
+import es_auth from './es/auth.json';
+import es_common from './es/common.json';
+import es_create from './es/create.json';
+import es_discussion from './es/discussion.json';
+import es_list from './es/list.json';
+import es_notifications from './es/notifications.json';
+import es_share from './es/share.json';
+import es_voting from './es/voting.json';
+import fi_auth from './fi/auth.json';
+import fi_common from './fi/common.json';
+import fi_create from './fi/create.json';
+import fi_discussion from './fi/discussion.json';
+import fi_list from './fi/list.json';
+import fi_notifications from './fi/notifications.json';
+import fi_share from './fi/share.json';
+import fi_voting from './fi/voting.json';
+import fr_auth from './fr/auth.json';
+import fr_common from './fr/common.json';
+import fr_create from './fr/create.json';
+import fr_discussion from './fr/discussion.json';
+import fr_list from './fr/list.json';
+import fr_notifications from './fr/notifications.json';
+import fr_share from './fr/share.json';
+import fr_voting from './fr/voting.json';
+import ha_auth from './ha/auth.json';
+import ha_common from './ha/common.json';
+import ha_create from './ha/create.json';
+import ha_discussion from './ha/discussion.json';
+import ha_list from './ha/list.json';
+import ha_notifications from './ha/notifications.json';
+import ha_share from './ha/share.json';
+import ha_voting from './ha/voting.json';
+import hi_auth from './hi/auth.json';
+import hi_common from './hi/common.json';
+import hi_create from './hi/create.json';
+import hi_discussion from './hi/discussion.json';
+import hi_list from './hi/list.json';
+import hi_notifications from './hi/notifications.json';
+import hi_share from './hi/share.json';
+import hi_voting from './hi/voting.json';
+import it_auth from './it/auth.json';
+import it_common from './it/common.json';
+import it_create from './it/create.json';
+import it_discussion from './it/discussion.json';
+import it_list from './it/list.json';
+import it_notifications from './it/notifications.json';
+import it_share from './it/share.json';
+import it_voting from './it/voting.json';
+import ja_auth from './ja/auth.json';
+import ja_common from './ja/common.json';
+import ja_create from './ja/create.json';
+import ja_discussion from './ja/discussion.json';
+import ja_list from './ja/list.json';
+import ja_notifications from './ja/notifications.json';
+import ja_share from './ja/share.json';
+import ja_voting from './ja/voting.json';
+import ko_auth from './ko/auth.json';
+import ko_common from './ko/common.json';
+import ko_create from './ko/create.json';
+import ko_discussion from './ko/discussion.json';
+import ko_list from './ko/list.json';
+import ko_notifications from './ko/notifications.json';
+import ko_share from './ko/share.json';
+import ko_voting from './ko/voting.json';
+import nb_auth from './nb/auth.json';
+import nb_common from './nb/common.json';
+import nb_create from './nb/create.json';
+import nb_discussion from './nb/discussion.json';
+import nb_list from './nb/list.json';
+import nb_notifications from './nb/notifications.json';
+import nb_share from './nb/share.json';
+import nb_voting from './nb/voting.json';
+import nl_auth from './nl/auth.json';
+import nl_common from './nl/common.json';
+import nl_create from './nl/create.json';
+import nl_discussion from './nl/discussion.json';
+import nl_list from './nl/list.json';
+import nl_notifications from './nl/notifications.json';
+import nl_share from './nl/share.json';
+import nl_voting from './nl/voting.json';
+import pl_auth from './pl/auth.json';
+import pl_common from './pl/common.json';
+import pl_create from './pl/create.json';
+import pl_discussion from './pl/discussion.json';
+import pl_list from './pl/list.json';
+import pl_notifications from './pl/notifications.json';
+import pl_share from './pl/share.json';
+import pl_voting from './pl/voting.json';
+import pt_BR_auth from './pt-BR/auth.json';
+import pt_BR_common from './pt-BR/common.json';
+import pt_BR_create from './pt-BR/create.json';
+import pt_BR_discussion from './pt-BR/discussion.json';
+import pt_BR_list from './pt-BR/list.json';
+import pt_BR_notifications from './pt-BR/notifications.json';
+import pt_BR_share from './pt-BR/share.json';
+import pt_BR_voting from './pt-BR/voting.json';
+import pt_PT_auth from './pt-PT/auth.json';
+import pt_PT_common from './pt-PT/common.json';
+import pt_PT_create from './pt-PT/create.json';
+import pt_PT_discussion from './pt-PT/discussion.json';
+import pt_PT_list from './pt-PT/list.json';
+import pt_PT_notifications from './pt-PT/notifications.json';
+import pt_PT_share from './pt-PT/share.json';
+import pt_PT_voting from './pt-PT/voting.json';
+import ru_auth from './ru/auth.json';
+import ru_common from './ru/common.json';
+import ru_create from './ru/create.json';
+import ru_discussion from './ru/discussion.json';
+import ru_list from './ru/list.json';
+import ru_notifications from './ru/notifications.json';
+import ru_share from './ru/share.json';
+import ru_voting from './ru/voting.json';
+import sv_auth from './sv/auth.json';
+import sv_common from './sv/common.json';
+import sv_create from './sv/create.json';
+import sv_discussion from './sv/discussion.json';
+import sv_list from './sv/list.json';
+import sv_notifications from './sv/notifications.json';
+import sv_share from './sv/share.json';
+import sv_voting from './sv/voting.json';
+import sw_auth from './sw/auth.json';
+import sw_common from './sw/common.json';
+import sw_create from './sw/create.json';
+import sw_discussion from './sw/discussion.json';
+import sw_list from './sw/list.json';
+import sw_notifications from './sw/notifications.json';
+import sw_share from './sw/share.json';
+import sw_voting from './sw/voting.json';
+import zh_Hans_auth from './zh-Hans/auth.json';
+import zh_Hans_common from './zh-Hans/common.json';
+import zh_Hans_create from './zh-Hans/create.json';
+import zh_Hans_discussion from './zh-Hans/discussion.json';
+import zh_Hans_list from './zh-Hans/list.json';
+import zh_Hans_notifications from './zh-Hans/notifications.json';
+import zh_Hans_share from './zh-Hans/share.json';
+import zh_Hans_voting from './zh-Hans/voting.json';
 
 export const NAMESPACES = ['auth', 'common', 'create', 'discussion', 'list', 'notifications', 'share', 'voting'] as const;
 
 export const resources = {
   'en': { auth: en_auth, common: en_common, create: en_create, discussion: en_discussion, list: en_list, notifications: en_notifications, share: en_share, voting: en_voting },
+  'ar': { auth: ar_auth, common: ar_common, create: ar_create, discussion: ar_discussion, list: ar_list, notifications: ar_notifications, share: ar_share, voting: ar_voting },
+  'bn': { auth: bn_auth, common: bn_common, create: bn_create, discussion: bn_discussion, list: bn_list, notifications: bn_notifications, share: bn_share, voting: bn_voting },
+  'da': { auth: da_auth, common: da_common, create: da_create, discussion: da_discussion, list: da_list, notifications: da_notifications, share: da_share, voting: da_voting },
+  'de': { auth: de_auth, common: de_common, create: de_create, discussion: de_discussion, list: de_list, notifications: de_notifications, share: de_share, voting: de_voting },
+  'el': { auth: el_auth, common: el_common, create: el_create, discussion: el_discussion, list: el_list, notifications: el_notifications, share: el_share, voting: el_voting },
+  'es': { auth: es_auth, common: es_common, create: es_create, discussion: es_discussion, list: es_list, notifications: es_notifications, share: es_share, voting: es_voting },
+  'fi': { auth: fi_auth, common: fi_common, create: fi_create, discussion: fi_discussion, list: fi_list, notifications: fi_notifications, share: fi_share, voting: fi_voting },
+  'fr': { auth: fr_auth, common: fr_common, create: fr_create, discussion: fr_discussion, list: fr_list, notifications: fr_notifications, share: fr_share, voting: fr_voting },
+  'ha': { auth: ha_auth, common: ha_common, create: ha_create, discussion: ha_discussion, list: ha_list, notifications: ha_notifications, share: ha_share, voting: ha_voting },
+  'hi': { auth: hi_auth, common: hi_common, create: hi_create, discussion: hi_discussion, list: hi_list, notifications: hi_notifications, share: hi_share, voting: hi_voting },
+  'it': { auth: it_auth, common: it_common, create: it_create, discussion: it_discussion, list: it_list, notifications: it_notifications, share: it_share, voting: it_voting },
+  'ja': { auth: ja_auth, common: ja_common, create: ja_create, discussion: ja_discussion, list: ja_list, notifications: ja_notifications, share: ja_share, voting: ja_voting },
+  'ko': { auth: ko_auth, common: ko_common, create: ko_create, discussion: ko_discussion, list: ko_list, notifications: ko_notifications, share: ko_share, voting: ko_voting },
+  'nb': { auth: nb_auth, common: nb_common, create: nb_create, discussion: nb_discussion, list: nb_list, notifications: nb_notifications, share: nb_share, voting: nb_voting },
+  'nl': { auth: nl_auth, common: nl_common, create: nl_create, discussion: nl_discussion, list: nl_list, notifications: nl_notifications, share: nl_share, voting: nl_voting },
+  'pl': { auth: pl_auth, common: pl_common, create: pl_create, discussion: pl_discussion, list: pl_list, notifications: pl_notifications, share: pl_share, voting: pl_voting },
+  'pt-BR': { auth: pt_BR_auth, common: pt_BR_common, create: pt_BR_create, discussion: pt_BR_discussion, list: pt_BR_list, notifications: pt_BR_notifications, share: pt_BR_share, voting: pt_BR_voting },
+  'pt-PT': { auth: pt_PT_auth, common: pt_PT_common, create: pt_PT_create, discussion: pt_PT_discussion, list: pt_PT_list, notifications: pt_PT_notifications, share: pt_PT_share, voting: pt_PT_voting },
+  'ru': { auth: ru_auth, common: ru_common, create: ru_create, discussion: ru_discussion, list: ru_list, notifications: ru_notifications, share: ru_share, voting: ru_voting },
+  'sv': { auth: sv_auth, common: sv_common, create: sv_create, discussion: sv_discussion, list: sv_list, notifications: sv_notifications, share: sv_share, voting: sv_voting },
+  'sw': { auth: sw_auth, common: sw_common, create: sw_create, discussion: sw_discussion, list: sw_list, notifications: sw_notifications, share: sw_share, voting: sw_voting },
+  'zh-Hans': { auth: zh_Hans_auth, common: zh_Hans_common, create: zh_Hans_create, discussion: zh_Hans_discussion, list: zh_Hans_list, notifications: zh_Hans_notifications, share: zh_Hans_share, voting: zh_Hans_voting },
 };
