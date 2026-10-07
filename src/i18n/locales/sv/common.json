@@ -1,0 +1,7 @@
+{
+  "language": {
+    "title": "Språk",
+    "restartTitle": "Omstart krävs",
+    "restartMessage": "Stäng VoteBoxApp och öppna appen igen för att byta textriktning för det här språket."
+  }
+}

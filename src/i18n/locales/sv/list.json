@@ -1,0 +1,63 @@
+{
+  "header": {
+    "updatedAt": "Uppdaterad {{time}}",
+    "createButton": "+ Skapa"
+  },
+  "loading": "Läser in förslag...",
+  "errors": {
+    "cannotConnect": "Kunde inte ansluta till Cardano-nätverket. Dra nedåt eller tryck på Försök igen.",
+    "connectionError": "Anslutningsfel — dra nedåt för att försöka igen"
+  },
+  "emptyState": {
+    "loadFailedTitle": "Det gick inte att läsa in förslagen",
+    "retry": "Försök igen",
+    "noProposalsTitle": "Inga förslag än",
+    "noProposalsText": "Var först med att skapa ett förslag och starta samtalet!",
+    "createFirst": "Skapa första förslaget"
+  },
+  "card": {
+    "closed": "Avslutad",
+    "remainingDaysHours": "{{days}} d {{hours}} h kvar",
+    "remainingHours": "{{hours}} h kvar",
+    "remainingMinutes": "{{minutes}} min kvar",
+    "optionCount_one": "{{count}} alternativ",
+    "optionCount_other": "{{count}} alternativ",
+    "voteCount_one": "{{count}} röst",
+    "voteCount_other": "{{count}} röster"
+  },
+  "queue": {
+    "title": "📤 I kö",
+    "votesQueued_one": "{{count}} röst i kö",
+    "votesQueued_other": "{{count}} röster i kö",
+    "proposalsQueued_one": "{{count}} förslag i kö",
+    "proposalsQueued_other": "{{count}} förslag i kö",
+    "autoSubmitNote": "De skickas automatiskt när du har en stabil anslutning.",
+    "oldestItem": "Äldsta posten: {{time}}",
+    "retryNow": "Försök igen nu",
+    "ok": "OK"
+  },
+  "syncDiagnostic": {
+    "title": "🔄 Diagnostik för bakgrundssynk",
+    "registrationHeading": "── Registrering ──",
+    "registered": "Registrerad: {{time}}",
+    "never": "aldrig",
+    "osStatus": "Systemstatus: {{status}}",
+    "unknown": "okänd",
+    "lastRunHeading": "── Senaste bakgrundskörning ──",
+    "lastRun": "Senaste körning: {{time}}",
+    "lastRunNever": "ALDRIG — uppgiften har inte körts",
+    "timeAgoParenthetical": "({{ago}})",
+    "result": "Resultat: {{result}}",
+    "error": "Fel: {{error}}",
+    "subscriptionsChecked": "Kontrollerade prenumerationer: {{count}}",
+    "explanation": "Uppgiften är schemalagd ungefär var 15:e minut. Om ”Senaste körning” är äldre än ~30–45 min (eller aldrig, trots att appen har varit stängd så länge) blockerar systemet troligen bakgrundsuppgiften — kontrollera batteri- och bakgrundsbegränsningar för VoteBoxApp i enhetens inställningar.",
+    "ok": "OK",
+    "timeAgo": {
+      "never": "aldrig",
+      "justNow": "just nu",
+      "minutes": "för {{minutes}} min sedan",
+      "hoursMinutes": "för {{hours}} h {{minutes}} min sedan",
+      "days": "för {{days}} d sedan"
+    }
+  }
+}

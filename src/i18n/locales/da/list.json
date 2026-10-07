@@ -1,0 +1,63 @@
+{
+  "header": {
+    "updatedAt": "Opdateret {{time}}",
+    "createButton": "+ Opret"
+  },
+  "loading": "Indlæser forslag...",
+  "errors": {
+    "cannotConnect": "Kunne ikke forbinde til Cardano-netværket. Træk ned, eller tryk på Prøv igen.",
+    "connectionError": "Forbindelsesfejl — træk ned for at prøve igen"
+  },
+  "emptyState": {
+    "loadFailedTitle": "Forslagene kunne ikke indlæses",
+    "retry": "Prøv igen",
+    "noProposalsTitle": "Ingen forslag endnu",
+    "noProposalsText": "Vær den første til at oprette et forslag og sætte gang i samtalen!",
+    "createFirst": "Opret det første forslag"
+  },
+  "card": {
+    "closed": "Lukket",
+    "remainingDaysHours": "{{days}} d {{hours}} t tilbage",
+    "remainingHours": "{{hours}} t tilbage",
+    "remainingMinutes": "{{minutes}} min tilbage",
+    "optionCount_one": "{{count}} valgmulighed",
+    "optionCount_other": "{{count}} valgmuligheder",
+    "voteCount_one": "{{count}} stemme",
+    "voteCount_other": "{{count}} stemmer"
+  },
+  "queue": {
+    "title": "📤 I kø",
+    "votesQueued_one": "{{count}} stemme i kø",
+    "votesQueued_other": "{{count}} stemmer i kø",
+    "proposalsQueued_one": "{{count}} forslag i kø",
+    "proposalsQueued_other": "{{count}} forslag i kø",
+    "autoSubmitNote": "De sendes automatisk, når du har en stabil forbindelse.",
+    "oldestItem": "Ældste element: {{time}}",
+    "retryNow": "Prøv igen nu",
+    "ok": "OK"
+  },
+  "syncDiagnostic": {
+    "title": "🔄 Diagnose af baggrundssynkronisering",
+    "registrationHeading": "── Registrering ──",
+    "registered": "Registreret: {{time}}",
+    "never": "aldrig",
+    "osStatus": "Systemstatus: {{status}}",
+    "unknown": "ukendt",
+    "lastRunHeading": "── Seneste baggrundskørsel ──",
+    "lastRun": "Seneste kørsel: {{time}}",
+    "lastRunNever": "ALDRIG — opgaven er ikke blevet kørt",
+    "timeAgoParenthetical": "({{ago}})",
+    "result": "Resultat: {{result}}",
+    "error": "Fejl: {{error}}",
+    "subscriptionsChecked": "Abonnementer tjekket: {{count}}",
+    "explanation": "Opgaven er planlagt ca. hvert 15. minut. Hvis »Seneste kørsel« er mere end ~30-45 min gammel (eller aldrig, selvom appen har været lukket så længe), blokerer systemet sandsynligvis baggrundsopgaven — tjek batteri- og baggrundsbegrænsninger for VoteBoxApp i enhedens indstillinger.",
+    "ok": "OK",
+    "timeAgo": {
+      "never": "aldrig",
+      "justNow": "lige nu",
+      "minutes": "for {{minutes}} min siden",
+      "hoursMinutes": "for {{hours}} t {{minutes}} min siden",
+      "days": "for {{days}} d siden"
+    }
+  }
+}

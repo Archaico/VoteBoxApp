@@ -1,0 +1,63 @@
+{
+  "header": {
+    "updatedAt": "Oppdatert {{time}}",
+    "createButton": "+ Lag"
+  },
+  "loading": "Laster inn forslag...",
+  "errors": {
+    "cannotConnect": "Kunne ikke koble til Cardano-nettverket. Dra ned eller trykk på Prøv igjen.",
+    "connectionError": "Tilkoblingsfeil — dra ned for å prøve igjen"
+  },
+  "emptyState": {
+    "loadFailedTitle": "Kunne ikke laste inn forslag",
+    "retry": "Prøv igjen",
+    "noProposalsTitle": "Ingen forslag ennå",
+    "noProposalsText": "Bli den første til å lage et forslag og start samtalen!",
+    "createFirst": "Lag det første forslaget"
+  },
+  "card": {
+    "closed": "Avsluttet",
+    "remainingDaysHours": "{{days}} d {{hours}} t igjen",
+    "remainingHours": "{{hours}} t igjen",
+    "remainingMinutes": "{{minutes}} min igjen",
+    "optionCount_one": "{{count}} alternativ",
+    "optionCount_other": "{{count}} alternativer",
+    "voteCount_one": "{{count}} stemme",
+    "voteCount_other": "{{count}} stemmer"
+  },
+  "queue": {
+    "title": "📤 I kø",
+    "votesQueued_one": "{{count}} stemme i kø",
+    "votesQueued_other": "{{count}} stemmer i kø",
+    "proposalsQueued_one": "{{count}} forslag i kø",
+    "proposalsQueued_other": "{{count}} forslag i kø",
+    "autoSubmitNote": "Disse sendes automatisk når du har en stabil tilkobling.",
+    "oldestItem": "Eldste element: {{time}}",
+    "retryNow": "Prøv igjen nå",
+    "ok": "OK"
+  },
+  "syncDiagnostic": {
+    "title": "🔄 Diagnostikk for bakgrunnssynkronisering",
+    "registrationHeading": "── Registrering ──",
+    "registered": "Registrert: {{time}}",
+    "never": "aldri",
+    "osStatus": "Systemstatus: {{status}}",
+    "unknown": "ukjent",
+    "lastRunHeading": "── Siste bakgrunnskjøring ──",
+    "lastRun": "Siste kjøring: {{time}}",
+    "lastRunNever": "ALDRI — oppgaven har ikke kjørt",
+    "timeAgoParenthetical": "({{ago}})",
+    "result": "Resultat: {{result}}",
+    "error": "Feil: {{error}}",
+    "subscriptionsChecked": "Abonnementer sjekket: {{count}}",
+    "explanation": "Oppgaven er planlagt omtrent hvert 15. minutt. Hvis «Siste kjøring» er mer enn ~30–45 min gammel (eller aldri, selv om appen har vært lukket så lenge), blokkerer systemet sannsynligvis bakgrunnsoppgaven — sjekk batteri- og bakgrunnsbegrensninger for VoteBoxApp i enhetsinnstillingene.",
+    "ok": "OK",
+    "timeAgo": {
+      "never": "aldri",
+      "justNow": "akkurat nå",
+      "minutes": "for {{minutes}} min siden",
+      "hoursMinutes": "for {{hours}} t {{minutes}} min siden",
+      "days": "for {{days}} d siden"
+    }
+  }
+}

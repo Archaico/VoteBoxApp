@@ -1,0 +1,176 @@
+{
+  "header": {
+    "back": "Terug",
+    "title": "Voorstel maken"
+  },
+  "infoBanner": "Beveiligd door Cardano · 80% minder gaskosten · Gratis voor stemmers",
+  "buttons": {
+    "cancel": "Annuleren",
+    "ok": "OK",
+    "continue": "Doorgaan",
+    "remove": "Verwijderen",
+    "done": "Klaar"
+  },
+  "wallets": {
+    "eternl": {
+      "badge": "AANBEVOLEN",
+      "description": "De krachtigste Cardano-wallet. Met ondersteuning voor WalletConnect."
+    },
+    "vespr": {
+      "badge": "BESTE VOOR BEGINNERS",
+      "description": "Gemaakt voor mobiel, snel en makkelijk in te stellen."
+    },
+    "lace": {
+      "badge": "OFFICIEEL VAN IOG",
+      "description": "Gemaakt door de oprichters van Cardano. Alles-in-één hub voor Web3."
+    }
+  },
+  "walletSelect": {
+    "title": "Koppel je wallet",
+    "subtitle": "Nodig om de kosten voor het maken van een voorstel te betalen. Om te stemmen heb je nooit een wallet nodig.",
+    "or": "of",
+    "enterManually": "📋  Adres handmatig invoeren",
+    "noWallet": "❓  Ik heb nog geen wallet",
+    "walletConnectSoon": "🔗 Ondersteuning voor WalletConnect komt binnenkort — met één tik koppelen met meer dan 600 wallets",
+    "openAlertTitle": "{{wallet}} openen?",
+    "openAlertMessage": "Hiermee open je de wallet-app {{wallet}} (of ga je naar de downloadpagina).\n\nKopieer na het koppelen je Cardano-adres (begint met addr_test1...) en kom hier terug om het te plakken.",
+    "openAlertButton": "{{wallet}} openen",
+    "linkErrorTitle": "Kan link niet openen",
+    "linkErrorMessage": "Zoek de wallet handmatig op in de Play Store."
+  },
+  "walletManual": {
+    "welcomeBack": "👋 Welkom terug! Open je wallet-app, kopieer je adres (addr_test1...) en plak het hieronder.",
+    "addressLabel": "Je Cardano-adres",
+    "addressHelper": "Begint met \"addr_test1\" · Te vinden in je wallet onder \"Ontvangen\" of \"Adres\"",
+    "back": "← Terug",
+    "confirm": "Adres bevestigen",
+    "invalidTitle": "Ongeldig adres",
+    "invalidMessage": "Voer een geldig Cardano-adres in. Het moet beginnen met \"addr_test1\" (testnet) en minstens 50 tekens lang zijn."
+  },
+  "walletConnected": {
+    "label": "Wallet gekoppeld",
+    "removeButton": "Wallet verwijderen en wijzigen",
+    "removeAlertTitle": "Wallet verwijderen",
+    "removeAlertMessage": "Weet je zeker dat je je wallet-adres wilt verwijderen?"
+  },
+  "noWallet": {
+    "title": "Een Cardano-wallet krijgen",
+    "body": "Met een Cardano-wallet kun je ADA (de munt van Cardano) bewaren en de kleine vergoeding betalen om een voorstel te publiceren. Stemmers hebben er nooit een nodig — alleen wie een voorstel maakt.",
+    "step1": "Download <bold>Vespr</bold> — de makkelijkste Cardano-wallet voor beginners, gemaakt voor mobiel.",
+    "step2": "Maak je wallet aan en schrijf je herstelzin veilig op.",
+    "step3": "Zet wat ADA op je wallet — een paar euro is genoeg om voorstellen te publiceren.",
+    "step4": "Kom hier terug, tik op Vespr en plak je adres.",
+    "downloadButton": "⬇️  Vespr Wallet downloaden",
+    "back": "← Terug naar wallets",
+    "linkErrorMessage": "Zoek naar \"Vespr Wallet\" in de Play Store."
+  },
+  "form": {
+    "titleLabel": "Titel van voorstel *",
+    "titlePlaceholder": "Voer een duidelijke, korte titel in",
+    "characterCount": "{{current}}/{{max}} tekens",
+    "descriptionLabel": "Beschrijving *",
+    "descriptionPlaceholder": "Leg je voorstel uitgebreid uit...",
+    "durationLabel": "Stemduur (dagen) *",
+    "durationHelper": "Aanbevolen: 7–14 dagen",
+    "votersLabel": "Verwacht aantal stemmers *",
+    "votersHelper": "Schat het aantal deelnemers (minimaal 2)",
+    "customVotersPlaceholder": "Of voer zelf een aantal in (min. 2)",
+    "selectedVoters_one": "Gekozen: {{voters}} stemmer",
+    "selectedVoters_other": "Gekozen: {{voters}} stemmers"
+  },
+  "attachments": {
+    "label": "Bijlagen (optioneel)",
+    "helper": "Maximaal {{max}} afbeeldingen bij je voorstel",
+    "addPhoto": "+\nFoto",
+    "limitTitle": "Limiet bereikt",
+    "limitMessage": "Je kunt maximaal {{max}} afbeeldingen per voorstel toevoegen.",
+    "permissionTitle": "Toestemming nodig",
+    "permissionMessage": "Geef toegang tot je foto's om een afbeelding toe te voegen.",
+    "errorTitle": "Kan afbeelding niet toevoegen"
+  },
+  "validation": {
+    "missingInfoTitle": "Gegevens ontbreken",
+    "missingInfoMessage": "Vul eerst alle verplichte velden in, ook je wallet-adres",
+    "invalidVotersTitle": "Ongeldig aantal stemmers",
+    "minVotersMessage": "Het minimale verwachte aantal stemmers is 2",
+    "votersAtLeastMessage": "Het verwachte aantal stemmers moet minstens 2 zijn",
+    "missingTitleTitle": "Titel ontbreekt",
+    "missingTitleMessage": "Voer een titel voor het voorstel in",
+    "missingDescriptionTitle": "Beschrijving ontbreekt",
+    "missingDescriptionMessage": "Voer een beschrijving voor het voorstel in",
+    "invalidDurationTitle": "Ongeldige duur",
+    "invalidDurationMessage": "De duur moet minstens 1 dag zijn",
+    "walletRequiredTitle": "Wallet vereist",
+    "walletRequiredMessage": "Koppel je Cardano-wallet om de kosten voor het maken te betalen"
+  },
+  "fees": {
+    "calculateButton": "Totale kosten berekenen",
+    "breakdownTitle": "Overzicht totale kosten",
+    "gasCosts": "Gaskosten:",
+    "foundationFee": "Bijdrage stichting:",
+    "total": "Totaal:",
+    "minimumApplied": "Platformminimum van 1,2 ADA toegepast",
+    "foundationInfo": "De stichtingsbijdrage steunt de open-source ontwikkeling van VoteBoxApp",
+    "alertTitle": "Volledig kostenoverzicht",
+    "alertExpectedVoters": "Verwachte stemmers: {{voters}}",
+    "alertGasCosts_one": "Gaskosten ({{count}} bundel): {{amount}} ADA",
+    "alertGasCosts_other": "Gaskosten ({{count}} bundels): {{amount}} ADA",
+    "alertFoundationFee": "Bijdrage stichting: {{amount}} ADA",
+    "alertTotal": "TOTAAL: {{ada}} ADA (~${{usd}} USD)",
+    "alertMinimumApplied": "(platformminimum van 1,2 ADA toegepast)",
+    "alertFoundationInfo": "De stichtingsbijdrage steunt de open-source ontwikkeling van VoteBoxApp.",
+    "votingFree": "Stemmen is GRATIS voor iedereen!"
+  },
+  "payment": {
+    "title": "Betaal om te publiceren",
+    "instructions": "Stuur precies dit bedrag vanuit je eigen wallet-app en plak daarna hieronder de transactiehash.",
+    "sendTo": "Versturen naar",
+    "amount": "Bedrag",
+    "copy": "Kopiëren",
+    "txHashLabel": "Transactiehash",
+    "txHashPlaceholder": "Plak de tx-hash uit je wallet-app",
+    "verifying": "Betaling controleren...",
+    "verifyButton": "Controleren en publiceren",
+    "editProposal": "← Voorstel bewerken",
+    "overpayTitle": "Bedrag veel hoger dan nodig",
+    "overpayMessage": "Je hebt {{sent}} ADA gestuurd, maar er was maar {{required}} ADA nodig. Dit kan niet worden terugbetaald — toch doorgaan?",
+    "verifyErrors": {
+      "malformed_hash": "Dat lijkt geen geldige transactiehash. Die moet uit 64 hexadecimale tekens bestaan — controleer wat je hebt geplakt.",
+      "not_found_or_pending": "Nog niet gevonden op de blockchain. Heb je net verstuurd? Wacht 30-60 seconden op de bevestiging en probeer het opnieuw.",
+      "wrong_recipient": "Deze transactie gaat niet naar het wallet-adres van de stichting dat hierboven staat.",
+      "insufficient_amount": "Het verstuurde bedrag is lager dan nodig — zie het bedrag hierboven.",
+      "already_used": "Deze transactie is al gebruikt voor een ander voorstel.",
+      "network_error": "Kan het netwerk niet bereiken om te controleren — controleer je verbinding en probeer het opnieuw.",
+      "generic": "Controle mislukt — probeer het opnieuw."
+    }
+  },
+  "publish": {
+    "statusInitializing": "Blockchainservice starten...",
+    "statusConnecting": "Verbinden met het Cardano-netwerk...",
+    "statusUploading": "Uploaden naar IPFS...",
+    "statusRecording": "Vastleggen op de blockchain...",
+    "incompleteResponse": "Onvolledig antwoord van de blockchainservice",
+    "unknownError": "Onbekende fout",
+    "queuedToast": "⏳ Geen verbinding — voorstel staat in de wachtrij en wordt gepubliceerd zodra je weer online bent",
+    "failedTitle": "Publiceren mislukt",
+    "failedMessage": "{{error}}\n\nBekijk de console voor gedetailleerde logs.",
+    "connectWalletButton": "Koppel wallet om te publiceren",
+    "continueButton": "Door naar betaling"
+  },
+  "success": {
+    "title": "🎉 Voorstel gepubliceerd!",
+    "live": "Je voorstel staat nu online!",
+    "ipfs": "IPFS: {{cid}}...",
+    "tx": "TX:   {{hash}}...",
+    "verifyOn": "Controleer op preprod.cardanoscan.io",
+    "totalPaid": "Totaal betaald: {{ada}} ADA (~${{usd}} USD)",
+    "configuredFor_one": "Ingesteld voor {{voters}} stemmer",
+    "configuredFor_other": "Ingesteld voor {{voters}} stemmers",
+    "copyTxHash": "📋 TX-hash kopiëren",
+    "share": "📢 Delen"
+  },
+  "batching": {
+    "title": "Stemmen bundelen",
+    "body": "Tot 100 stemmen worden gebundeld om gaskosten te besparen\nKleinere bundels worden elke 10 min automatisch verstuurd\nAlle stemmen zijn vastgelegd als het voorstel afloopt\n80% lagere kosten dan losse stemmen\nStemmen is volledig GRATIS voor deelnemers"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "invite": {
+    "heading": "🗳️ DIN STEMME ER VIGTIG",
+    "closes_one": "⏰ Afstemningen lukker: {{date}} ({{count}} dag tilbage)",
+    "closes_other": "⏰ Afstemningen lukker: {{date}} ({{count}} dage tilbage)",
+    "secured": "🔒 Sikret på Cardano-blockchainen",
+    "free": "✅ Helt gratis at stemme — ingen tegnebog nødvendig",
+    "voteNow": "Stem nu på VoteBoxApp:",
+    "footer": "— Delt via VoteBoxApp · Gratis demokratisk afstemning for alle",
+    "title": "Stem om: {{title}}"
+  },
+  "voted": {
+    "heading": "✊ Jeg har lige stemt på VoteBoxApp",
+    "daysLeft_one": "{{count}} dag tilbage til at stemme — gør din stemme hørt:",
+    "daysLeft_other": "{{count}} dage tilbage til at stemme — gør din stemme hørt:",
+    "closed": "Afstemningen er lukket — gør din stemme hørt:",
+    "tagline": "🔒 Sikret med blockchain · 100 % gratis · Ingen tegnebog nødvendig",
+    "footer": "— VoteBoxApp: Demokratisk afstemning for alle",
+    "title": "Jeg har stemt: {{title}}"
+  },
+  "results": {
+    "noResults": "Ingen resultater endnu",
+    "noVotes": "Ingen stemmer registreret endnu",
+    "row_one": "{{bar}} {{option}}: {{count}} stemme ({{pct}} %)",
+    "row_other": "{{bar}} {{option}}: {{count}} stemmer ({{pct}} %)",
+    "heading": "📊 AFSTEMNINGENS RESULTAT",
+    "leading": "🏆 Fører: »{{option}}« med {{pct}} %",
+    "total": "Afgivne stemmer i alt: {{count}}",
+    "verified": "🔒 Bekræftet på Cardano-blockchainen",
+    "seeFull": "Se hele resultatet på VoteBoxApp:",
+    "footer": "— VoteBoxApp: Åben og gratis demokratisk afstemning",
+    "title": "Resultat: {{title}}"
+  },
+  "urgent": {
+    "lessThanHour": "⚡ MINDRE END 1 TIME TILBAGE TIL AT STEMME",
+    "hours": "⚡ {{count}} TIMER TILBAGE TIL AT STEMME",
+    "days": "⏰ {{count}} DAGE TILBAGE TIL AT STEMME",
+    "votedSoFar_one": "{{count}} person har stemt indtil videre.",
+    "votedSoFar_other": "{{count}} personer har stemt indtil videre.",
+    "stillCounts": "Din stemme tæller stadig — stem nu:",
+    "tagline": "✅ Gratis · Ingen tegnebog nødvendig · Tager 10 sekunder",
+    "footer": "— VoteBoxApp: Demokratisk afstemning på blockchainen",
+    "title": "Haster: Stem om »{{title}}«"
+  },
+  "discovery": {
+    "heading": "🗳️ Se dette forslag på VoteBoxApp",
+    "open": "🟢 Afstemningen er ÅBEN",
+    "closed": "🔴 Afstemningen er lukket",
+    "freeToVote": "✅ Gratis at stemme — ingen tegnebog eller konto nødvendig",
+    "seeResults": "📊 Se det endelige resultat",
+    "footer": "— VoteBoxApp: Gratis, åben afstemning sikret med blockchain"
+  }
+}

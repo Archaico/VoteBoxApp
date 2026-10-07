@@ -1,0 +1,78 @@
+{
+  "choices": {
+    "yes": "Ja",
+    "no": "Nein",
+    "abstain": "Enthaltung"
+  },
+  "votingScreen": {
+    "tabs": {
+      "vote": "Abstimmen",
+      "discussion": "Diskussion",
+      "discussionWithCount": "Diskussion ({{count}})"
+    },
+    "back": "← Zurück",
+    "loading": "Vorschlag wird geladen...",
+    "unknownCreator": "Unbekannt",
+    "createdBy": "Erstellt von:",
+    "deadline": "Endet am:",
+    "daysRemaining_one": "Noch {{count}} Tag",
+    "daysRemaining_other": "Noch {{count}} Tage",
+    "results": {
+      "title": "Aktuelles Ergebnis",
+      "totalVotes_one": "{{count}} Stimme insgesamt",
+      "totalVotes_other": "{{count}} Stimmen insgesamt"
+    },
+    "alreadyVoted": {
+      "title": "✅ Du hast bereits abgestimmt",
+      "yourVote": "Deine Stimme: <bold>{{choice}}</bold>",
+      "note": "Eine abgegebene Stimme kann nicht geändert werden."
+    },
+    "closed": {
+      "title": "🔒 Abstimmung beendet",
+      "note": "Die Frist für diesen Vorschlag ist abgelaufen. Es werden keine Stimmen mehr angenommen."
+    },
+    "castVote": {
+      "title": "Gib deine Stimme ab",
+      "privacyNotice": "🔒 Deine Stimme ist vollständig anonym und kann nicht zu dir zurückverfolgt werden",
+      "yes": "✅ Ja",
+      "no": "❌ Nein",
+      "abstain": "⚪ Enthaltung",
+      "submit": "Stimme abgeben"
+    },
+    "status": {
+      "preparing": "Deine Stimme wird vorbereitet...",
+      "connecting": "Verbindung zum Cardano-Netzwerk...",
+      "submitting": "Stimme wird an die Blockchain gesendet..."
+    },
+    "toasts": {
+      "selectVoteFirst": "Bitte wähle zuerst deine Stimme aus",
+      "votingClosed": "Die Abstimmung über diesen Vorschlag ist beendet",
+      "voteQueued": "⚠️ Stimme in der Warteschlange – wird gesendet, sobald du online bist",
+      "voteFailed": "❌ Abstimmung fehlgeschlagen: {{message}}",
+      "unknownError": "Unbekannter Fehler"
+    }
+  },
+  "successModal": {
+    "title": "Stimme abgegeben",
+    "subtitle": "Auf der Cardano-Blockchain gespeichert",
+    "proposalId": "Vorschlags-ID",
+    "transactionHash": "Transaktions-Hash",
+    "yourVote": "Deine Stimme",
+    "sharePrompt": "Zeig anderen, dass du abgestimmt hast 👇",
+    "done": "Fertig",
+    "copy": "⎘ Kopieren",
+    "copied": "✓ Kopiert",
+    "copyFailedTitle": "Kopieren fehlgeschlagen",
+    "copyFailedMessage": "Bitte manuell kopieren: {{value}}"
+  },
+  "shareButton": {
+    "moments": {
+      "invite": "Zum Abstimmen einladen",
+      "voted": "Teilen, dass du abgestimmt hast",
+      "results": "Ergebnis teilen",
+      "urgency": "Teilen – Abstimmung endet bald",
+      "discovery": "Vorschlag teilen"
+    },
+    "shareFailedTitle": "Teilen fehlgeschlagen"
+  }
+}

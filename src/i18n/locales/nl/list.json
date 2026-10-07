@@ -1,0 +1,63 @@
+{
+  "header": {
+    "updatedAt": "Bijgewerkt {{time}}",
+    "createButton": "+ Nieuw"
+  },
+  "loading": "Voorstellen laden...",
+  "errors": {
+    "cannotConnect": "Kan geen verbinding maken met het Cardano-netwerk. Trek omlaag of tik op Opnieuw.",
+    "connectionError": "Verbindingsfout — trek omlaag om het opnieuw te proberen"
+  },
+  "emptyState": {
+    "loadFailedTitle": "Kan voorstellen niet laden",
+    "retry": "Opnieuw",
+    "noProposalsTitle": "Nog geen voorstellen",
+    "noProposalsText": "Maak als eerste een voorstel en start het gesprek!",
+    "createFirst": "Eerste voorstel maken"
+  },
+  "card": {
+    "closed": "Gesloten",
+    "remainingDaysHours": "Nog {{days}}d {{hours}}u",
+    "remainingHours": "Nog {{hours}}u",
+    "remainingMinutes": "Nog {{minutes}}m",
+    "optionCount_one": "{{count}} optie",
+    "optionCount_other": "{{count}} opties",
+    "voteCount_one": "{{count}} stem",
+    "voteCount_other": "{{count}} stemmen"
+  },
+  "queue": {
+    "title": "📤 In de wachtrij",
+    "votesQueued_one": "{{count}} stem in de wachtrij",
+    "votesQueued_other": "{{count}} stemmen in de wachtrij",
+    "proposalsQueued_one": "{{count}} voorstel in de wachtrij",
+    "proposalsQueued_other": "{{count}} voorstellen in de wachtrij",
+    "autoSubmitNote": "Deze worden automatisch verstuurd zodra je een stabiele verbinding hebt.",
+    "oldestItem": "Oudste item: {{time}}",
+    "retryNow": "Nu opnieuw proberen",
+    "ok": "OK"
+  },
+  "syncDiagnostic": {
+    "title": "🔄 Diagnose achtergrondsynchronisatie",
+    "registrationHeading": "── Registratie ──",
+    "registered": "Geregistreerd: {{time}}",
+    "never": "nooit",
+    "osStatus": "Systeemstatus: {{status}}",
+    "unknown": "onbekend",
+    "lastRunHeading": "── Laatste achtergronduitvoering ──",
+    "lastRun": "Laatst uitgevoerd: {{time}}",
+    "lastRunNever": "NOOIT — taak is niet uitgevoerd",
+    "timeAgoParenthetical": "({{ago}})",
+    "result": "Resultaat: {{result}}",
+    "error": "Fout: {{error}}",
+    "subscriptionsChecked": "Abonnementen gecontroleerd: {{count}}",
+    "explanation": "De taak is ingepland voor ongeveer elke 15 min. Is \"Laatst uitgevoerd\" meer dan ~30-45 min geleden (of nooit, terwijl de app al zo lang gesloten is)? Dan blokkeert het systeem waarschijnlijk de achtergrondtaak — controleer de batterij- en achtergrondbeperkingen voor VoteBoxApp in de instellingen van je apparaat.",
+    "ok": "OK",
+    "timeAgo": {
+      "never": "nooit",
+      "justNow": "zojuist",
+      "minutes": "{{minutes}} min geleden",
+      "hoursMinutes": "{{hours}}u {{minutes}}m geleden",
+      "days": "{{days}}d geleden"
+    }
+  }
+}

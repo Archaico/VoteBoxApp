@@ -1,0 +1,25 @@
+{
+  "header": {
+    "title": "Discussie ({{count}})"
+  },
+  "loading": "Een moment… reacties worden opgehaald uit het gedecentraliseerde IPFS-netwerk.",
+  "empty": {
+    "title": "Nog geen reacties.",
+    "subtitle": "Begin als eerste de discussie over dit voorstel!"
+  },
+  "comment": {
+    "reply": "Reageren"
+  },
+  "replying": {
+    "label": "Reageren op reactie...",
+    "cancel": "Annuleren"
+  },
+  "input": {
+    "placeholder": "Schrijf een reactie...",
+    "post": "Plaatsen"
+  },
+  "toast": {
+    "savedOffline": "Reactie opgeslagen — wordt gesynchroniseerd zodra je weer online bent",
+    "saveFailed": "Reactie opslaan mislukt"
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "header": {
+    "updatedAt": "Aktualisiert {{time}}",
+    "createButton": "+ Neu"
+  },
+  "loading": "Vorschläge werden geladen...",
+  "errors": {
+    "cannotConnect": "Keine Verbindung zum Cardano-Netzwerk. Nach unten ziehen oder auf „Erneut versuchen“ tippen.",
+    "connectionError": "Verbindungsfehler – zum Aktualisieren nach unten ziehen"
+  },
+  "emptyState": {
+    "loadFailedTitle": "Vorschläge konnten nicht geladen werden",
+    "retry": "Erneut versuchen",
+    "noProposalsTitle": "Noch keine Vorschläge",
+    "noProposalsText": "Erstelle den ersten Vorschlag und bring das Gespräch in Gang!",
+    "createFirst": "Ersten Vorschlag erstellen"
+  },
+  "card": {
+    "closed": "Beendet",
+    "remainingDaysHours": "Noch {{days}} T. {{hours}} Std.",
+    "remainingHours": "Noch {{hours}} Std.",
+    "remainingMinutes": "Noch {{minutes}} Min.",
+    "optionCount_one": "{{count}} Option",
+    "optionCount_other": "{{count}} Optionen",
+    "voteCount_one": "{{count}} Stimme",
+    "voteCount_other": "{{count}} Stimmen"
+  },
+  "queue": {
+    "title": "📤 In der Warteschlange",
+    "votesQueued_one": "{{count}} Stimme wartet",
+    "votesQueued_other": "{{count}} Stimmen warten",
+    "proposalsQueued_one": "{{count}} Vorschlag wartet",
+    "proposalsQueued_other": "{{count}} Vorschläge warten",
+    "autoSubmitNote": "Diese werden automatisch gesendet, sobald du eine stabile Verbindung hast.",
+    "oldestItem": "Ältester Eintrag: {{time}}",
+    "retryNow": "Jetzt erneut versuchen",
+    "ok": "OK"
+  },
+  "syncDiagnostic": {
+    "title": "🔄 Diagnose der Hintergrundsynchronisierung",
+    "registrationHeading": "── Registrierung ──",
+    "registered": "Registriert: {{time}}",
+    "never": "nie",
+    "osStatus": "Systemstatus: {{status}}",
+    "unknown": "unbekannt",
+    "lastRunHeading": "── Letzter Hintergrundlauf ──",
+    "lastRun": "Letzter Lauf: {{time}}",
+    "lastRunNever": "NIE – Aufgabe wurde nicht ausgeführt",
+    "timeAgoParenthetical": "({{ago}})",
+    "result": "Ergebnis: {{result}}",
+    "error": "Fehler: {{error}}",
+    "subscriptionsChecked": "Geprüfte Abos: {{count}}",
+    "explanation": "Die Aufgabe ist etwa alle 15 Min. geplant. Wenn „Letzter Lauf“ länger als ca. 30–45 Min. zurückliegt (oder „nie“ anzeigt, obwohl die App so lange geschlossen war), blockiert das System sehr wahrscheinlich die Hintergrundaufgabe – prüfe in den Geräteeinstellungen die Akku- bzw. Hintergrundbeschränkungen für VoteBoxApp.",
+    "ok": "OK",
+    "timeAgo": {
+      "never": "nie",
+      "justNow": "gerade eben",
+      "minutes": "vor {{minutes}} Min.",
+      "hoursMinutes": "vor {{hours}} Std. {{minutes}} Min.",
+      "days": "vor {{days}} T."
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "header": {
+    "title": "Diskussion ({{count}})"
+  },
+  "loading": "Einen Moment… Kommentare werden aus dem dezentralen IPFS-Netzwerk geladen.",
+  "empty": {
+    "title": "Noch keine Kommentare.",
+    "subtitle": "Starte als Erste:r die Diskussion zu diesem Vorschlag!"
+  },
+  "comment": {
+    "reply": "Antworten"
+  },
+  "replying": {
+    "label": "Antwort auf Kommentar...",
+    "cancel": "Abbrechen"
+  },
+  "input": {
+    "placeholder": "Kommentar schreiben...",
+    "post": "Senden"
+  },
+  "toast": {
+    "savedOffline": "Kommentar gespeichert – wird synchronisiert, sobald du wieder online bist",
+    "saveFailed": "Kommentar konnte nicht gespeichert werden"
+  }
+}

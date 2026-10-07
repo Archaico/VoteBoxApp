@@ -1,0 +1,53 @@
+{
+  "invite": {
+    "heading": "🗳️ DEINE STIMME ZÄHLT",
+    "closes_one": "⏰ Abstimmung endet: {{date}} (noch {{count}} Tag)",
+    "closes_other": "⏰ Abstimmung endet: {{date}} (noch {{count}} Tage)",
+    "secured": "🔒 Gesichert auf der Cardano-Blockchain",
+    "free": "✅ Abstimmen ist komplett kostenlos – keine Wallet nötig",
+    "voteNow": "Jetzt auf VoteBoxApp abstimmen:",
+    "footer": "— Geteilt über VoteBoxApp · Kostenlose demokratische Abstimmungen für alle",
+    "title": "Stimm ab: {{title}}"
+  },
+  "voted": {
+    "heading": "✊ Ich habe gerade auf VoteBoxApp abgestimmt",
+    "daysLeft_one": "Noch {{count}} Tag zum Abstimmen – mach mit:",
+    "daysLeft_other": "Noch {{count}} Tage zum Abstimmen – mach mit:",
+    "closed": "Die Abstimmung ist beendet – sag deine Meinung:",
+    "tagline": "🔒 Per Blockchain gesichert · 100 % kostenlos · Keine Wallet nötig",
+    "footer": "— VoteBoxApp: Demokratische Abstimmungen für alle",
+    "title": "Ich habe abgestimmt: {{title}}"
+  },
+  "results": {
+    "noResults": "Noch keine Ergebnisse verfügbar",
+    "noVotes": "Noch keine Stimmen abgegeben",
+    "row_one": "{{bar}} {{option}}: {{count}} Stimme ({{pct}} %)",
+    "row_other": "{{bar}} {{option}}: {{count}} Stimmen ({{pct}} %)",
+    "heading": "📊 ABSTIMMUNGSERGEBNIS",
+    "leading": "🏆 Vorne: „{{option}}“ mit {{pct}} %",
+    "total": "Abgegebene Stimmen insgesamt: {{count}}",
+    "verified": "🔒 Bestätigt auf der Cardano-Blockchain",
+    "seeFull": "Alle Ergebnisse auf VoteBoxApp:",
+    "footer": "— VoteBoxApp: Transparente, kostenlose demokratische Abstimmungen",
+    "title": "Ergebnis: {{title}}"
+  },
+  "urgent": {
+    "lessThanHour": "⚡ WENIGER ALS 1 STUNDE ZUM ABSTIMMEN",
+    "hours": "⚡ NUR NOCH {{count}} STUNDEN ZUM ABSTIMMEN",
+    "days": "⏰ NUR NOCH {{count}} TAGE ZUM ABSTIMMEN",
+    "votedSoFar_one": "Bisher hat {{count}} Person abgestimmt.",
+    "votedSoFar_other": "Bisher haben {{count}} Personen abgestimmt.",
+    "stillCounts": "Deine Stimme zählt noch – stimm jetzt ab:",
+    "tagline": "✅ Kostenlos · Keine Wallet nötig · Dauert 10 Sekunden",
+    "footer": "— VoteBoxApp: Demokratische Abstimmungen auf der Blockchain",
+    "title": "Dringend: Stimm ab über „{{title}}“"
+  },
+  "discovery": {
+    "heading": "🗳️ Schau dir diesen Vorschlag auf VoteBoxApp an",
+    "open": "🟢 Abstimmung ist OFFEN",
+    "closed": "🔴 Abstimmung ist beendet",
+    "freeToVote": "✅ Kostenlos abstimmen – keine Wallet, kein Konto nötig",
+    "seeResults": "📊 Sieh dir das Endergebnis an",
+    "footer": "— VoteBoxApp: Kostenlose, offene, per Blockchain gesicherte Abstimmungen"
+  }
+}

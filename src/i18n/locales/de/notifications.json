@@ -1,0 +1,50 @@
+{
+  "push": {
+    "deadline24h": {
+      "title": "Abstimmung endet in 24 Stunden"
+    },
+    "deadline1h": {
+      "title": "Abstimmung endet in 1 Stunde"
+    },
+    "voteSubmitted": {
+      "title": "Stimme abgegeben"
+    },
+    "voteConfirmed": {
+      "title": "Stimme auf der Blockchain bestätigt",
+      "body": "{{title}} · TX: {{txHash}}..."
+    },
+    "proposalLive": {
+      "title": "Dein Vorschlag ist online"
+    },
+    "commentPosted": {
+      "title": "Kommentar veröffentlicht"
+    },
+    "newComment": {
+      "title": "Neuer Kommentar zum Vorschlag"
+    },
+    "proposalFinalised": {
+      "titlePassed": "Vorschlag ANGENOMMEN",
+      "titleEnded": "Abstimmung beendet",
+      "body": "{{title}} · Ja: {{yes}} / Nein: {{no}}"
+    },
+    "lowBalance": {
+      "title": "Niedriges ADA-Guthaben",
+      "body": "Guthaben unter 1,5 ADA – lade auf, um Vorschläge zu erstellen"
+    },
+    "txFailed": {
+      "title": "Transaktion fehlgeschlagen",
+      "body": "Bitte wiederhole deine letzte Aktion"
+    }
+  },
+  "toast": {
+    "offlineQueue": {
+      "voteSubmitted": "✅ Stimme erfolgreich abgegeben",
+      "proposalSubmitted": "✅ Vorschlag erfolgreich eingereicht",
+      "proposalPaymentRejected": "❌ Vorschlag entfernt – Zahlung konnte nicht bestätigt werden ({{reason}})",
+      "voteFailed_one": "❌ Stimme nach {{count}} Versuch fehlgeschlagen",
+      "voteFailed_other": "❌ Stimme nach {{count}} Versuchen fehlgeschlagen",
+      "proposalFailed_one": "❌ Vorschlag nach {{count}} Versuch fehlgeschlagen",
+      "proposalFailed_other": "❌ Vorschlag nach {{count}} Versuchen fehlgeschlagen"
+    }
+  }
+}

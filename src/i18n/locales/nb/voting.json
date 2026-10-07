@@ -1,0 +1,78 @@
+{
+  "choices": {
+    "yes": "Ja",
+    "no": "Nei",
+    "abstain": "Avstår"
+  },
+  "votingScreen": {
+    "tabs": {
+      "vote": "Stem",
+      "discussion": "Diskusjon",
+      "discussionWithCount": "Diskusjon ({{count}})"
+    },
+    "back": "← Tilbake",
+    "loading": "Laster inn forslaget...",
+    "unknownCreator": "Ukjent",
+    "createdBy": "Laget av:",
+    "deadline": "Frist:",
+    "daysRemaining_one": "{{count}} dag igjen",
+    "daysRemaining_other": "{{count}} dager igjen",
+    "results": {
+      "title": "Foreløpig resultat",
+      "totalVotes_one": "{{count}} stemme totalt",
+      "totalVotes_other": "{{count}} stemmer totalt"
+    },
+    "alreadyVoted": {
+      "title": "✅ Du har allerede stemt",
+      "yourVote": "Din stemme: <bold>{{choice}}</bold>",
+      "note": "Du kan ikke endre stemmen din etter at den er sendt."
+    },
+    "closed": {
+      "title": "🔒 Avstemningen er stengt",
+      "note": "Fristen for dette forslaget har gått ut. Det tas ikke imot flere stemmer."
+    },
+    "castVote": {
+      "title": "Avgi stemmen din",
+      "privacyNotice": "🔒 Stemmen din er helt anonym og kan ikke spores tilbake til deg",
+      "yes": "✅ Ja",
+      "no": "❌ Nei",
+      "abstain": "⚪ Avstår",
+      "submit": "Send stemme"
+    },
+    "status": {
+      "preparing": "Forbereder stemmen din...",
+      "connecting": "Kobler til Cardano-nettverket...",
+      "submitting": "Sender stemmen til blokkjeden..."
+    },
+    "toasts": {
+      "selectVoteFirst": "Velg stemmen din først",
+      "votingClosed": "Avstemningen om dette forslaget er stengt",
+      "voteQueued": "⚠️ Stemmen står i kø - sendes når du er på nett",
+      "voteFailed": "❌ Stemmegivningen mislyktes: {{message}}",
+      "unknownError": "Ukjent feil"
+    }
+  },
+  "successModal": {
+    "title": "Stemmen er sendt",
+    "subtitle": "Registrert på Cardano-blokkjeden",
+    "proposalId": "Forslags-ID",
+    "transactionHash": "Transaksjonshash",
+    "yourVote": "Din stemme",
+    "sharePrompt": "Fortell andre at du har stemt 👇",
+    "done": "Ferdig",
+    "copy": "⎘ Kopier",
+    "copied": "✓ Kopiert",
+    "copyFailedTitle": "Kopieringen mislyktes",
+    "copyFailedMessage": "Kopier manuelt: {{value}}"
+  },
+  "shareButton": {
+    "moments": {
+      "invite": "Inviter folk til å stemme",
+      "voted": "Del at du har stemt",
+      "results": "Del resultatet",
+      "urgency": "Del — avstemningen stenger snart",
+      "discovery": "Del forslaget"
+    },
+    "shareFailedTitle": "Delingen mislyktes"
+  }
+}

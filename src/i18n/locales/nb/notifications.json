@@ -1,0 +1,50 @@
+{
+  "push": {
+    "deadline24h": {
+      "title": "Avstemningen stenger om 24 timer"
+    },
+    "deadline1h": {
+      "title": "Avstemningen stenger om 1 time"
+    },
+    "voteSubmitted": {
+      "title": "Stemmen er sendt"
+    },
+    "voteConfirmed": {
+      "title": "Stemmen er bekreftet på blokkjeden",
+      "body": "{{title}} · TX: {{txHash}}..."
+    },
+    "proposalLive": {
+      "title": "Forslaget ditt er publisert"
+    },
+    "commentPosted": {
+      "title": "Kommentaren er publisert"
+    },
+    "newComment": {
+      "title": "Ny kommentar på forslaget"
+    },
+    "proposalFinalised": {
+      "titlePassed": "Forslaget ble VEDTATT",
+      "titleEnded": "Avstemningen er avsluttet",
+      "body": "{{title}} · Ja: {{yes}} / Nei: {{no}}"
+    },
+    "lowBalance": {
+      "title": "Lav ADA-saldo",
+      "body": "Saldoen er under 1,5 ADA — fyll på for å lage forslag"
+    },
+    "txFailed": {
+      "title": "Transaksjonen mislyktes",
+      "body": "Prøv den siste handlingen din på nytt"
+    }
+  },
+  "toast": {
+    "offlineQueue": {
+      "voteSubmitted": "✅ Stemmen er sendt",
+      "proposalSubmitted": "✅ Forslaget er sendt",
+      "proposalPaymentRejected": "❌ Forslaget er fjernet — betalingen kunne ikke bekreftes ({{reason}})",
+      "voteFailed_one": "❌ Stemmen mislyktes etter {{count}} forsøk",
+      "voteFailed_other": "❌ Stemmen mislyktes etter {{count}} forsøk",
+      "proposalFailed_one": "❌ Forslaget mislyktes etter {{count}} forsøk",
+      "proposalFailed_other": "❌ Forslaget mislyktes etter {{count}} forsøk"
+    }
+  }
+}

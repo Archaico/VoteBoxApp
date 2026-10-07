@@ -1,0 +1,53 @@
+{
+  "invite": {
+    "heading": "🗳️ JOUW STEM IS NODIG",
+    "closes_one": "⏰ Stemming sluit: {{date}} (nog {{count}} dag)",
+    "closes_other": "⏰ Stemming sluit: {{date}} (nog {{count}} dagen)",
+    "secured": "🔒 Beveiligd op de Cardano-blockchain",
+    "free": "✅ Stemmen is helemaal gratis — geen wallet nodig",
+    "voteNow": "Stem nu op VoteBoxApp:",
+    "footer": "— Gedeeld via VoteBoxApp · Gratis democratisch stemmen voor iedereen",
+    "title": "Stem over: {{title}}"
+  },
+  "voted": {
+    "heading": "✊ Ik heb net gestemd op VoteBoxApp",
+    "daysLeft_one": "Nog {{count}} dag om te stemmen — laat je stem horen:",
+    "daysLeft_other": "Nog {{count}} dagen om te stemmen — laat je stem horen:",
+    "closed": "De stemming is gesloten — laat je stem horen:",
+    "tagline": "🔒 Beveiligd met blockchain · 100% gratis · Geen wallet nodig",
+    "footer": "— VoteBoxApp: Democratisch stemmen voor iedereen",
+    "title": "Ik heb gestemd: {{title}}"
+  },
+  "results": {
+    "noResults": "Nog geen resultaten beschikbaar",
+    "noVotes": "Nog geen stemmen uitgebracht",
+    "row_one": "{{bar}} {{option}}: {{count}} stem ({{pct}}%)",
+    "row_other": "{{bar}} {{option}}: {{count}} stemmen ({{pct}}%)",
+    "heading": "📊 UITSLAG STEMMING",
+    "leading": "🏆 Voorop: \"{{option}}\" met {{pct}}%",
+    "total": "Totaal uitgebrachte stemmen: {{count}}",
+    "verified": "🔒 Geverifieerd op de Cardano-blockchain",
+    "seeFull": "Bekijk de volledige uitslag op VoteBoxApp:",
+    "footer": "— VoteBoxApp: Transparant, gratis democratisch stemmen",
+    "title": "Uitslag: {{title}}"
+  },
+  "urgent": {
+    "lessThanHour": "⚡ MINDER DAN 1 UUR OM TE STEMMEN",
+    "hours": "⚡ NOG {{count}} UUR OM TE STEMMEN",
+    "days": "⏰ NOG {{count}} DAGEN OM TE STEMMEN",
+    "votedSoFar_one": "Tot nu toe heeft {{count}} persoon gestemd.",
+    "votedSoFar_other": "Tot nu toe hebben {{count}} mensen gestemd.",
+    "stillCounts": "Jouw stem telt nog steeds — stem nu:",
+    "tagline": "✅ Gratis · Geen wallet nodig · Duurt 10 seconden",
+    "footer": "— VoteBoxApp: Democratisch stemmen op de blockchain",
+    "title": "Dringend: stem over \"{{title}}\""
+  },
+  "discovery": {
+    "heading": "🗳️ Bekijk dit voorstel op VoteBoxApp",
+    "open": "🟢 Stemming is OPEN",
+    "closed": "🔴 Stemming is gesloten",
+    "freeToVote": "✅ Gratis stemmen — geen wallet of account nodig",
+    "seeResults": "📊 Bekijk de einduitslag",
+    "footer": "— VoteBoxApp: Gratis, open stemmen, beveiligd met blockchain"
+  }
+}

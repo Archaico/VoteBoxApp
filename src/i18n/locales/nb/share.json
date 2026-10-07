@@ -1,0 +1,53 @@
+{
+  "invite": {
+    "heading": "🗳️ VI TRENGER DIN STEMME",
+    "closes_one": "⏰ Avstemningen stenger: {{date}} ({{count}} dag igjen)",
+    "closes_other": "⏰ Avstemningen stenger: {{date}} ({{count}} dager igjen)",
+    "secured": "🔒 Sikret på Cardano-blokkjeden",
+    "free": "✅ Helt gratis å stemme — ingen lommebok trengs",
+    "voteNow": "Stem nå på VoteBoxApp:",
+    "footer": "— Delt via VoteBoxApp · Gratis demokratisk avstemning for alle",
+    "title": "Stem over: {{title}}"
+  },
+  "voted": {
+    "heading": "✊ Jeg har nettopp stemt på VoteBoxApp",
+    "daysLeft_one": "{{count}} dag igjen å stemme — si din mening:",
+    "daysLeft_other": "{{count}} dager igjen å stemme — si din mening:",
+    "closed": "Avstemningen er stengt — si din mening:",
+    "tagline": "🔒 Sikret med blokkjede · 100 % gratis · Ingen lommebok trengs",
+    "footer": "— VoteBoxApp: Demokratisk avstemning for alle",
+    "title": "Jeg har stemt: {{title}}"
+  },
+  "results": {
+    "noResults": "Ingen resultater ennå",
+    "noVotes": "Ingen stemmer registrert ennå",
+    "row_one": "{{bar}} {{option}}: {{count}} stemme ({{pct}} %)",
+    "row_other": "{{bar}} {{option}}: {{count}} stemmer ({{pct}} %)",
+    "heading": "📊 AVSTEMNINGSRESULTAT",
+    "leading": "🏆 Leder: «{{option}}» med {{pct}} %",
+    "total": "Antall avgitte stemmer: {{count}}",
+    "verified": "🔒 Bekreftet på Cardano-blokkjeden",
+    "seeFull": "Se hele resultatet på VoteBoxApp:",
+    "footer": "— VoteBoxApp: Åpen og gratis demokratisk avstemning",
+    "title": "Resultat: {{title}}"
+  },
+  "urgent": {
+    "lessThanHour": "⚡ MINDRE ENN 1 TIME IGJEN Å STEMME",
+    "hours": "⚡ {{count}} TIMER IGJEN Å STEMME",
+    "days": "⏰ {{count}} DAGER IGJEN Å STEMME",
+    "votedSoFar_one": "{{count}} person har stemt så langt.",
+    "votedSoFar_other": "{{count}} personer har stemt så langt.",
+    "stillCounts": "Stemmen din teller fortsatt — stem nå:",
+    "tagline": "✅ Gratis · Ingen lommebok trengs · Tar 10 sekunder",
+    "footer": "— VoteBoxApp: Demokratisk avstemning på blokkjeden",
+    "title": "Haster: Stem over «{{title}}»"
+  },
+  "discovery": {
+    "heading": "🗳️ Sjekk ut dette forslaget på VoteBoxApp",
+    "open": "🟢 Avstemningen er ÅPEN",
+    "closed": "🔴 Avstemningen er stengt",
+    "freeToVote": "✅ Gratis å stemme — ingen lommebok eller konto trengs",
+    "seeResults": "📊 Se det endelige resultatet",
+    "footer": "— VoteBoxApp: Gratis, åpen avstemning sikret med blokkjede"
+  }
+}

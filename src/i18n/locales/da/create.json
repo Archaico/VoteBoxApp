@@ -1,0 +1,176 @@
+{
+  "header": {
+    "back": "Tilbage",
+    "title": "Opret forslag"
+  },
+  "infoBanner": "Sikret af Cardano · 80 % lavere gasgebyrer · Gratis at stemme",
+  "buttons": {
+    "cancel": "Annuller",
+    "ok": "OK",
+    "continue": "Fortsæt",
+    "remove": "Fjern",
+    "done": "Færdig"
+  },
+  "wallets": {
+    "eternl": {
+      "badge": "ANBEFALET",
+      "description": "Den mest avancerede Cardano-tegnebog. Understøtter WalletConnect."
+    },
+    "vespr": {
+      "badge": "BEDST TIL BEGYNDERE",
+      "description": "Lavet til mobilen, hurtig og nem at sætte op."
+    },
+    "lace": {
+      "badge": "OFFICIEL FRA IOG",
+      "description": "Udviklet af Cardanos grundlæggere. Alt-i-én-hub til Web3."
+    }
+  },
+  "walletSelect": {
+    "title": "Forbind din tegnebog",
+    "subtitle": "Kræves for at betale gebyret for at oprette et forslag. Vælgere har aldrig brug for en tegnebog.",
+    "or": "eller",
+    "enterManually": "📋  Indtast adresse manuelt",
+    "noWallet": "❓  Jeg har ikke en tegnebog endnu",
+    "walletConnectSoon": "🔗 Understøttelse af WalletConnect kommer snart — forbind med ét tryk til over 600 tegnebøger",
+    "openAlertTitle": "Åbn {{wallet}}?",
+    "openAlertMessage": "Dette åbner tegnebogsappen {{wallet}} (eller sender dig videre, så du kan downloade den).\n\nNår du har forbundet, skal du kopiere din Cardano-adresse (starter med addr_test1...) og vende tilbage hertil for at indsætte den.",
+    "openAlertButton": "Åbn {{wallet}}",
+    "linkErrorTitle": "Linket kunne ikke åbnes",
+    "linkErrorMessage": "Søg efter tegnebogen manuelt i Play Butik."
+  },
+  "walletManual": {
+    "welcomeBack": "👋 Velkommen tilbage! Åbn din tegnebogsapp, kopiér din adresse (addr_test1...), og indsæt den nedenfor.",
+    "addressLabel": "Din Cardano-adresse",
+    "addressHelper": "Starter med »addr_test1« · Findes i din tegnebog under »Modtag« eller »Adresse«",
+    "back": "← Tilbage",
+    "confirm": "Bekræft adresse",
+    "invalidTitle": "Ugyldig adresse",
+    "invalidMessage": "Indtast en gyldig Cardano-adresse. Den skal starte med »addr_test1« (testnet) og være mindst 50 tegn lang."
+  },
+  "walletConnected": {
+    "label": "Tegnebog forbundet",
+    "removeButton": "Fjern og skift tegnebog",
+    "removeAlertTitle": "Fjern tegnebog",
+    "removeAlertMessage": "Er du sikker på, at du vil fjerne din tegnebogsadresse?"
+  },
+  "noWallet": {
+    "title": "Sådan får du en Cardano-tegnebog",
+    "body": "Med en Cardano-tegnebog kan du opbevare ADA (Cardanos valuta) og betale det lille gebyr for at offentliggøre et forslag. Vælgere har aldrig brug for en — kun dem, der opretter forslag.",
+    "step1": "Download <bold>Vespr</bold> — den nemmeste Cardano-tegnebog for begyndere, lavet til mobilen.",
+    "step2": "Opret din tegnebog, og skriv din gendannelsessætning ned et sikkert sted.",
+    "step3": "Indsæt lidt ADA — nogle få kroner er nok til at offentliggøre forslag.",
+    "step4": "Vend tilbage hertil, tryk på Vespr, og indsæt din adresse.",
+    "downloadButton": "⬇️  Download Vespr Wallet",
+    "back": "← Tilbage til tegnebøger",
+    "linkErrorMessage": "Søg efter »Vespr Wallet« i Play Butik."
+  },
+  "form": {
+    "titleLabel": "Forslagets titel *",
+    "titlePlaceholder": "Skriv en klar og kort titel",
+    "characterCount": "{{current}}/{{max}} tegn",
+    "descriptionLabel": "Beskrivelse *",
+    "descriptionPlaceholder": "Forklar dit forslag i detaljer...",
+    "durationLabel": "Afstemningens varighed (dage) *",
+    "durationHelper": "Anbefalet: 7–14 dage",
+    "votersLabel": "Forventet antal vælgere *",
+    "votersHelper": "Anslå antallet af deltagere (mindst 2)",
+    "customVotersPlaceholder": "Eller indtast eget antal (mindst 2)",
+    "selectedVoters_one": "Valgt: {{voters}} vælger",
+    "selectedVoters_other": "Valgt: {{voters}} vælgere"
+  },
+  "attachments": {
+    "label": "Vedhæftede filer (valgfrit)",
+    "helper": "Op til {{max}} billeder til dit forslag",
+    "addPhoto": "+\nFoto",
+    "limitTitle": "Grænsen er nået",
+    "limitMessage": "Du kan vedhæfte op til {{max}} billeder pr. forslag.",
+    "permissionTitle": "Tilladelse påkrævet",
+    "permissionMessage": "Giv adgang til dine billeder for at vedhæfte et billede.",
+    "errorTitle": "Billedet kunne ikke tilføjes"
+  },
+  "validation": {
+    "missingInfoTitle": "Manglende oplysninger",
+    "missingInfoMessage": "Udfyld først alle obligatoriske felter, også din tegnebogsadresse",
+    "invalidVotersTitle": "Ugyldigt antal vælgere",
+    "minVotersMessage": "Det mindste forventede antal vælgere er 2",
+    "votersAtLeastMessage": "Det forventede antal vælgere skal være mindst 2",
+    "missingTitleTitle": "Titel mangler",
+    "missingTitleMessage": "Indtast en titel på forslaget",
+    "missingDescriptionTitle": "Beskrivelse mangler",
+    "missingDescriptionMessage": "Indtast en beskrivelse af forslaget",
+    "invalidDurationTitle": "Ugyldig varighed",
+    "invalidDurationMessage": "Varigheden skal være mindst 1 dag",
+    "walletRequiredTitle": "Tegnebog påkrævet",
+    "walletRequiredMessage": "Forbind din Cardano-tegnebog for at betale gebyret"
+  },
+  "fees": {
+    "calculateButton": "Beregn samlet pris",
+    "breakdownTitle": "Oversigt over samlet pris",
+    "gasCosts": "Gasgebyrer:",
+    "foundationFee": "Fondsgebyr:",
+    "total": "I alt:",
+    "minimumApplied": "Platformens minimum på 1,2 ADA er anvendt",
+    "foundationInfo": "Fondsgebyret støtter udviklingen af VoteBoxApp som open source",
+    "alertTitle": "Komplet gebyroversigt",
+    "alertExpectedVoters": "Forventede vælgere: {{voters}}",
+    "alertGasCosts_one": "Gasgebyrer ({{count}} pulje): {{amount}} ADA",
+    "alertGasCosts_other": "Gasgebyrer ({{count}} puljer): {{amount}} ADA",
+    "alertFoundationFee": "Fondsgebyr: {{amount}} ADA",
+    "alertTotal": "I ALT: {{ada}} ADA (~${{usd}} USD)",
+    "alertMinimumApplied": "(platformens minimum på 1,2 ADA er anvendt)",
+    "alertFoundationInfo": "Fondsgebyret støtter udviklingen af VoteBoxApp som open source.",
+    "votingFree": "Det er GRATIS for alle at stemme!"
+  },
+  "payment": {
+    "title": "Betal for at offentliggøre",
+    "instructions": "Send præcis dette beløb fra din egen tegnebogsapp, og indsæt derefter transaktionshashen nedenfor.",
+    "sendTo": "Send til",
+    "amount": "Beløb",
+    "copy": "Kopiér",
+    "txHashLabel": "Transaktionshash",
+    "txHashPlaceholder": "Indsæt tx-hashen fra din tegnebogsapp",
+    "verifying": "Bekræfter betaling...",
+    "verifyButton": "Bekræft og offentliggør",
+    "editProposal": "← Rediger forslag",
+    "overpayTitle": "Beløbet er langt højere end nødvendigt",
+    "overpayMessage": "Du sendte {{sent}} ADA, men kun {{required}} ADA var påkrævet. Det kan ikke refunderes — vil du fortsætte alligevel?",
+    "verifyErrors": {
+      "malformed_hash": "Det ligner ikke en gyldig transaktionshash. Den skal bestå af 64 hexadecimale tegn — tjek, hvad du indsatte.",
+      "not_found_or_pending": "Ikke fundet på blockchainen endnu. Hvis du lige har sendt den, så vent 30-60 sekunder på bekræftelse, og prøv igen.",
+      "wrong_recipient": "Denne transaktion betaler ikke til fondens tegnebogsadresse, som vises ovenfor.",
+      "insufficient_amount": "Det sendte beløb er lavere end påkrævet — se beløbet ovenfor.",
+      "already_used": "Denne transaktion er allerede brugt til et andet forslag.",
+      "network_error": "Kunne ikke få forbindelse til netværket for at bekræfte — tjek din forbindelse, og prøv igen.",
+      "generic": "Bekræftelsen mislykkedes — prøv igen."
+    }
+  },
+  "publish": {
+    "statusInitializing": "Starter blockchaintjenesten...",
+    "statusConnecting": "Forbinder til Cardano-netværket...",
+    "statusUploading": "Uploader til IPFS...",
+    "statusRecording": "Registrerer på blockchainen...",
+    "incompleteResponse": "Ufuldstændigt svar fra blockchaintjenesten",
+    "unknownError": "Ukendt fejl",
+    "queuedToast": "⏳ Ingen forbindelse — forslaget er sat i kø og offentliggøres, når du er online igen",
+    "failedTitle": "Offentliggørelse mislykkedes",
+    "failedMessage": "{{error}}\n\nSe konsollen for detaljerede logs.",
+    "connectWalletButton": "Forbind tegnebog for at offentliggøre",
+    "continueButton": "Fortsæt til betaling"
+  },
+  "success": {
+    "title": "🎉 Forslaget er offentliggjort!",
+    "live": "Dit forslag er nu offentliggjort!",
+    "ipfs": "IPFS: {{cid}}...",
+    "tx": "TX:   {{hash}}...",
+    "verifyOn": "Bekræft på preprod.cardanoscan.io",
+    "totalPaid": "Betalt i alt: {{ada}} ADA (~${{usd}} USD)",
+    "configuredFor_one": "Indstillet til {{voters}} vælger",
+    "configuredFor_other": "Indstillet til {{voters}} vælgere",
+    "copyTxHash": "📋 Kopiér TX-hash",
+    "share": "📢 Del"
+  },
+  "batching": {
+    "title": "Stemmer i puljer",
+    "body": "Op til 100 stemmer samles i én pulje for at spare gasgebyrer\nMindre puljer sendes automatisk hvert 10. minut\nAlle stemmer er registreret, når forslaget slutter\n80 % lavere omkostninger end enkeltvise stemmer\nDet er helt GRATIS for deltagerne at stemme"
+  }
+}

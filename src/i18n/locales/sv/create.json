@@ -1,0 +1,176 @@
+{
+  "header": {
+    "back": "Tillbaka",
+    "title": "Skapa förslag"
+  },
+  "infoBanner": "Säkrat av Cardano · 80 % lägre gasavgifter · Gratis att rösta",
+  "buttons": {
+    "cancel": "Avbryt",
+    "ok": "OK",
+    "continue": "Fortsätt",
+    "remove": "Ta bort",
+    "done": "Klar"
+  },
+  "wallets": {
+    "eternl": {
+      "badge": "REKOMMENDERAS",
+      "description": "Den kraftfullaste Cardano-plånboken. Stöd för WalletConnect."
+    },
+    "vespr": {
+      "badge": "BÄST FÖR NYBÖRJARE",
+      "description": "Byggd för mobilen, snabb och enkel att komma igång med."
+    },
+    "lace": {
+      "badge": "OFFICIELL FRÅN IOG",
+      "description": "Byggd av Cardanos grundare. Allt-i-ett-nav för Web3."
+    }
+  },
+  "walletSelect": {
+    "title": "Anslut din plånbok",
+    "subtitle": "Behövs för att betala avgiften för att skapa förslag. Väljare behöver aldrig en plånbok.",
+    "or": "eller",
+    "enterManually": "📋  Ange adress manuellt",
+    "noWallet": "❓  Jag har ingen plånbok än",
+    "walletConnectSoon": "🔗 Stöd för WalletConnect kommer snart — anslut med ett tryck till över 600 plånböcker",
+    "openAlertTitle": "Öppna {{wallet}}?",
+    "openAlertMessage": "Plånboksappen {{wallet}} öppnas (eller så skickas du vidare för att ladda ner den).\n\nKopiera din Cardano-adress (börjar med addr_test1...) när du har anslutit och kom tillbaka hit för att klistra in den.",
+    "openAlertButton": "Öppna {{wallet}}",
+    "linkErrorTitle": "Det gick inte att öppna länken",
+    "linkErrorMessage": "Sök efter plånboken manuellt i Play Butik."
+  },
+  "walletManual": {
+    "welcomeBack": "👋 Välkommen tillbaka! Öppna din plånboksapp, kopiera din adress (addr_test1...) och klistra in den nedan.",
+    "addressLabel": "Din Cardano-adress",
+    "addressHelper": "Börjar med ”addr_test1” · Finns i plånboken under ”Ta emot” eller ”Adress”",
+    "back": "← Tillbaka",
+    "confirm": "Bekräfta adress",
+    "invalidTitle": "Ogiltig adress",
+    "invalidMessage": "Ange en giltig Cardano-adress. Den ska börja med ”addr_test1” (testnet) och vara minst 50 tecken lång."
+  },
+  "walletConnected": {
+    "label": "Plånbok ansluten",
+    "removeButton": "Ta bort och byt plånbok",
+    "removeAlertTitle": "Ta bort plånbok",
+    "removeAlertMessage": "Vill du verkligen ta bort din plånboksadress?"
+  },
+  "noWallet": {
+    "title": "Skaffa en Cardano-plånbok",
+    "body": "Med en Cardano-plånbok kan du förvara ADA (Cardanos valuta) och betala den lilla avgiften för att publicera ett förslag. Väljare behöver aldrig någon — bara den som skapar förslag.",
+    "step1": "Ladda ner <bold>Vespr</bold> — den enklaste Cardano-plånboken för nybörjare, byggd för mobilen.",
+    "step2": "Skapa din plånbok och skriv ner din återställningsfras på ett säkert ställe.",
+    "step3": "Fyll på med lite ADA — några tior räcker för att publicera förslag.",
+    "step4": "Kom tillbaka hit, tryck på Vespr och klistra in din adress.",
+    "downloadButton": "⬇️  Ladda ner Vespr Wallet",
+    "back": "← Tillbaka till plånböcker",
+    "linkErrorMessage": "Sök efter ”Vespr Wallet” i Play Butik."
+  },
+  "form": {
+    "titleLabel": "Förslagets titel *",
+    "titlePlaceholder": "Skriv en tydlig och kort titel",
+    "characterCount": "{{current}}/{{max}} tecken",
+    "descriptionLabel": "Beskrivning *",
+    "descriptionPlaceholder": "Förklara ditt förslag i detalj...",
+    "durationLabel": "Omröstningens längd (dagar) *",
+    "durationHelper": "Rekommenderas: 7–14 dagar",
+    "votersLabel": "Förväntat antal väljare *",
+    "votersHelper": "Uppskatta antalet deltagare (minst 2)",
+    "customVotersPlaceholder": "Eller ange eget antal (minst 2)",
+    "selectedVoters_one": "Valt: {{voters}} väljare",
+    "selectedVoters_other": "Valt: {{voters}} väljare"
+  },
+  "attachments": {
+    "label": "Bilagor (valfritt)",
+    "helper": "Upp till {{max}} bilder till ditt förslag",
+    "addPhoto": "+\nFoto",
+    "limitTitle": "Gränsen nådd",
+    "limitMessage": "Du kan bifoga upp till {{max}} bilder per förslag.",
+    "permissionTitle": "Behörighet krävs",
+    "permissionMessage": "Ge åtkomst till bildbiblioteket för att bifoga en bild.",
+    "errorTitle": "Det gick inte att lägga till bilden"
+  },
+  "validation": {
+    "missingInfoTitle": "Uppgifter saknas",
+    "missingInfoMessage": "Fyll i alla obligatoriska fält först, även din plånboksadress",
+    "invalidVotersTitle": "Ogiltigt antal väljare",
+    "minVotersMessage": "Minsta förväntade antal väljare är 2",
+    "votersAtLeastMessage": "Förväntat antal väljare måste vara minst 2",
+    "missingTitleTitle": "Titel saknas",
+    "missingTitleMessage": "Ange en titel för förslaget",
+    "missingDescriptionTitle": "Beskrivning saknas",
+    "missingDescriptionMessage": "Ange en beskrivning av förslaget",
+    "invalidDurationTitle": "Ogiltig längd",
+    "invalidDurationMessage": "Längden måste vara minst 1 dag",
+    "walletRequiredTitle": "Plånbok krävs",
+    "walletRequiredMessage": "Anslut din Cardano-plånbok för att betala avgiften"
+  },
+  "fees": {
+    "calculateButton": "Beräkna total kostnad",
+    "breakdownTitle": "Kostnadsöversikt",
+    "gasCosts": "Gasavgifter:",
+    "foundationFee": "Stiftelseavgift:",
+    "total": "Totalt:",
+    "minimumApplied": "Plattformens minimum på 1,2 ADA har tillämpats",
+    "foundationInfo": "Stiftelseavgiften stöder utvecklingen av VoteBoxApp med öppen källkod",
+    "alertTitle": "Fullständig avgiftsöversikt",
+    "alertExpectedVoters": "Förväntade väljare: {{voters}}",
+    "alertGasCosts_one": "Gasavgifter ({{count}} omgång): {{amount}} ADA",
+    "alertGasCosts_other": "Gasavgifter ({{count}} omgångar): {{amount}} ADA",
+    "alertFoundationFee": "Stiftelseavgift: {{amount}} ADA",
+    "alertTotal": "TOTALT: {{ada}} ADA (~${{usd}} USD)",
+    "alertMinimumApplied": "(plattformens minimum på 1,2 ADA har tillämpats)",
+    "alertFoundationInfo": "Stiftelseavgiften stöder utvecklingen av VoteBoxApp med öppen källkod.",
+    "votingFree": "Att rösta är GRATIS för alla!"
+  },
+  "payment": {
+    "title": "Betala för att publicera",
+    "instructions": "Skicka exakt detta belopp från din egen plånboksapp och klistra sedan in transaktionshashen nedan.",
+    "sendTo": "Skicka till",
+    "amount": "Belopp",
+    "copy": "Kopiera",
+    "txHashLabel": "Transaktionshash",
+    "txHashPlaceholder": "Klistra in tx-hashen från din plånboksapp",
+    "verifying": "Verifierar betalningen...",
+    "verifyButton": "Verifiera och publicera",
+    "editProposal": "← Redigera förslag",
+    "overpayTitle": "Beloppet är mycket högre än nödvändigt",
+    "overpayMessage": "Du skickade {{sent}} ADA, men bara {{required}} ADA behövdes. Det kan inte återbetalas — fortsätta ändå?",
+    "verifyErrors": {
+      "malformed_hash": "Det ser inte ut som en giltig transaktionshash. Den ska bestå av 64 hexadecimala tecken — kontrollera vad du klistrade in.",
+      "not_found_or_pending": "Hittades inte på blockkedjan än. Om du nyss skickade den, vänta 30–60 sekunder på bekräftelse och försök igen.",
+      "wrong_recipient": "Den här transaktionen betalar inte till stiftelsens plånboksadress som visas ovan.",
+      "insufficient_amount": "Det skickade beloppet är lägre än vad som krävs — se beloppet ovan.",
+      "already_used": "Den här transaktionen har redan använts för ett annat förslag.",
+      "network_error": "Kunde inte nå nätverket för att verifiera — kontrollera din anslutning och försök igen.",
+      "generic": "Verifieringen misslyckades — försök igen."
+    }
+  },
+  "publish": {
+    "statusInitializing": "Startar blockkedjetjänsten...",
+    "statusConnecting": "Ansluter till Cardano-nätverket...",
+    "statusUploading": "Laddar upp till IPFS...",
+    "statusRecording": "Registrerar på blockkedjan...",
+    "incompleteResponse": "Ofullständigt svar från blockkedjetjänsten",
+    "unknownError": "Okänt fel",
+    "queuedToast": "⏳ Ingen anslutning — förslaget ligger i kö och publiceras när du är online igen",
+    "failedTitle": "Publiceringen misslyckades",
+    "failedMessage": "{{error}}\n\nSe konsolen för detaljerade loggar.",
+    "connectWalletButton": "Anslut plånbok för att publicera",
+    "continueButton": "Fortsätt till betalning"
+  },
+  "success": {
+    "title": "🎉 Förslaget är publicerat!",
+    "live": "Ditt förslag är nu live!",
+    "ipfs": "IPFS: {{cid}}...",
+    "tx": "TX:   {{hash}}...",
+    "verifyOn": "Verifiera på preprod.cardanoscan.io",
+    "totalPaid": "Totalt betalt: {{ada}} ADA (~${{usd}} USD)",
+    "configuredFor_one": "Inställt för {{voters}} väljare",
+    "configuredFor_other": "Inställt för {{voters}} väljare",
+    "copyTxHash": "📋 Kopiera TX-hash",
+    "share": "📢 Dela"
+  },
+  "batching": {
+    "title": "Röster i omgångar",
+    "body": "Upp till 100 röster skickas i samma omgång för att spara gasavgifter\nMindre omgångar skickas automatiskt var 10:e minut\nAlla röster är registrerade när förslaget avslutas\n80 % lägre kostnad jämfört med enskilda röster\nAtt rösta är helt GRATIS för deltagarna"
+  }
+}

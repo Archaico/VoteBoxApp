@@ -1,0 +1,25 @@
+{
+  "header": {
+    "title": "Diskussion ({{count}})"
+  },
+  "loading": "Ett ögonblick… hämtar kommentarer från det decentraliserade IPFS-nätverket.",
+  "empty": {
+    "title": "Inga kommentarer än.",
+    "subtitle": "Bli först med att diskutera det här förslaget!"
+  },
+  "comment": {
+    "reply": "Svara"
+  },
+  "replying": {
+    "label": "Svarar på kommentar...",
+    "cancel": "Avbryt"
+  },
+  "input": {
+    "placeholder": "Skriv en kommentar...",
+    "post": "Skicka"
+  },
+  "toast": {
+    "savedOffline": "Kommentaren har sparats — synkas när du är online igen",
+    "saveFailed": "Det gick inte att spara kommentaren"
+  }
+}

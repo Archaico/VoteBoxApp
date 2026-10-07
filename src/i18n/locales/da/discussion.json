@@ -1,0 +1,25 @@
+{
+  "header": {
+    "title": "Diskussion ({{count}})"
+  },
+  "loading": "Et øjeblik… henter kommentarer fra det decentrale IPFS-netværk.",
+  "empty": {
+    "title": "Ingen kommentarer endnu.",
+    "subtitle": "Vær den første til at diskutere dette forslag!"
+  },
+  "comment": {
+    "reply": "Svar"
+  },
+  "replying": {
+    "label": "Svarer på kommentar...",
+    "cancel": "Annuller"
+  },
+  "input": {
+    "placeholder": "Skriv en kommentar...",
+    "post": "Send"
+  },
+  "toast": {
+    "savedOffline": "Kommentaren er gemt — synkroniseres, når du er online igen",
+    "saveFailed": "Kommentaren kunne ikke gemmes"
+  }
+}

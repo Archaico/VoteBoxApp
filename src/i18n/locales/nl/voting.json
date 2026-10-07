@@ -1,0 +1,78 @@
+{
+  "choices": {
+    "yes": "Ja",
+    "no": "Nee",
+    "abstain": "Onthouding"
+  },
+  "votingScreen": {
+    "tabs": {
+      "vote": "Stemmen",
+      "discussion": "Discussie",
+      "discussionWithCount": "Discussie ({{count}})"
+    },
+    "back": "← Terug",
+    "loading": "Voorstel laden...",
+    "unknownCreator": "Onbekend",
+    "createdBy": "Gemaakt door:",
+    "deadline": "Deadline:",
+    "daysRemaining_one": "Nog {{count}} dag",
+    "daysRemaining_other": "Nog {{count}} dagen",
+    "results": {
+      "title": "Huidige uitslag",
+      "totalVotes_one": "{{count}} stem in totaal",
+      "totalVotes_other": "{{count}} stemmen in totaal"
+    },
+    "alreadyVoted": {
+      "title": "✅ Je hebt al gestemd",
+      "yourVote": "Jouw stem: <bold>{{choice}}</bold>",
+      "note": "Je kunt je stem niet meer wijzigen nadat je die hebt uitgebracht."
+    },
+    "closed": {
+      "title": "🔒 De stemming is gesloten",
+      "note": "De deadline van dit voorstel is verstreken. Er worden geen stemmen meer aangenomen."
+    },
+    "castVote": {
+      "title": "Breng je stem uit",
+      "privacyNotice": "🔒 Je stem is volledig anoniem en kan niet naar jou worden herleid",
+      "yes": "✅ Ja",
+      "no": "❌ Nee",
+      "abstain": "⚪ Onthouding",
+      "submit": "Stem versturen"
+    },
+    "status": {
+      "preparing": "Je stem wordt voorbereid...",
+      "connecting": "Verbinden met het Cardano-netwerk...",
+      "submitting": "Stem wordt naar de blockchain verstuurd..."
+    },
+    "toasts": {
+      "selectVoteFirst": "Kies eerst je stem",
+      "votingClosed": "De stemming over dit voorstel is gesloten",
+      "voteQueued": "⚠️ Stem in de wachtrij - wordt verstuurd zodra je online bent",
+      "voteFailed": "❌ Stemmen mislukt: {{message}}",
+      "unknownError": "Onbekende fout"
+    }
+  },
+  "successModal": {
+    "title": "Stem verstuurd",
+    "subtitle": "Vastgelegd op de Cardano-blockchain",
+    "proposalId": "Voorstel-ID",
+    "transactionHash": "Transactiehash",
+    "yourVote": "Jouw stem",
+    "sharePrompt": "Laat anderen weten dat je hebt gestemd 👇",
+    "done": "Klaar",
+    "copy": "⎘ Kopiëren",
+    "copied": "✓ Gekopieerd",
+    "copyFailedTitle": "Kopiëren mislukt",
+    "copyFailedMessage": "Kopieer handmatig: {{value}}"
+  },
+  "shareButton": {
+    "moments": {
+      "invite": "Nodig mensen uit om te stemmen",
+      "voted": "Deel dat je hebt gestemd",
+      "results": "Uitslag delen",
+      "urgency": "Delen — stemming sluit bijna",
+      "discovery": "Voorstel delen"
+    },
+    "shareFailedTitle": "Delen mislukt"
+  }
+}

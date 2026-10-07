@@ -1,0 +1,176 @@
+{
+  "header": {
+    "back": "Tilbake",
+    "title": "Lag forslag"
+  },
+  "infoBanner": "Sikret av Cardano · 80 % lavere gassavgifter · Gratis å stemme",
+  "buttons": {
+    "cancel": "Avbryt",
+    "ok": "OK",
+    "continue": "Fortsett",
+    "remove": "Fjern",
+    "done": "Ferdig"
+  },
+  "wallets": {
+    "eternl": {
+      "badge": "ANBEFALT",
+      "description": "Den kraftigste Cardano-lommeboken. Støtter WalletConnect."
+    },
+    "vespr": {
+      "badge": "BEST FOR NYBEGYNNERE",
+      "description": "Laget for mobil, rask og enkel å sette opp."
+    },
+    "lace": {
+      "badge": "OFFISIELL FRA IOG",
+      "description": "Laget av Cardanos grunnleggere. Alt-i-ett-hub for Web3."
+    }
+  },
+  "walletSelect": {
+    "title": "Koble til lommeboken din",
+    "subtitle": "Kreves for å betale gebyret for å lage et forslag. Velgere trenger aldri en lommebok.",
+    "or": "eller",
+    "enterManually": "📋  Skriv inn adressen manuelt",
+    "noWallet": "❓  Jeg har ikke lommebok ennå",
+    "walletConnectSoon": "🔗 Støtte for WalletConnect kommer snart — koble til med ett trykk på over 600 lommebøker",
+    "openAlertTitle": "Åpne {{wallet}}?",
+    "openAlertMessage": "Dette åpner lommebokappen {{wallet}} (eller tar deg til nedlastingssiden).\n\nNår du har koblet til, kopierer du Cardano-adressen din (begynner med addr_test1...) og kommer tilbake hit for å lime den inn.",
+    "openAlertButton": "Åpne {{wallet}}",
+    "linkErrorTitle": "Kunne ikke åpne lenken",
+    "linkErrorMessage": "Søk etter lommeboken manuelt i Play Butikk."
+  },
+  "walletManual": {
+    "welcomeBack": "👋 Velkommen tilbake! Åpne lommebokappen, kopier adressen din (addr_test1...) og lim den inn nedenfor.",
+    "addressLabel": "Cardano-adressen din",
+    "addressHelper": "Begynner med «addr_test1» · Finnes i lommeboken under «Motta» eller «Adresse»",
+    "back": "← Tilbake",
+    "confirm": "Bekreft adressen",
+    "invalidTitle": "Ugyldig adresse",
+    "invalidMessage": "Skriv inn en gyldig Cardano-adresse. Den skal begynne med «addr_test1» (testnet) og være minst 50 tegn lang."
+  },
+  "walletConnected": {
+    "label": "Lommebok tilkoblet",
+    "removeButton": "Fjern og bytt lommebok",
+    "removeAlertTitle": "Fjern lommebok",
+    "removeAlertMessage": "Er du sikker på at du vil fjerne lommebokadressen din?"
+  },
+  "noWallet": {
+    "title": "Skaff deg en Cardano-lommebok",
+    "body": "Med en Cardano-lommebok kan du oppbevare ADA (Cardanos valuta) og betale det lille gebyret for å publisere et forslag. Velgere trenger aldri en — bare de som lager forslag.",
+    "step1": "Last ned <bold>Vespr</bold> — den enkleste Cardano-lommeboken for nybegynnere, laget for mobil.",
+    "step2": "Opprett lommeboken og skriv ned gjenopprettingsfrasen din på et trygt sted.",
+    "step3": "Fyll på med litt ADA — noen få kroner holder for å publisere forslag.",
+    "step4": "Kom tilbake hit, trykk på Vespr og lim inn adressen din.",
+    "downloadButton": "⬇️  Last ned Vespr Wallet",
+    "back": "← Tilbake til lommebøker",
+    "linkErrorMessage": "Søk etter «Vespr Wallet» i Play Butikk."
+  },
+  "form": {
+    "titleLabel": "Tittel på forslaget *",
+    "titlePlaceholder": "Skriv en tydelig og kort tittel",
+    "characterCount": "{{current}}/{{max}} tegn",
+    "descriptionLabel": "Beskrivelse *",
+    "descriptionPlaceholder": "Forklar forslaget ditt i detalj...",
+    "durationLabel": "Avstemningens varighet (dager) *",
+    "durationHelper": "Anbefalt: 7–14 dager",
+    "votersLabel": "Forventet antall velgere *",
+    "votersHelper": "Anslå antall deltakere (minst 2)",
+    "customVotersPlaceholder": "Eller skriv inn eget antall (minst 2)",
+    "selectedVoters_one": "Valgt: {{voters}} velger",
+    "selectedVoters_other": "Valgt: {{voters}} velgere"
+  },
+  "attachments": {
+    "label": "Vedlegg (valgfritt)",
+    "helper": "Opptil {{max}} bilder til forslaget ditt",
+    "addPhoto": "+\nBilde",
+    "limitTitle": "Grensen er nådd",
+    "limitMessage": "Du kan legge ved opptil {{max}} bilder per forslag.",
+    "permissionTitle": "Tillatelse trengs",
+    "permissionMessage": "Gi tilgang til bildene dine for å legge ved et bilde.",
+    "errorTitle": "Kunne ikke legge til bildet"
+  },
+  "validation": {
+    "missingInfoTitle": "Informasjon mangler",
+    "missingInfoMessage": "Fyll ut alle obligatoriske felt først, også lommebokadressen din",
+    "invalidVotersTitle": "Ugyldig antall velgere",
+    "minVotersMessage": "Minste forventede antall velgere er 2",
+    "votersAtLeastMessage": "Forventet antall velgere må være minst 2",
+    "missingTitleTitle": "Tittel mangler",
+    "missingTitleMessage": "Skriv inn en tittel på forslaget",
+    "missingDescriptionTitle": "Beskrivelse mangler",
+    "missingDescriptionMessage": "Skriv inn en beskrivelse av forslaget",
+    "invalidDurationTitle": "Ugyldig varighet",
+    "invalidDurationMessage": "Varigheten må være minst 1 dag",
+    "walletRequiredTitle": "Lommebok kreves",
+    "walletRequiredMessage": "Koble til Cardano-lommeboken din for å betale gebyret"
+  },
+  "fees": {
+    "calculateButton": "Beregn totalkostnad",
+    "breakdownTitle": "Oversikt over totalkostnad",
+    "gasCosts": "Gassavgifter:",
+    "foundationFee": "Stiftelsesgebyr:",
+    "total": "Totalt:",
+    "minimumApplied": "Plattformens minimum på 1,2 ADA er brukt",
+    "foundationInfo": "Stiftelsesgebyret støtter utviklingen av VoteBoxApp som åpen kildekode",
+    "alertTitle": "Fullstendig gebyroversikt",
+    "alertExpectedVoters": "Forventede velgere: {{voters}}",
+    "alertGasCosts_one": "Gassavgifter ({{count}} bunt): {{amount}} ADA",
+    "alertGasCosts_other": "Gassavgifter ({{count}} bunter): {{amount}} ADA",
+    "alertFoundationFee": "Stiftelsesgebyr: {{amount}} ADA",
+    "alertTotal": "TOTALT: {{ada}} ADA (~${{usd}} USD)",
+    "alertMinimumApplied": "(plattformens minimum på 1,2 ADA er brukt)",
+    "alertFoundationInfo": "Stiftelsesgebyret støtter utviklingen av VoteBoxApp som åpen kildekode.",
+    "votingFree": "Det er GRATIS for alle å stemme!"
+  },
+  "payment": {
+    "title": "Betal for å publisere",
+    "instructions": "Send nøyaktig dette beløpet fra din egen lommebokapp, og lim deretter inn transaksjonshashen nedenfor.",
+    "sendTo": "Send til",
+    "amount": "Beløp",
+    "copy": "Kopier",
+    "txHashLabel": "Transaksjonshash",
+    "txHashPlaceholder": "Lim inn tx-hashen fra lommebokappen",
+    "verifying": "Bekrefter betalingen...",
+    "verifyButton": "Bekreft og publiser",
+    "editProposal": "← Rediger forslaget",
+    "overpayTitle": "Beløpet er mye høyere enn nødvendig",
+    "overpayMessage": "Du sendte {{sent}} ADA, men bare {{required}} ADA var nødvendig. Dette kan ikke refunderes — vil du fortsette likevel?",
+    "verifyErrors": {
+      "malformed_hash": "Det ser ikke ut som en gyldig transaksjonshash. Den skal bestå av 64 heksadesimale tegn — sjekk hva du limte inn.",
+      "not_found_or_pending": "Ikke funnet på blokkjeden ennå. Hvis du nettopp sendte den, vent 30–60 sekunder på bekreftelse og prøv igjen.",
+      "wrong_recipient": "Denne transaksjonen betaler ikke til stiftelsens lommebokadresse som vises ovenfor.",
+      "insufficient_amount": "Beløpet som ble sendt, er lavere enn nødvendig — se beløpet ovenfor.",
+      "already_used": "Denne transaksjonen er allerede brukt for et annet forslag.",
+      "network_error": "Fikk ikke kontakt med nettverket for å bekrefte — sjekk tilkoblingen og prøv igjen.",
+      "generic": "Bekreftelsen mislyktes — prøv igjen."
+    }
+  },
+  "publish": {
+    "statusInitializing": "Starter blokkjedetjenesten...",
+    "statusConnecting": "Kobler til Cardano-nettverket...",
+    "statusUploading": "Laster opp til IPFS...",
+    "statusRecording": "Registrerer på blokkjeden...",
+    "incompleteResponse": "Ufullstendig svar fra blokkjedetjenesten",
+    "unknownError": "Ukjent feil",
+    "queuedToast": "⏳ Ingen tilkobling — forslaget står i kø og publiseres når du er på nett igjen",
+    "failedTitle": "Publiseringen mislyktes",
+    "failedMessage": "{{error}}\n\nSe konsollen for detaljerte logger.",
+    "connectWalletButton": "Koble til lommebok for å publisere",
+    "continueButton": "Gå videre til betaling"
+  },
+  "success": {
+    "title": "🎉 Forslaget er publisert!",
+    "live": "Forslaget ditt er nå publisert!",
+    "ipfs": "IPFS: {{cid}}...",
+    "tx": "TX:   {{hash}}...",
+    "verifyOn": "Bekreft på preprod.cardanoscan.io",
+    "totalPaid": "Totalt betalt: {{ada}} ADA (~${{usd}} USD)",
+    "configuredFor_one": "Satt opp for {{voters}} velger",
+    "configuredFor_other": "Satt opp for {{voters}} velgere",
+    "copyTxHash": "📋 Kopier TX-hash",
+    "share": "📢 Del"
+  },
+  "batching": {
+    "title": "Stemmer i bunter",
+    "body": "Opptil 100 stemmer samles i én bunt for å spare gassavgifter\nMindre bunter sendes automatisk hvert 10. minutt\nAlle stemmer er registrert når forslaget avsluttes\n80 % lavere kostnad enn enkeltstemmer\nDet er helt GRATIS for deltakerne å stemme"
+  }
+}

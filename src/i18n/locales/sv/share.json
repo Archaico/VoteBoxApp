@@ -1,0 +1,53 @@
+{
+  "invite": {
+    "heading": "🗳️ DIN RÖST BEHÖVS",
+    "closes_one": "⏰ Omröstningen stänger: {{date}} ({{count}} dag kvar)",
+    "closes_other": "⏰ Omröstningen stänger: {{date}} ({{count}} dagar kvar)",
+    "secured": "🔒 Säkrad på Cardanos blockkedja",
+    "free": "✅ Helt gratis att rösta — ingen plånbok behövs",
+    "voteNow": "Rösta nu på VoteBoxApp:",
+    "footer": "— Delat via VoteBoxApp · Gratis demokratisk omröstning för alla",
+    "title": "Rösta om: {{title}}"
+  },
+  "voted": {
+    "heading": "✊ Jag har just röstat på VoteBoxApp",
+    "daysLeft_one": "{{count}} dag kvar att rösta — gör din röst hörd:",
+    "daysLeft_other": "{{count}} dagar kvar att rösta — gör din röst hörd:",
+    "closed": "Omröstningen är stängd — gör din röst hörd:",
+    "tagline": "🔒 Säkrad med blockkedja · 100 % gratis · Ingen plånbok behövs",
+    "footer": "— VoteBoxApp: Demokratisk omröstning för alla",
+    "title": "Jag har röstat: {{title}}"
+  },
+  "results": {
+    "noResults": "Inga resultat än",
+    "noVotes": "Inga röster registrerade än",
+    "row_one": "{{bar}} {{option}}: {{count}} röst ({{pct}} %)",
+    "row_other": "{{bar}} {{option}}: {{count}} röster ({{pct}} %)",
+    "heading": "📊 RESULTAT AV OMRÖSTNINGEN",
+    "leading": "🏆 Leder: ”{{option}}” med {{pct}} %",
+    "total": "Antal avgivna röster: {{count}}",
+    "verified": "🔒 Verifierat på Cardanos blockkedja",
+    "seeFull": "Se hela resultatet på VoteBoxApp:",
+    "footer": "— VoteBoxApp: Transparent och gratis demokratisk omröstning",
+    "title": "Resultat: {{title}}"
+  },
+  "urgent": {
+    "lessThanHour": "⚡ MINDRE ÄN 1 TIMME KVAR ATT RÖSTA",
+    "hours": "⚡ {{count}} TIMMAR KVAR ATT RÖSTA",
+    "days": "⏰ {{count}} DAGAR KVAR ATT RÖSTA",
+    "votedSoFar_one": "{{count}} person har röstat hittills.",
+    "votedSoFar_other": "{{count}} personer har röstat hittills.",
+    "stillCounts": "Din röst räknas fortfarande — rösta nu:",
+    "tagline": "✅ Gratis · Ingen plånbok behövs · Tar 10 sekunder",
+    "footer": "— VoteBoxApp: Demokratisk omröstning på blockkedjan",
+    "title": "Brådskande: Rösta om ”{{title}}”"
+  },
+  "discovery": {
+    "heading": "🗳️ Kolla in det här förslaget på VoteBoxApp",
+    "open": "🟢 Omröstningen är ÖPPEN",
+    "closed": "🔴 Omröstningen är stängd",
+    "freeToVote": "✅ Gratis att rösta — ingen plånbok eller konto behövs",
+    "seeResults": "📊 Se slutresultatet",
+    "footer": "— VoteBoxApp: Gratis, öppen omröstning säkrad med blockkedja"
+  }
+}

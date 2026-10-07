@@ -1,0 +1,50 @@
+{
+  "push": {
+    "deadline24h": {
+      "title": "Stemming sluit over 24 uur"
+    },
+    "deadline1h": {
+      "title": "Stemming sluit over 1 uur"
+    },
+    "voteSubmitted": {
+      "title": "Stem verstuurd"
+    },
+    "voteConfirmed": {
+      "title": "Stem bevestigd op de blockchain",
+      "body": "{{title}} · TX: {{txHash}}..."
+    },
+    "proposalLive": {
+      "title": "Je voorstel staat online"
+    },
+    "commentPosted": {
+      "title": "Reactie geplaatst"
+    },
+    "newComment": {
+      "title": "Nieuwe reactie op voorstel"
+    },
+    "proposalFinalised": {
+      "titlePassed": "Voorstel AANGENOMEN",
+      "titleEnded": "Stemming afgelopen",
+      "body": "{{title}} · Ja: {{yes}} / Nee: {{no}}"
+    },
+    "lowBalance": {
+      "title": "Laag ADA-saldo",
+      "body": "Saldo onder 1,5 ADA — vul aan om voorstellen te maken"
+    },
+    "txFailed": {
+      "title": "Transactie mislukt",
+      "body": "Probeer je laatste actie opnieuw"
+    }
+  },
+  "toast": {
+    "offlineQueue": {
+      "voteSubmitted": "✅ Stem verstuurd",
+      "proposalSubmitted": "✅ Voorstel ingediend",
+      "proposalPaymentRejected": "❌ Voorstel verwijderd — betaling kon niet worden gecontroleerd ({{reason}})",
+      "voteFailed_one": "❌ Stem mislukt na {{count}} poging",
+      "voteFailed_other": "❌ Stem mislukt na {{count}} pogingen",
+      "proposalFailed_one": "❌ Voorstel mislukt na {{count}} poging",
+      "proposalFailed_other": "❌ Voorstel mislukt na {{count}} pogingen"
+    }
+  }
+}

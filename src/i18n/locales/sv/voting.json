@@ -1,0 +1,78 @@
+{
+  "choices": {
+    "yes": "Ja",
+    "no": "Nej",
+    "abstain": "Avstår"
+  },
+  "votingScreen": {
+    "tabs": {
+      "vote": "Rösta",
+      "discussion": "Diskussion",
+      "discussionWithCount": "Diskussion ({{count}})"
+    },
+    "back": "← Tillbaka",
+    "loading": "Läser in förslaget...",
+    "unknownCreator": "Okänd",
+    "createdBy": "Skapat av:",
+    "deadline": "Sista dag:",
+    "daysRemaining_one": "{{count}} dag kvar",
+    "daysRemaining_other": "{{count}} dagar kvar",
+    "results": {
+      "title": "Aktuellt resultat",
+      "totalVotes_one": "{{count}} röst totalt",
+      "totalVotes_other": "{{count}} röster totalt"
+    },
+    "alreadyVoted": {
+      "title": "✅ Du har redan röstat",
+      "yourVote": "Din röst: <bold>{{choice}}</bold>",
+      "note": "Du kan inte ändra din röst när den har skickats."
+    },
+    "closed": {
+      "title": "🔒 Omröstningen är stängd",
+      "note": "Tidsfristen för det här förslaget har gått ut. Inga fler röster tas emot."
+    },
+    "castVote": {
+      "title": "Lägg din röst",
+      "privacyNotice": "🔒 Din röst är helt anonym och kan inte spåras tillbaka till dig",
+      "yes": "✅ Ja",
+      "no": "❌ Nej",
+      "abstain": "⚪ Avstår",
+      "submit": "Skicka röst"
+    },
+    "status": {
+      "preparing": "Förbereder din röst...",
+      "connecting": "Ansluter till Cardano-nätverket...",
+      "submitting": "Skickar rösten till blockkedjan..."
+    },
+    "toasts": {
+      "selectVoteFirst": "Välj din röst först",
+      "votingClosed": "Omröstningen om det här förslaget är stängd",
+      "voteQueued": "⚠️ Rösten ligger i kö - skickas när du är online",
+      "voteFailed": "❌ Röstningen misslyckades: {{message}}",
+      "unknownError": "Okänt fel"
+    }
+  },
+  "successModal": {
+    "title": "Rösten har skickats",
+    "subtitle": "Registrerad på Cardanos blockkedja",
+    "proposalId": "Förslags-ID",
+    "transactionHash": "Transaktionshash",
+    "yourVote": "Din röst",
+    "sharePrompt": "Berätta för andra att du har röstat 👇",
+    "done": "Klar",
+    "copy": "⎘ Kopiera",
+    "copied": "✓ Kopierat",
+    "copyFailedTitle": "Kopieringen misslyckades",
+    "copyFailedMessage": "Kopiera manuellt: {{value}}"
+  },
+  "shareButton": {
+    "moments": {
+      "invite": "Bjud in andra att rösta",
+      "voted": "Dela att du har röstat",
+      "results": "Dela resultatet",
+      "urgency": "Dela — omröstningen stänger snart",
+      "discovery": "Dela förslaget"
+    },
+    "shareFailedTitle": "Delningen misslyckades"
+  }
+}
