@@ -1,0 +1,80 @@
+{
+  "choices": {
+    "yes": "Sì",
+    "no": "No",
+    "abstain": "Astensione"
+  },
+  "votingScreen": {
+    "tabs": {
+      "vote": "Vota",
+      "discussion": "Discussione",
+      "discussionWithCount": "Discussione ({{count}})"
+    },
+    "back": "← Indietro",
+    "loading": "Caricamento proposta...",
+    "unknownCreator": "Sconosciuto",
+    "createdBy": "Creata da:",
+    "deadline": "Scadenza:",
+    "daysRemaining_one": "Manca {{count}} giorno",
+    "daysRemaining_many": "Mancano {{count}} giorni",
+    "daysRemaining_other": "Mancano {{count}} giorni",
+    "results": {
+      "title": "Risultati attuali",
+      "totalVotes_one": "{{count}} voto in totale",
+      "totalVotes_many": "{{count}} voti in totale",
+      "totalVotes_other": "{{count}} voti in totale"
+    },
+    "alreadyVoted": {
+      "title": "✅ Hai già votato",
+      "yourVote": "Il tuo voto: <bold>{{choice}}</bold>",
+      "note": "Una volta inviato, il voto non si può cambiare."
+    },
+    "closed": {
+      "title": "🔒 La votazione è chiusa",
+      "note": "La scadenza di questa proposta è passata. Non si accettano più voti."
+    },
+    "castVote": {
+      "title": "Esprimi il tuo voto",
+      "privacyNotice": "🔒 Il tuo voto è completamente anonimo e non può essere ricondotto a te",
+      "yes": "✅ Sì",
+      "no": "❌ No",
+      "abstain": "⚪ Astensione",
+      "submit": "Invia voto"
+    },
+    "status": {
+      "preparing": "Preparazione del voto...",
+      "connecting": "Connessione alla rete Cardano...",
+      "submitting": "Invio del voto alla blockchain..."
+    },
+    "toasts": {
+      "selectVoteFirst": "Prima scegli il tuo voto",
+      "votingClosed": "La votazione per questa proposta è chiusa",
+      "voteQueued": "⚠️ Voto in coda: verrà inviato appena torni online",
+      "voteFailed": "❌ Voto non riuscito: {{message}}",
+      "unknownError": "Errore sconosciuto"
+    }
+  },
+  "successModal": {
+    "title": "Voto inviato",
+    "subtitle": "Registrato sulla blockchain Cardano",
+    "proposalId": "ID proposta",
+    "transactionHash": "Hash della transazione",
+    "yourVote": "Il tuo voto",
+    "sharePrompt": "Fai sapere agli altri che hai votato 👇",
+    "done": "Fatto",
+    "copy": "⎘ Copia",
+    "copied": "✓ Copiato",
+    "copyFailedTitle": "Copia non riuscita",
+    "copyFailedMessage": "Copia manualmente: {{value}}"
+  },
+  "shareButton": {
+    "moments": {
+      "invite": "Invita a votare",
+      "voted": "Condividi che hai votato",
+      "results": "Condividi i risultati",
+      "urgency": "Condividi: si chiude presto",
+      "discovery": "Condividi la proposta"
+    },
+    "shareFailedTitle": "Condivisione non riuscita"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "push": {
+    "deadline24h": {
+      "title": "La votación cierra en 24 horas"
+    },
+    "deadline1h": {
+      "title": "La votación cierra en 1 hora"
+    },
+    "voteSubmitted": {
+      "title": "Voto enviado"
+    },
+    "voteConfirmed": {
+      "title": "Voto confirmado en la blockchain",
+      "body": "{{title}} · TX: {{txHash}}..."
+    },
+    "proposalLive": {
+      "title": "Tu propuesta está activa"
+    },
+    "commentPosted": {
+      "title": "Comentario publicado"
+    },
+    "newComment": {
+      "title": "Nuevo comentario en la propuesta"
+    },
+    "proposalFinalised": {
+      "titlePassed": "Propuesta APROBADA",
+      "titleEnded": "Propuesta finalizada",
+      "body": "{{title}} · Sí: {{yes}} / No: {{no}}"
+    },
+    "lowBalance": {
+      "title": "Saldo de ADA bajo",
+      "body": "Saldo inferior a 1.5 ADA: recarga para crear propuestas"
+    },
+    "txFailed": {
+      "title": "Transacción fallida",
+      "body": "Vuelve a intentar tu última acción"
+    }
+  },
+  "toast": {
+    "offlineQueue": {
+      "voteSubmitted": "✅ Voto enviado correctamente",
+      "proposalSubmitted": "✅ Propuesta enviada correctamente",
+      "proposalPaymentRejected": "❌ Propuesta eliminada: no se pudo verificar el pago ({{reason}})",
+      "voteFailed_one": "❌ El voto falló tras {{count}} intento",
+      "voteFailed_many": "❌ El voto falló tras {{count}} intentos",
+      "voteFailed_other": "❌ El voto falló tras {{count}} intentos",
+      "proposalFailed_one": "❌ La propuesta falló tras {{count}} intento",
+      "proposalFailed_many": "❌ La propuesta falló tras {{count}} intentos",
+      "proposalFailed_other": "❌ La propuesta falló tras {{count}} intentos"
+    }
+  }
+}

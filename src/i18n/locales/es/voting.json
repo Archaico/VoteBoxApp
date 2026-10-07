@@ -1,0 +1,80 @@
+{
+  "choices": {
+    "yes": "Sí",
+    "no": "No",
+    "abstain": "Abstención"
+  },
+  "votingScreen": {
+    "tabs": {
+      "vote": "Votar",
+      "discussion": "Debate",
+      "discussionWithCount": "Debate ({{count}})"
+    },
+    "back": "← Atrás",
+    "loading": "Cargando propuesta...",
+    "unknownCreator": "Desconocido",
+    "createdBy": "Creada por:",
+    "deadline": "Fecha límite:",
+    "daysRemaining_one": "Queda {{count}} día",
+    "daysRemaining_many": "Quedan {{count}} días",
+    "daysRemaining_other": "Quedan {{count}} días",
+    "results": {
+      "title": "Resultados actuales",
+      "totalVotes_one": "{{count}} voto en total",
+      "totalVotes_many": "{{count}} votos en total",
+      "totalVotes_other": "{{count}} votos en total"
+    },
+    "alreadyVoted": {
+      "title": "✅ Ya votaste",
+      "yourVote": "Tu voto: <bold>{{choice}}</bold>",
+      "note": "Una vez enviado, no puedes cambiar tu voto."
+    },
+    "closed": {
+      "title": "🔒 La votación ya cerró",
+      "note": "La fecha límite de esta propuesta ya pasó. Ya no se aceptan votos."
+    },
+    "castVote": {
+      "title": "Emite tu voto",
+      "privacyNotice": "🔒 Tu voto es totalmente anónimo y nadie puede vincularlo contigo",
+      "yes": "✅ Sí",
+      "no": "❌ No",
+      "abstain": "⚪ Abstención",
+      "submit": "Enviar voto"
+    },
+    "status": {
+      "preparing": "Preparando tu voto...",
+      "connecting": "Conectando con la red Cardano...",
+      "submitting": "Enviando el voto a la blockchain..."
+    },
+    "toasts": {
+      "selectVoteFirst": "Primero elige tu voto",
+      "votingClosed": "La votación de esta propuesta ya cerró",
+      "voteQueued": "⚠️ Voto en cola: se enviará cuando haya conexión",
+      "voteFailed": "❌ Error al votar: {{message}}",
+      "unknownError": "Error desconocido"
+    }
+  },
+  "successModal": {
+    "title": "Voto enviado",
+    "subtitle": "Registrado en la blockchain de Cardano",
+    "proposalId": "ID de la propuesta",
+    "transactionHash": "Hash de la transacción",
+    "yourVote": "Tu voto",
+    "sharePrompt": "Cuéntales a los demás que votaste 👇",
+    "done": "Listo",
+    "copy": "⎘ Copiar",
+    "copied": "✓ Copiado",
+    "copyFailedTitle": "No se pudo copiar",
+    "copyFailedMessage": "Cópialo manualmente: {{value}}"
+  },
+  "shareButton": {
+    "moments": {
+      "invite": "Invitar a votar",
+      "voted": "Compartir que votaste",
+      "results": "Compartir resultados",
+      "urgency": "Compartir: cierra pronto",
+      "discovery": "Compartir propuesta"
+    },
+    "shareFailedTitle": "No se pudo compartir"
+  }
+}

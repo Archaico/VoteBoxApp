@@ -1,0 +1,25 @@
+{
+  "header": {
+    "title": "Discussione ({{count}})"
+  },
+  "loading": "Un attimo… carichiamo i commenti dalla rete decentralizzata IPFS.",
+  "empty": {
+    "title": "Ancora nessun commento.",
+    "subtitle": "Inizia tu la discussione su questa proposta!"
+  },
+  "comment": {
+    "reply": "Rispondi"
+  },
+  "replying": {
+    "label": "Risposta al commento...",
+    "cancel": "Annulla"
+  },
+  "input": {
+    "placeholder": "Scrivi un commento...",
+    "post": "Pubblica"
+  },
+  "toast": {
+    "savedOffline": "Commento salvato: verrà sincronizzato appena torni online",
+    "saveFailed": "Impossibile salvare il commento"
+  }
+}

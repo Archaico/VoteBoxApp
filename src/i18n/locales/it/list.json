@@ -1,0 +1,67 @@
+{
+  "header": {
+    "updatedAt": "Aggiornato: {{time}}",
+    "createButton": "+ Crea"
+  },
+  "loading": "Caricamento proposte...",
+  "errors": {
+    "cannotConnect": "Impossibile connettersi alla rete Cardano. Trascina verso il basso o tocca Riprova.",
+    "connectionError": "Errore di connessione: trascina verso il basso per riprovare"
+  },
+  "emptyState": {
+    "loadFailedTitle": "Impossibile caricare le proposte",
+    "retry": "Riprova",
+    "noProposalsTitle": "Ancora nessuna proposta",
+    "noProposalsText": "Crea tu la prima proposta e avvia la conversazione!",
+    "createFirst": "Crea la prima proposta"
+  },
+  "card": {
+    "closed": "Chiusa",
+    "remainingDaysHours": "Mancano {{days}} g {{hours}} h",
+    "remainingHours": "Mancano {{hours}} h",
+    "remainingMinutes": "Mancano {{minutes}} min",
+    "optionCount_one": "{{count}} opzione",
+    "optionCount_many": "{{count}} opzioni",
+    "optionCount_other": "{{count}} opzioni",
+    "voteCount_one": "{{count}} voto",
+    "voteCount_many": "{{count}} voti",
+    "voteCount_other": "{{count}} voti"
+  },
+  "queue": {
+    "title": "📤 Elementi in coda",
+    "votesQueued_one": "{{count}} voto in coda",
+    "votesQueued_many": "{{count}} voti in coda",
+    "votesQueued_other": "{{count}} voti in coda",
+    "proposalsQueued_one": "{{count}} proposta in coda",
+    "proposalsQueued_many": "{{count}} proposte in coda",
+    "proposalsQueued_other": "{{count}} proposte in coda",
+    "autoSubmitNote": "Verranno inviati automaticamente quando avrai una connessione stabile.",
+    "oldestItem": "Elemento più vecchio: {{time}}",
+    "retryNow": "Riprova ora",
+    "ok": "OK"
+  },
+  "syncDiagnostic": {
+    "title": "🔄 Diagnostica sincronizzazione in background",
+    "registrationHeading": "── Registrazione ──",
+    "registered": "Registrata: {{time}}",
+    "never": "mai",
+    "osStatus": "Stato del sistema: {{status}}",
+    "unknown": "sconosciuto",
+    "lastRunHeading": "── Ultima esecuzione in background ──",
+    "lastRun": "Ultima esecuzione: {{time}}",
+    "lastRunNever": "MAI: l'attività non è stata eseguita",
+    "timeAgoParenthetical": "({{ago}})",
+    "result": "Risultato: {{result}}",
+    "error": "Errore: {{error}}",
+    "subscriptionsChecked": "Iscrizioni controllate: {{count}}",
+    "explanation": "L'attività è programmata ogni ~15 min. Se l'\"Ultima esecuzione\" risale a più di ~30-45 min fa (o indica mai, anche se l'app è rimasta chiusa così a lungo), molto probabilmente il sistema sta bloccando l'attività in background. Controlla le restrizioni di batteria e attività in background per VoteBoxApp nelle impostazioni del dispositivo.",
+    "ok": "OK",
+    "timeAgo": {
+      "never": "mai",
+      "justNow": "proprio ora",
+      "minutes": "{{minutes}} min fa",
+      "hoursMinutes": "{{hours}} h {{minutes}} min fa",
+      "days": "{{days}} g fa"
+    }
+  }
+}

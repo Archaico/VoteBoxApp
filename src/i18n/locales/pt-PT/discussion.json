@@ -1,0 +1,25 @@
+{
+  "header": {
+    "title": "Discussão ({{count}})"
+  },
+  "loading": "Um momento… a obter comentários da rede descentralizada IPFS.",
+  "empty": {
+    "title": "Ainda não há comentários.",
+    "subtitle": "Seja o primeiro a comentar esta proposta!"
+  },
+  "comment": {
+    "reply": "Responder"
+  },
+  "replying": {
+    "label": "A responder ao comentário...",
+    "cancel": "Cancelar"
+  },
+  "input": {
+    "placeholder": "Escreva um comentário...",
+    "post": "Publicar"
+  },
+  "toast": {
+    "savedOffline": "Comentário guardado — será sincronizado quando voltar a estar online",
+    "saveFailed": "Não foi possível guardar o comentário"
+  }
+}

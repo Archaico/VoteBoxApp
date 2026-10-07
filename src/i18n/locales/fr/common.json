@@ -1,0 +1,7 @@
+{
+  "language": {
+    "title": "Langue",
+    "restartTitle": "Redémarrage nécessaire",
+    "restartMessage": "Fermez puis rouvrez VoteBoxApp pour changer le sens du texte pour cette langue."
+  }
+}

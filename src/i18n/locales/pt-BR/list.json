@@ -1,0 +1,67 @@
+{
+  "header": {
+    "updatedAt": "Atualizado: {{time}}",
+    "createButton": "+ Criar"
+  },
+  "loading": "Carregando propostas...",
+  "errors": {
+    "cannotConnect": "Não foi possível conectar à rede Cardano. Puxe para baixo ou toque em Tentar de novo.",
+    "connectionError": "Erro de conexão — puxe para baixo para tentar de novo"
+  },
+  "emptyState": {
+    "loadFailedTitle": "Não foi possível carregar as propostas",
+    "retry": "Tentar de novo",
+    "noProposalsTitle": "Nenhuma proposta ainda",
+    "noProposalsText": "Crie a primeira proposta e comece a conversa!",
+    "createFirst": "Criar a primeira proposta"
+  },
+  "card": {
+    "closed": "Encerrada",
+    "remainingDaysHours": "Faltam {{days}}d {{hours}}h",
+    "remainingHours": "Faltam {{hours}}h",
+    "remainingMinutes": "Faltam {{minutes}} min",
+    "optionCount_one": "{{count}} opção",
+    "optionCount_many": "{{count}} opções",
+    "optionCount_other": "{{count}} opções",
+    "voteCount_one": "{{count}} voto",
+    "voteCount_many": "{{count}} votos",
+    "voteCount_other": "{{count}} votos"
+  },
+  "queue": {
+    "title": "📤 Itens na fila",
+    "votesQueued_one": "{{count}} voto na fila",
+    "votesQueued_many": "{{count}} votos na fila",
+    "votesQueued_other": "{{count}} votos na fila",
+    "proposalsQueued_one": "{{count}} proposta na fila",
+    "proposalsQueued_many": "{{count}} propostas na fila",
+    "proposalsQueued_other": "{{count}} propostas na fila",
+    "autoSubmitNote": "Eles serão enviados automaticamente quando você tiver uma conexão estável.",
+    "oldestItem": "Item mais antigo: {{time}}",
+    "retryNow": "Tentar agora",
+    "ok": "OK"
+  },
+  "syncDiagnostic": {
+    "title": "🔄 Diagnóstico da sincronização em segundo plano",
+    "registrationHeading": "── Registro ──",
+    "registered": "Registrada: {{time}}",
+    "never": "nunca",
+    "osStatus": "Status do sistema: {{status}}",
+    "unknown": "desconhecido",
+    "lastRunHeading": "── Última execução em segundo plano ──",
+    "lastRun": "Última execução: {{time}}",
+    "lastRunNever": "NUNCA — a tarefa não foi executada",
+    "timeAgoParenthetical": "({{ago}})",
+    "result": "Resultado: {{result}}",
+    "error": "Erro: {{error}}",
+    "subscriptionsChecked": "Inscrições verificadas: {{count}}",
+    "explanation": "A tarefa está agendada a cada ~15 min. Se a \"Última execução\" for de mais de ~30-45 min atrás (ou nunca, mesmo com o app fechado esse tempo todo), é muito provável que o sistema esteja bloqueando a tarefa em segundo plano — confira as restrições de bateria e de atividade em segundo plano do VoteBoxApp nas configurações do aparelho.",
+    "ok": "OK",
+    "timeAgo": {
+      "never": "nunca",
+      "justNow": "agora mesmo",
+      "minutes": "há {{minutes}} min",
+      "hoursMinutes": "há {{hours}}h {{minutes}}min",
+      "days": "há {{days}}d"
+    }
+  }
+}

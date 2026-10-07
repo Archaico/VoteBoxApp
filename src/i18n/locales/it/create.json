@@ -1,0 +1,179 @@
+{
+  "header": {
+    "back": "Indietro",
+    "title": "Crea proposta"
+  },
+  "infoBanner": "Protetto da Cardano · 80% di gas risparmiato · Gratis per chi vota",
+  "buttons": {
+    "cancel": "Annulla",
+    "ok": "OK",
+    "continue": "Continua",
+    "remove": "Rimuovi",
+    "done": "Fatto"
+  },
+  "wallets": {
+    "eternl": {
+      "badge": "CONSIGLIATO",
+      "description": "Il wallet Cardano più completo. Supporta WalletConnect."
+    },
+    "vespr": {
+      "badge": "IDEALE PER INIZIARE",
+      "description": "Nato per il mobile, veloce e facile da configurare."
+    },
+    "lace": {
+      "badge": "UFFICIALE IOG",
+      "description": "Creato dai fondatori di Cardano. Tutto il Web3 in un'unica app."
+    }
+  },
+  "walletSelect": {
+    "title": "Collega il tuo wallet",
+    "subtitle": "Serve per pagare la commissione di creazione della proposta. Per votare non serve mai un wallet.",
+    "or": "oppure",
+    "enterManually": "📋  Inserisci l'indirizzo a mano",
+    "noWallet": "❓  Non ho ancora un wallet",
+    "walletConnectSoon": "🔗 WalletConnect in arrivo: collegamento con un tocco a oltre 600 wallet",
+    "openAlertTitle": "Aprire {{wallet}}?",
+    "openAlertMessage": "Si aprirà l'app del wallet {{wallet}} (o la pagina per scaricarla).\n\nDopo il collegamento, copia il tuo indirizzo Cardano (inizia con addr_test1...) e torna qui per incollarlo.",
+    "openAlertButton": "Apri {{wallet}}",
+    "linkErrorTitle": "Impossibile aprire il link",
+    "linkErrorMessage": "Cerca il wallet manualmente nel Play Store."
+  },
+  "walletManual": {
+    "welcomeBack": "👋 Bentornato! Apri l'app del tuo wallet, copia il tuo indirizzo (addr_test1...) e incollalo qui sotto.",
+    "addressLabel": "Il tuo indirizzo Cardano",
+    "addressHelper": "Inizia con \"addr_test1\" · Lo trovi nel wallet alla voce \"Ricevi\" o \"Indirizzo\"",
+    "back": "← Indietro",
+    "confirm": "Conferma indirizzo",
+    "invalidTitle": "Indirizzo non valido",
+    "invalidMessage": "Inserisci un indirizzo Cardano valido. Deve iniziare con \"addr_test1\" (testnet) ed essere lungo almeno 50 caratteri."
+  },
+  "walletConnected": {
+    "label": "Wallet collegato",
+    "removeButton": "Rimuovi e cambia wallet",
+    "removeAlertTitle": "Rimuovi wallet",
+    "removeAlertMessage": "Vuoi davvero rimuovere l'indirizzo del tuo wallet?"
+  },
+  "noWallet": {
+    "title": "Come ottenere un wallet Cardano",
+    "body": "Un wallet Cardano ti permette di tenere ADA (la valuta di Cardano) e di pagare la piccola commissione per pubblicare una proposta. Chi vota non ne ha mai bisogno: serve solo a chi crea proposte.",
+    "step1": "Scarica <bold>Vespr</bold>: è il wallet Cardano più semplice per chi inizia, pensato per lo smartphone.",
+    "step2": "Crea il tuo wallet e annota la frase di recupero in un posto sicuro.",
+    "step3": "Aggiungi un po' di ADA: bastano pochi dollari per pubblicare proposte.",
+    "step4": "Torna qui, tocca Vespr e incolla il tuo indirizzo.",
+    "downloadButton": "⬇️  Scarica Vespr",
+    "back": "← Torna ai wallet",
+    "linkErrorMessage": "Cerca \"Vespr Wallet\" nel Play Store."
+  },
+  "form": {
+    "titleLabel": "Titolo della proposta *",
+    "titlePlaceholder": "Scrivi un titolo chiaro e conciso",
+    "characterCount": "{{current}}/{{max}} caratteri",
+    "descriptionLabel": "Descrizione *",
+    "descriptionPlaceholder": "Spiega la tua proposta nei dettagli...",
+    "durationLabel": "Durata della votazione (giorni) *",
+    "durationHelper": "Consigliato: 7–14 giorni",
+    "votersLabel": "Votanti previsti *",
+    "votersHelper": "Stima il numero di partecipanti (minimo 2)",
+    "customVotersPlaceholder": "Oppure inserisci un altro numero (min. 2)",
+    "selectedVoters_one": "Selezionato: {{voters}} votante",
+    "selectedVoters_many": "Selezionati: {{voters}} votanti",
+    "selectedVoters_other": "Selezionati: {{voters}} votanti"
+  },
+  "attachments": {
+    "label": "Allegati (facoltativi)",
+    "helper": "Fino a {{max}} immagini da allegare alla proposta",
+    "addPhoto": "+\nFoto",
+    "limitTitle": "Limite raggiunto",
+    "limitMessage": "Puoi allegare fino a {{max}} immagini per proposta.",
+    "permissionTitle": "Autorizzazione necessaria",
+    "permissionMessage": "Consenti l'accesso alle foto per allegare un'immagine.",
+    "errorTitle": "Impossibile aggiungere l'immagine"
+  },
+  "validation": {
+    "missingInfoTitle": "Informazioni mancanti",
+    "missingInfoMessage": "Compila prima tutti i campi obbligatori, compreso l'indirizzo del wallet",
+    "invalidVotersTitle": "Numero di votanti non valido",
+    "minVotersMessage": "Il minimo di votanti previsti è 2",
+    "votersAtLeastMessage": "I votanti previsti devono essere almeno 2",
+    "missingTitleTitle": "Titolo mancante",
+    "missingTitleMessage": "Inserisci un titolo per la proposta",
+    "missingDescriptionTitle": "Descrizione mancante",
+    "missingDescriptionMessage": "Inserisci una descrizione della proposta",
+    "invalidDurationTitle": "Durata non valida",
+    "invalidDurationMessage": "La durata deve essere di almeno 1 giorno",
+    "walletRequiredTitle": "Wallet necessario",
+    "walletRequiredMessage": "Collega il tuo wallet Cardano per pagare la commissione di creazione"
+  },
+  "fees": {
+    "calculateButton": "Calcola il costo totale",
+    "breakdownTitle": "Dettaglio del costo totale",
+    "gasCosts": "Costi del gas:",
+    "foundationFee": "Commissione della Fondazione:",
+    "total": "Totale:",
+    "minimumApplied": "Applicato il minimo della piattaforma: 1,2 ADA",
+    "foundationInfo": "La commissione della Fondazione sostiene lo sviluppo open source di VoteBoxApp",
+    "alertTitle": "Dettaglio completo dei costi",
+    "alertExpectedVoters": "Votanti previsti: {{voters}}",
+    "alertGasCosts_one": "Costi del gas ({{count}} lotto): {{amount}} ADA",
+    "alertGasCosts_many": "Costi del gas ({{count}} lotti): {{amount}} ADA",
+    "alertGasCosts_other": "Costi del gas ({{count}} lotti): {{amount}} ADA",
+    "alertFoundationFee": "Commissione della Fondazione: {{amount}} ADA",
+    "alertTotal": "TOTALE: {{ada}} ADA (~{{usd}} $ USD)",
+    "alertMinimumApplied": "(applicato il minimo della piattaforma: 1,2 ADA)",
+    "alertFoundationInfo": "La commissione della Fondazione sostiene lo sviluppo open source di VoteBoxApp.",
+    "votingFree": "Votare è GRATIS per tutti i partecipanti!"
+  },
+  "payment": {
+    "title": "Invia il pagamento per pubblicare",
+    "instructions": "Invia esattamente questo importo dall'app del tuo wallet, poi incolla qui sotto l'hash della transazione.",
+    "sendTo": "Invia a",
+    "amount": "Importo",
+    "copy": "Copia",
+    "txHashLabel": "Hash della transazione",
+    "txHashPlaceholder": "Incolla l'hash della transazione dal tuo wallet",
+    "verifying": "Verifica del pagamento...",
+    "verifyButton": "Verifica e pubblica",
+    "editProposal": "← Modifica proposta",
+    "overpayTitle": "Importo molto superiore al necessario",
+    "overpayMessage": "Hai inviato {{sent}} ADA, ma ne servivano solo {{required}}. Non è rimborsabile: vuoi continuare lo stesso?",
+    "verifyErrors": {
+      "malformed_hash": "Non sembra un hash di transazione valido. Deve avere 64 caratteri esadecimali: controlla cosa hai incollato.",
+      "not_found_or_pending": "Non ancora presente sulla blockchain. Se l'hai appena inviato, attendi 30-60 secondi la conferma e riprova.",
+      "wrong_recipient": "Questa transazione non paga l'indirizzo del wallet della Fondazione indicato sopra.",
+      "insufficient_amount": "L'importo inviato è inferiore a quello richiesto: vedi l'importo sopra.",
+      "already_used": "Questa transazione è già stata usata per un'altra proposta.",
+      "network_error": "Impossibile raggiungere la rete per la verifica. Controlla la connessione e riprova.",
+      "generic": "Verifica non riuscita. Riprova."
+    }
+  },
+  "publish": {
+    "statusInitializing": "Avvio del servizio blockchain...",
+    "statusConnecting": "Connessione alla rete Cardano...",
+    "statusUploading": "Caricamento su IPFS...",
+    "statusRecording": "Registrazione sulla blockchain...",
+    "incompleteResponse": "Risposta incompleta dal servizio blockchain",
+    "unknownError": "Errore sconosciuto",
+    "queuedToast": "⏳ Nessuna connessione: proposta in coda, verrà pubblicata appena torni online",
+    "failedTitle": "Pubblicazione non riuscita",
+    "failedMessage": "{{error}}\n\nControlla la console per i log dettagliati.",
+    "connectWalletButton": "Collega il wallet per pubblicare",
+    "continueButton": "Vai al pagamento"
+  },
+  "success": {
+    "title": "🎉 Proposta pubblicata!",
+    "live": "La tua proposta è online!",
+    "ipfs": "IPFS: {{cid}}...",
+    "tx": "TX:   {{hash}}...",
+    "verifyOn": "Verifica su preprod.cardanoscan.io",
+    "totalPaid": "Totale pagato: {{ada}} ADA (~{{usd}} $ USD)",
+    "configuredFor_one": "Configurata per {{voters}} votante",
+    "configuredFor_many": "Configurata per {{voters}} votanti",
+    "configuredFor_other": "Configurata per {{voters}} votanti",
+    "copyTxHash": "📋 Copia hash TX",
+    "share": "📢 Condividi"
+  },
+  "batching": {
+    "title": "Sistema di voti a lotti",
+    "body": "Voti raggruppati in lotti fino a 100 per risparmiare gas\nI lotti più piccoli vengono inviati in automatico ogni 10 min\nTutti i voti vengono registrati alla chiusura della proposta\n80% di costi in meno rispetto ai voti singoli\nVotare è completamente GRATIS per i partecipanti"
+  }
+}

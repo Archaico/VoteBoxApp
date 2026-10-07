@@ -1,0 +1,67 @@
+{
+  "header": {
+    "updatedAt": "Mis à jour : {{time}}",
+    "createButton": "+ Créer"
+  },
+  "loading": "Chargement des propositions...",
+  "errors": {
+    "cannotConnect": "Connexion au réseau Cardano impossible. Tirez vers le bas ou touchez Réessayer.",
+    "connectionError": "Erreur de connexion : tirez vers le bas pour réessayer"
+  },
+  "emptyState": {
+    "loadFailedTitle": "Impossible de charger les propositions",
+    "retry": "Réessayer",
+    "noProposalsTitle": "Aucune proposition pour l'instant",
+    "noProposalsText": "Créez la première proposition et lancez la discussion !",
+    "createFirst": "Créer la première proposition"
+  },
+  "card": {
+    "closed": "Clos",
+    "remainingDaysHours": "{{days}} j {{hours}} h restants",
+    "remainingHours": "{{hours}} h restantes",
+    "remainingMinutes": "{{minutes}} min restantes",
+    "optionCount_one": "{{count}} option",
+    "optionCount_many": "{{count}} options",
+    "optionCount_other": "{{count}} options",
+    "voteCount_one": "{{count}} vote",
+    "voteCount_many": "{{count}} votes",
+    "voteCount_other": "{{count}} votes"
+  },
+  "queue": {
+    "title": "📤 Éléments en attente",
+    "votesQueued_one": "{{count}} vote en attente",
+    "votesQueued_many": "{{count}} votes en attente",
+    "votesQueued_other": "{{count}} votes en attente",
+    "proposalsQueued_one": "{{count}} proposition en attente",
+    "proposalsQueued_many": "{{count}} propositions en attente",
+    "proposalsQueued_other": "{{count}} propositions en attente",
+    "autoSubmitNote": "Ils seront envoyés automatiquement dès que votre connexion sera stable.",
+    "oldestItem": "Élément le plus ancien : {{time}}",
+    "retryNow": "Réessayer maintenant",
+    "ok": "OK"
+  },
+  "syncDiagnostic": {
+    "title": "🔄 Diagnostic de synchro en arrière-plan",
+    "registrationHeading": "── Enregistrement ──",
+    "registered": "Enregistrée : {{time}}",
+    "never": "jamais",
+    "osStatus": "État système : {{status}}",
+    "unknown": "inconnu",
+    "lastRunHeading": "── Dernière exécution en arrière-plan ──",
+    "lastRun": "Dernière exécution : {{time}}",
+    "lastRunNever": "JAMAIS : la tâche ne s'est pas exécutée",
+    "timeAgoParenthetical": "({{ago}})",
+    "result": "Résultat : {{result}}",
+    "error": "Erreur : {{error}}",
+    "subscriptionsChecked": "Abonnements vérifiés : {{count}}",
+    "explanation": "La tâche est planifiée toutes les ~15 min. Si la « Dernière exécution » date de plus de ~30-45 min (ou indique jamais, alors que l'app est fermée depuis aussi longtemps), le système bloque très probablement la tâche en arrière-plan. Vérifiez les restrictions de batterie et d'activité en arrière-plan de VoteBoxApp dans les réglages de l'appareil.",
+    "ok": "OK",
+    "timeAgo": {
+      "never": "jamais",
+      "justNow": "à l'instant",
+      "minutes": "il y a {{minutes}} min",
+      "hoursMinutes": "il y a {{hours}} h {{minutes}} min",
+      "days": "il y a {{days}} j"
+    }
+  }
+}

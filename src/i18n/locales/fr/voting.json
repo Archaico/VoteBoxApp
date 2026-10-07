@@ -1,0 +1,80 @@
+{
+  "choices": {
+    "yes": "Oui",
+    "no": "Non",
+    "abstain": "Abstention"
+  },
+  "votingScreen": {
+    "tabs": {
+      "vote": "Voter",
+      "discussion": "Discussion",
+      "discussionWithCount": "Discussion ({{count}})"
+    },
+    "back": "← Retour",
+    "loading": "Chargement de la proposition...",
+    "unknownCreator": "Inconnu",
+    "createdBy": "Créée par :",
+    "deadline": "Date limite :",
+    "daysRemaining_one": "{{count}} jour restant",
+    "daysRemaining_many": "{{count}} jours restants",
+    "daysRemaining_other": "{{count}} jours restants",
+    "results": {
+      "title": "Résultats actuels",
+      "totalVotes_one": "{{count}} vote au total",
+      "totalVotes_many": "{{count}} votes au total",
+      "totalVotes_other": "{{count}} votes au total"
+    },
+    "alreadyVoted": {
+      "title": "✅ Vous avez déjà voté",
+      "yourVote": "Votre vote : <bold>{{choice}}</bold>",
+      "note": "Une fois envoyé, votre vote ne peut plus être modifié."
+    },
+    "closed": {
+      "title": "🔒 Le vote est clos",
+      "note": "La date limite de cette proposition est passée. Les votes ne sont plus acceptés."
+    },
+    "castVote": {
+      "title": "Votez",
+      "privacyNotice": "🔒 Votre vote est totalement anonyme et ne peut pas être relié à vous",
+      "yes": "✅ Oui",
+      "no": "❌ Non",
+      "abstain": "⚪ Abstention",
+      "submit": "Envoyer mon vote"
+    },
+    "status": {
+      "preparing": "Préparation de votre vote...",
+      "connecting": "Connexion au réseau Cardano...",
+      "submitting": "Envoi du vote à la blockchain..."
+    },
+    "toasts": {
+      "selectVoteFirst": "Choisissez d'abord votre vote",
+      "votingClosed": "Le vote est clos pour cette proposition",
+      "voteQueued": "⚠️ Vote en attente : il sera envoyé dès le retour en ligne",
+      "voteFailed": "❌ Échec du vote : {{message}}",
+      "unknownError": "Erreur inconnue"
+    }
+  },
+  "successModal": {
+    "title": "Vote envoyé",
+    "subtitle": "Enregistré sur la blockchain Cardano",
+    "proposalId": "ID de la proposition",
+    "transactionHash": "Hash de la transaction",
+    "yourVote": "Votre vote",
+    "sharePrompt": "Dites aux autres que vous avez voté 👇",
+    "done": "Terminé",
+    "copy": "⎘ Copier",
+    "copied": "✓ Copié",
+    "copyFailedTitle": "Échec de la copie",
+    "copyFailedMessage": "Copiez manuellement : {{value}}"
+  },
+  "shareButton": {
+    "moments": {
+      "invite": "Inviter à voter",
+      "voted": "Dire que j'ai voté",
+      "results": "Partager les résultats",
+      "urgency": "Partager : fin du vote proche",
+      "discovery": "Partager la proposition"
+    },
+    "shareFailedTitle": "Échec du partage"
+  }
+}

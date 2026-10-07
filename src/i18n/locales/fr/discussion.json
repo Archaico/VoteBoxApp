@@ -1,0 +1,25 @@
+{
+  "header": {
+    "title": "Discussion ({{count}})"
+  },
+  "loading": "Un instant… chargement des commentaires depuis le réseau décentralisé IPFS.",
+  "empty": {
+    "title": "Aucun commentaire pour l'instant.",
+    "subtitle": "Lancez la discussion sur cette proposition !"
+  },
+  "comment": {
+    "reply": "Répondre"
+  },
+  "replying": {
+    "label": "Réponse au commentaire...",
+    "cancel": "Annuler"
+  },
+  "input": {
+    "placeholder": "Ajouter un commentaire...",
+    "post": "Publier"
+  },
+  "toast": {
+    "savedOffline": "Commentaire enregistré : il sera synchronisé dès le retour en ligne",
+    "saveFailed": "Échec de l'enregistrement du commentaire"
+  }
+}

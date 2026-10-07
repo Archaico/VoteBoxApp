@@ -1,0 +1,57 @@
+{
+  "invite": {
+    "heading": "🗳️ PRECISAMOS DO SEU VOTO",
+    "closes_one": "⏰ A votação termina: {{date}} (falta {{count}} dia)",
+    "closes_many": "⏰ A votação termina: {{date}} (faltam {{count}} dias)",
+    "closes_other": "⏰ A votação termina: {{date}} (faltam {{count}} dias)",
+    "secured": "🔒 Protegido na blockchain Cardano",
+    "free": "✅ Votar é totalmente grátis — sem precisar de carteira",
+    "voteNow": "Vote agora no VoteBoxApp:",
+    "footer": "— Compartilhado pelo VoteBoxApp · Votação democrática grátis para todos",
+    "title": "Vote: {{title}}"
+  },
+  "voted": {
+    "heading": "✊ Acabei de votar no VoteBoxApp",
+    "daysLeft_one": "Falta {{count}} dia para votar — faça sua voz ser ouvida:",
+    "daysLeft_many": "Faltam {{count}} dias para votar — faça sua voz ser ouvida:",
+    "daysLeft_other": "Faltam {{count}} dias para votar — faça sua voz ser ouvida:",
+    "closed": "A votação foi encerrada — faça sua voz ser ouvida:",
+    "tagline": "🔒 Protegido por blockchain · 100% grátis · Sem carteira",
+    "footer": "— VoteBoxApp: votação democrática para todos",
+    "title": "Eu votei: {{title}}"
+  },
+  "results": {
+    "noResults": "Ainda não há resultados",
+    "noVotes": "Nenhum voto registrado ainda",
+    "row_one": "{{bar}} {{option}}: {{count}} voto ({{pct}}%)",
+    "row_many": "{{bar}} {{option}}: {{count}} votos ({{pct}}%)",
+    "row_other": "{{bar}} {{option}}: {{count}} votos ({{pct}}%)",
+    "heading": "📊 RESULTADO DA VOTAÇÃO",
+    "leading": "🏆 Na liderança: \"{{option}}\" com {{pct}}%",
+    "total": "Total de votos: {{count}}",
+    "verified": "🔒 Verificado na blockchain Cardano",
+    "seeFull": "Veja o resultado completo no VoteBoxApp:",
+    "footer": "— VoteBoxApp: votação democrática transparente e grátis",
+    "title": "Resultado: {{title}}"
+  },
+  "urgent": {
+    "lessThanHour": "⚡ MENOS DE 1 HORA PARA VOTAR",
+    "hours": "⚡ FALTAM {{count}} HORAS PARA VOTAR",
+    "days": "⏰ FALTAM {{count}} DIAS PARA VOTAR",
+    "votedSoFar_one": "{{count}} pessoa já votou.",
+    "votedSoFar_many": "{{count}} pessoas já votaram.",
+    "votedSoFar_other": "{{count}} pessoas já votaram.",
+    "stillCounts": "Sua voz ainda conta — vote agora:",
+    "tagline": "✅ Grátis · Sem carteira · Leva 10 segundos",
+    "footer": "— VoteBoxApp: votação democrática na blockchain",
+    "title": "Urgente: vote em \"{{title}}\""
+  },
+  "discovery": {
+    "heading": "🗳️ Confira esta proposta no VoteBoxApp",
+    "open": "🟢 A votação está ABERTA",
+    "closed": "🔴 A votação foi encerrada",
+    "freeToVote": "✅ Votar é grátis — sem carteira nem cadastro",
+    "seeResults": "📊 Veja o resultado final",
+    "footer": "— VoteBoxApp: votação livre, aberta e protegida por blockchain"
+  }
+}
