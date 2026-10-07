@@ -26,6 +26,7 @@ import { offlineQueueService, isNetworkError } from '../services/OfflineQueueSer
 import { toastService } from '../services/ToastService';
 import { QueueIndicator } from '../components/QueueIndicator';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTranslation, Trans } from 'react-i18next';
 
 interface CreateProposalScreenProps {
   onBack: () => void;
@@ -50,9 +51,9 @@ const CARDANO_WALLETS = [
   {
     id: 'eternl',
     name: 'Eternl',
-    badge: 'RECOMMENDED',
+    badgeKey: 'wallets.eternl.badge',
     badgeColor: '#22c55e',
-    description: 'Most powerful Cardano wallet. WalletConnect support.',
+    descriptionKey: 'wallets.eternl.description',
     emoji: '🟢',
     playStoreUrl: 'https://play.google.com/store/apps/details?id=io.ccvault.v1.main',
     accentColor: '#1d4ed8',
@@ -61,9 +62,9 @@ const CARDANO_WALLETS = [
   {
     id: 'vespr',
     name: 'Vespr',
-    badge: 'BEST FOR BEGINNERS',
+    badgeKey: 'wallets.vespr.badge',
     badgeColor: '#8b5cf6',
-    description: 'Mobile-native, fast, and easy to set up.',
+    descriptionKey: 'wallets.vespr.description',
     emoji: '🟣',
     playStoreUrl: 'https://play.google.com/store/apps/details?id=art.nft_craze.gallery.main',
     accentColor: '#7c3aed',
@@ -72,9 +73,9 @@ const CARDANO_WALLETS = [
   {
     id: 'lace',
     name: 'Lace',
-    badge: 'OFFICIAL IOG',
+    badgeKey: 'wallets.lace.badge',
     badgeColor: '#0891b2',
-    description: "Built by Cardano's founders. All-in-one Web3 hub.",
+    descriptionKey: 'wallets.lace.description',
     emoji: '🔵',
     playStoreUrl: 'https://play.google.com/store/apps/details?id=io.lace.mobilewallet',
     accentColor: '#0e7490',
@@ -89,19 +90,21 @@ type WalletFlowState = 'select' | 'no-wallet-guide' | 'manual-entry' | 'connecte
 // would make walletFlow === 'connected' ambiguous.
 type PaymentFlowState = 'not-started' | 'awaiting-payment' | 'verifying' | 'verify-failed';
 
-const VERIFY_FAILURE_MESSAGES: Record<string, string> = {
-  malformed_hash: 'That doesn\'t look like a valid transaction hash. It should be 64 hex characters — check what you pasted.',
-  not_found_or_pending: 'Not found on-chain yet. If you just sent it, wait 30-60 seconds for confirmation and try again.',
-  wrong_recipient: 'This transaction doesn\'t pay the Foundation wallet address shown above.',
-  insufficient_amount: 'The amount sent is less than required — see the amount above.',
-  already_used: 'This transaction has already been used for another proposal.',
-  network_error: 'Could not reach the network to verify — check your connection and try again.',
+// Failure reasons from treasuryService.verifyPaymentTransaction → create.json keys.
+const VERIFY_FAILURE_KEYS: Record<string, string> = {
+  malformed_hash: 'payment.verifyErrors.malformed_hash',
+  not_found_or_pending: 'payment.verifyErrors.not_found_or_pending',
+  wrong_recipient: 'payment.verifyErrors.wrong_recipient',
+  insufficient_amount: 'payment.verifyErrors.insufficient_amount',
+  already_used: 'payment.verifyErrors.already_used',
+  network_error: 'payment.verifyErrors.network_error',
 };
 
 export default function CreateProposalScreen({
   onBack,
   onProposalCreated,
 }: CreateProposalScreenProps) {
+  const { t } = useTranslation('create');
   const insets = useSafeAreaInsets();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -139,17 +142,17 @@ export default function CreateProposalScreen({
   const handleWalletSelect = async (wallet: typeof CARDANO_WALLETS[0]) => {
     setSelectedWallet(wallet.id);
     Alert.alert(
-      `Open ${wallet.name}?`,
-      `This will open the ${wallet.name} wallet app (or take you to download it).\n\nAfter connecting, copy your Cardano address (starts with addr_test1...) and come back here to paste it.`,
+      t('walletSelect.openAlertTitle', { wallet: wallet.name }),
+      t('walletSelect.openAlertMessage', { wallet: wallet.name }),
       [
-        { text: 'Cancel', style: 'cancel', onPress: () => setSelectedWallet(null) },
+        { text: t('buttons.cancel'), style: 'cancel', onPress: () => setSelectedWallet(null) },
         {
-          text: `Open ${wallet.name}`,
+          text: t('walletSelect.openAlertButton', { wallet: wallet.name }),
           onPress: async () => {
             try {
               await Linking.openURL(wallet.playStoreUrl);
             } catch {
-              Alert.alert('Could not open link', 'Please search for the wallet in the Play Store manually.');
+              Alert.alert(t('walletSelect.linkErrorTitle'), t('walletSelect.linkErrorMessage'));
             }
             // After returning, show manual entry to paste their address
             setShowManualAfterWallet(true);
@@ -168,8 +171,8 @@ export default function CreateProposalScreen({
     const hasValidPrefix = cleaned.startsWith('addr1') || cleaned.startsWith('addr_test1');
     if (!hasValidPrefix || cleaned.length < 50) {
       Alert.alert(
-        'Invalid Address',
-        'Please enter a valid Cardano address. It should start with "addr_test1" (testnet) and be at least 50 characters long.'
+        t('walletManual.invalidTitle'),
+        t('walletManual.invalidMessage')
       );
       return;
     }
@@ -179,12 +182,12 @@ export default function CreateProposalScreen({
 
   const handleDisconnectWallet = () => {
     Alert.alert(
-      'Remove Wallet',
-      'Are you sure you want to remove your wallet address?',
+      t('walletConnected.removeAlertTitle'),
+      t('walletConnected.removeAlertMessage'),
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: t('buttons.cancel'), style: 'cancel' },
         {
-          text: 'Remove',
+          text: t('buttons.remove'),
           style: 'destructive',
           onPress: () => {
             setWalletAddress('');
@@ -207,13 +210,13 @@ export default function CreateProposalScreen({
 
   const handleAddAttachment = async () => {
     if (attachments.length >= MAX_ATTACHMENTS) {
-      Alert.alert('Limit Reached', `You can attach up to ${MAX_ATTACHMENTS} images per proposal.`);
+      Alert.alert(t('attachments.limitTitle'), t('attachments.limitMessage', { max: MAX_ATTACHMENTS }));
       return;
     }
 
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
-      Alert.alert('Permission Needed', 'Allow photo library access to attach an image.');
+      Alert.alert(t('attachments.permissionTitle'), t('attachments.permissionMessage'));
       return;
     }
 
@@ -238,7 +241,7 @@ export default function CreateProposalScreen({
 
       setAttachments(prev => [...prev, manipulated.uri]);
     } catch (error) {
-      Alert.alert('Could not add image', error instanceof Error ? error.message : 'Unknown error');
+      Alert.alert(t('attachments.errorTitle'), error instanceof Error ? error.message : t('publish.unknownError'));
     } finally {
       setIsPickingAttachment(false);
     }
@@ -265,11 +268,11 @@ export default function CreateProposalScreen({
 
   const handleEstimateFee = () => {
     if (!title.trim() || !description.trim() || !walletAddress.trim()) {
-      Alert.alert('Missing Information', 'Please fill in all required fields first, including your wallet address');
+      Alert.alert(t('validation.missingInfoTitle'), t('validation.missingInfoMessage'));
       return;
     }
     if (expectedVoters < 2) {
-      Alert.alert('Invalid Voter Count', 'Minimum expected voters is 2');
+      Alert.alert(t('validation.invalidVotersTitle'), t('validation.minVotersMessage'));
       return;
     }
 
@@ -277,44 +280,43 @@ export default function CreateProposalScreen({
     setFeeEstimate(fees);
 
     const batchCount = Math.ceil(expectedVoters / 100);
-    const batchWord = batchCount > 1 ? 'batches' : 'batch';
     const message = [
-      'Expected voters: ' + expectedVoters.toLocaleString(),
+      t('fees.alertExpectedVoters', { voters: expectedVoters.toLocaleString() }),
       '',
-      'Gas costs (' + batchCount + ' ' + batchWord + '): ' + fees.gasCostADA + ' ADA',
-      'Foundation fee: ' + fees.foundationFeeADA + ' ADA',
+      t('fees.alertGasCosts', { count: batchCount, amount: fees.gasCostADA }),
+      t('fees.alertFoundationFee', { amount: fees.foundationFeeADA }),
       '---',
-      'TOTAL: ' + fees.grandTotalADA + ' ADA (~$' + fees.grandTotalUSD + ' USD)',
-      fees.isMinimumApplied ? '(platform minimum of 1.2 ADA applied)' : '',
+      t('fees.alertTotal', { ada: fees.grandTotalADA, usd: fees.grandTotalUSD }),
+      fees.isMinimumApplied ? t('fees.alertMinimumApplied') : '',
       '',
-      'Foundation fee supports VoteBoxApp open-source development.',
-      'Voting is FREE for all participants!',
+      t('fees.alertFoundationInfo'),
+      t('fees.votingFree'),
     ].filter(Boolean).join('\n');
 
-    Alert.alert('Complete Fee Breakdown', message, [{ text: 'OK' }]);
+    Alert.alert(t('fees.alertTitle'), message, [{ text: t('buttons.ok') }]);
   };
 
   // Step 1: validate the form, freeze a fee quote, reveal the payment card.
   // No network calls yet.
   const handleBeginPublish = () => {
     if (!title.trim()) {
-      Alert.alert('Missing Title', 'Please enter a proposal title');
+      Alert.alert(t('validation.missingTitleTitle'), t('validation.missingTitleMessage'));
       return;
     }
     if (!description.trim()) {
-      Alert.alert('Missing Description', 'Please enter a proposal description');
+      Alert.alert(t('validation.missingDescriptionTitle'), t('validation.missingDescriptionMessage'));
       return;
     }
     if (!duration || parseInt(duration) < 1) {
-      Alert.alert('Invalid Duration', 'Duration must be at least 1 day');
+      Alert.alert(t('validation.invalidDurationTitle'), t('validation.invalidDurationMessage'));
       return;
     }
     if (!walletAddress.trim()) {
-      Alert.alert('Wallet Required', 'Please connect your Cardano wallet to pay the creation fee');
+      Alert.alert(t('validation.walletRequiredTitle'), t('validation.walletRequiredMessage'));
       return;
     }
     if (expectedVoters < 2) {
-      Alert.alert('Invalid Voter Count', 'Expected voters must be at least 2');
+      Alert.alert(t('validation.invalidVotersTitle'), t('validation.votersAtLeastMessage'));
       return;
     }
 
@@ -334,7 +336,8 @@ export default function CreateProposalScreen({
     const result = await treasuryService.verifyPaymentTransaction(paymentTxHashInput, lockedFees.grandTotal);
     if (!result.ok) {
       setPaymentFlow('verify-failed');
-      setPaymentVerifyError(VERIFY_FAILURE_MESSAGES[result.reason ?? 'network_error'] ?? 'Verification failed — please try again.');
+      const failureKey = VERIFY_FAILURE_KEYS[result.reason ?? 'network_error'];
+      setPaymentVerifyError(failureKey ? t(failureKey) : t('payment.verifyErrors.generic'));
       return;
     }
 
@@ -343,11 +346,14 @@ export default function CreateProposalScreen({
     if (result.paidLovelace! > lockedFees.grandTotal * 10) {
       const proceed = await new Promise<boolean>(resolve => {
         Alert.alert(
-          'Amount much higher than required',
-          `You sent ${(result.paidLovelace! / 1_000_000).toFixed(4)} ADA, but only ${lockedFees.grandTotalADA} ADA was required. This can't be refunded — continue anyway?`,
+          t('payment.overpayTitle'),
+          t('payment.overpayMessage', {
+            sent: (result.paidLovelace! / 1_000_000).toFixed(4),
+            required: lockedFees.grandTotalADA,
+          }),
           [
-            { text: 'Cancel', style: 'cancel', onPress: () => resolve(false) },
-            { text: 'Continue', onPress: () => resolve(true) },
+            { text: t('buttons.cancel'), style: 'cancel', onPress: () => resolve(false) },
+            { text: t('buttons.continue'), onPress: () => resolve(true) },
           ]
         );
       });
@@ -363,13 +369,13 @@ export default function CreateProposalScreen({
   // Step 3: the actual publish, now given an already-verified payment.
   const executePublish = async (paymentTxHash: string, requiredLovelace: number) => {
     setIsSubmitting(true);
-    setUploadStatus('Initializing blockchain service...');
+    setUploadStatus(t('publish.statusInitializing'));
 
     try {
-      setUploadStatus('Connecting to Cardano network...');
+      setUploadStatus(t('publish.statusConnecting'));
       await blockchainService.initialize();
 
-      setUploadStatus('Uploading to IPFS...');
+      setUploadStatus(t('publish.statusUploading'));
       const result = await blockchainService.createProposal({
         title: title.trim(),
         description: description.trim(),
@@ -381,10 +387,10 @@ export default function CreateProposalScreen({
         requiredLovelace,
       });
 
-      setUploadStatus('Recording on blockchain...');
+      setUploadStatus(t('publish.statusRecording'));
 
       if (!result || !result.cid || !result.metadataTxHash) {
-        throw new Error('Incomplete response from blockchain service');
+        throw new Error(t('publish.incompleteResponse'));
       }
 
       const proposalDeadline = Date.now() + (parseInt(duration) * 24 * 60 * 60 * 1000);
@@ -401,30 +407,30 @@ export default function CreateProposalScreen({
       setPaymentTxHashInput('');
 
       const successMessage = [
-        'Your proposal is now live!',
+        t('success.live'),
         '',
-        'IPFS: ' + result.cid.slice(0, 24) + '...',
-        'TX:   ' + result.metadataTxHash.slice(0, 24) + '...',
+        t('success.ipfs', { cid: result.cid.slice(0, 24) }),
+        t('success.tx', { hash: result.metadataTxHash.slice(0, 24) }),
         '',
-        'Verify on preprod.cardanoscan.io',
+        t('success.verifyOn'),
         '',
-        'Total paid: ' + fees.grandTotalADA + ' ADA (~$' + fees.grandTotalUSD + ' USD)',
+        t('success.totalPaid', { ada: fees.grandTotalADA, usd: fees.grandTotalUSD }),
         '',
-        'Configured for ' + expectedVoters.toLocaleString() + ' voters',
+        t('success.configuredFor', { count: expectedVoters, voters: expectedVoters.toLocaleString() }),
         '',
-        'Voting is FREE for all participants!',
+        t('fees.votingFree'),
       ].join('\n');
 
-      Alert.alert('🎉 Proposal Published!', successMessage, [
+      Alert.alert(t('success.title'), successMessage, [
         {
-          text: '📋 Copy TX Hash',
+          text: t('success.copyTxHash'),
           onPress: async () => {
             await Clipboard.setStringAsync(result.metadataTxHash);
             onProposalCreated();
           },
         },
         {
-          text: '📢 Share',
+          text: t('success.share'),
           onPress: () => {
             shareService.shareProposalInvite({
               id: result.cid,
@@ -437,7 +443,7 @@ export default function CreateProposalScreen({
           },
         },
         {
-          text: 'Done',
+          text: t('buttons.done'),
           onPress: onProposalCreated,
           style: 'cancel',
         },
@@ -457,7 +463,7 @@ export default function CreateProposalScreen({
           paymentTxHash,
           requiredLovelace,
         });
-        toastService.warning('⏳ No connection — proposal queued, will publish when back online');
+        toastService.warning(t('publish.queuedToast'));
         setPaymentFlow('not-started');
         setLockedFees(null);
         return;
@@ -467,13 +473,13 @@ export default function CreateProposalScreen({
       // surface here via BlockchainService's defensive re-verify — don't queue
       // those, retrying later won't fix a bad payment. Send the user back to
       // the payment step so they can paste a different hash.
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorMessage = error instanceof Error ? error.message : t('publish.unknownError');
       setPaymentFlow('verify-failed');
       setPaymentVerifyError(errorMessage);
       Alert.alert(
-        'Publication Failed',
-        errorMessage + '\n\nCheck console for detailed logs.',
-        [{ text: 'OK' }]
+        t('publish.failedTitle'),
+        t('publish.failedMessage', { error: errorMessage }),
+        [{ text: t('buttons.ok') }]
       );
     }
   };
@@ -492,13 +498,11 @@ export default function CreateProposalScreen({
 
     return (
       <View style={styles.paymentBox}>
-        <Text style={styles.paymentTitle}>Send Payment to Publish</Text>
-        <Text style={styles.paymentInstructions}>
-          Send exactly this amount from your own wallet app, then paste the transaction hash below.
-        </Text>
+        <Text style={styles.paymentTitle}>{t('payment.title')}</Text>
+        <Text style={styles.paymentInstructions}>{t('payment.instructions')}</Text>
 
         <View style={styles.paymentField}>
-          <Text style={styles.paymentFieldLabel}>Send to</Text>
+          <Text style={styles.paymentFieldLabel}>{t('payment.sendTo')}</Text>
           <View style={styles.paymentCopyRow}>
             <Text style={styles.paymentFieldValue} numberOfLines={1}>
               {truncateAddress(TREASURY_CONFIG.FOUNDATION_WALLET)}
@@ -507,28 +511,28 @@ export default function CreateProposalScreen({
               style={styles.paymentCopyBtn}
               onPress={() => Clipboard.setStringAsync(TREASURY_CONFIG.FOUNDATION_WALLET)}
             >
-              <Text style={styles.paymentCopyBtnText}>Copy</Text>
+              <Text style={styles.paymentCopyBtnText}>{t('payment.copy')}</Text>
             </TouchableOpacity>
           </View>
         </View>
 
         <View style={styles.paymentField}>
-          <Text style={styles.paymentFieldLabel}>Amount</Text>
+          <Text style={styles.paymentFieldLabel}>{t('payment.amount')}</Text>
           <View style={styles.paymentCopyRow}>
             <Text style={styles.paymentFieldValue}>{lockedFees.grandTotalADA} ADA</Text>
             <TouchableOpacity
               style={styles.paymentCopyBtn}
               onPress={() => Clipboard.setStringAsync(lockedFees.grandTotalADA)}
             >
-              <Text style={styles.paymentCopyBtnText}>Copy</Text>
+              <Text style={styles.paymentCopyBtnText}>{t('payment.copy')}</Text>
             </TouchableOpacity>
           </View>
         </View>
 
-        <Text style={styles.label}>Transaction Hash</Text>
+        <Text style={styles.label}>{t('payment.txHashLabel')}</Text>
         <TextInput
           style={styles.walletManualInput}
-          placeholder="Paste the tx hash from your wallet app"
+          placeholder={t('payment.txHashPlaceholder')}
           placeholderTextColor="#9ca3af"
           value={paymentTxHashInput}
           onChangeText={text => { setPaymentTxHashInput(text); setPaymentVerifyError(null); }}
@@ -553,15 +557,15 @@ export default function CreateProposalScreen({
           {paymentFlow === 'verifying' ? (
             <>
               <ActivityIndicator size="small" color="white" />
-              <Text style={styles.paymentVerifyBtnText}>Verifying payment...</Text>
+              <Text style={styles.paymentVerifyBtnText}>{t('payment.verifying')}</Text>
             </>
           ) : (
-            <Text style={styles.paymentVerifyBtnText}>Verify & Publish</Text>
+            <Text style={styles.paymentVerifyBtnText}>{t('payment.verifyButton')}</Text>
           )}
         </TouchableOpacity>
 
         <TouchableOpacity onPress={handleEditProposal} disabled={paymentFlow === 'verifying' || isSubmitting}>
-          <Text style={styles.paymentEditLink}>← Edit Proposal</Text>
+          <Text style={styles.paymentEditLink}>{t('payment.editProposal')}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -576,13 +580,13 @@ export default function CreateProposalScreen({
         <View style={styles.walletConnectedBox}>
           <View style={styles.walletConnectedHeader}>
             <View style={styles.walletConnectedDot} />
-            <Text style={styles.walletConnectedLabel}>Wallet Connected</Text>
+            <Text style={styles.walletConnectedLabel}>{t('walletConnected.label')}</Text>
           </View>
           <Text style={styles.walletConnectedAddress}>
             {truncateAddress(walletAddress)}
           </Text>
           <TouchableOpacity onPress={handleDisconnectWallet} style={styles.walletDisconnectBtn}>
-            <Text style={styles.walletDisconnectText}>Remove & Change Wallet</Text>
+            <Text style={styles.walletDisconnectText}>{t('walletConnected.removeButton')}</Text>
           </TouchableOpacity>
         </View>
       );
@@ -594,12 +598,10 @@ export default function CreateProposalScreen({
         <View style={styles.walletManualContainer}>
           {showManualAfterWallet && (
             <View style={styles.walletReturnHint}>
-              <Text style={styles.walletReturnHintText}>
-                👋 Welcome back! Open your wallet app, copy your address (addr_test1...), and paste it below.
-              </Text>
+              <Text style={styles.walletReturnHintText}>{t('walletManual.welcomeBack')}</Text>
             </View>
           )}
-          <Text style={styles.label}>Your Cardano Address</Text>
+          <Text style={styles.label}>{t('walletManual.addressLabel')}</Text>
           <TextInput
             style={styles.walletManualInput}
             placeholder="addr_test1..."
@@ -611,9 +613,7 @@ export default function CreateProposalScreen({
             autoFocus={true}
             multiline={false}
           />
-          <Text style={styles.helperText}>
-            Starts with "addr_test1" · Found in your wallet under "Receive" or "Address"
-          </Text>
+          <Text style={styles.helperText}>{t('walletManual.addressHelper')}</Text>
           <View style={styles.walletManualButtons}>
             <TouchableOpacity
               style={styles.walletManualBack}
@@ -624,7 +624,7 @@ export default function CreateProposalScreen({
                 setSelectedWallet(null);
               }}
             >
-              <Text style={styles.walletManualBackText}>← Back</Text>
+              <Text style={styles.walletManualBackText}>{t('walletManual.back')}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[
@@ -634,7 +634,7 @@ export default function CreateProposalScreen({
               onPress={handleConfirmManualAddress}
               disabled={!manualAddressInput.trim()}
             >
-              <Text style={styles.walletManualConfirmText}>Confirm Address</Text>
+              <Text style={styles.walletManualConfirmText}>{t('walletManual.confirm')}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -645,41 +645,33 @@ export default function CreateProposalScreen({
     if (walletFlow === 'no-wallet-guide') {
       return (
         <View style={styles.noWalletGuide}>
-          <Text style={styles.noWalletGuideTitle}>
-            Getting a Cardano Wallet
-          </Text>
-          <Text style={styles.noWalletGuideBody}>
-            A Cardano wallet lets you hold ADA (Cardano's currency) and pay
-            the small fee to publish a proposal. Voters never need one — only
-            proposal creators do.
-          </Text>
+          <Text style={styles.noWalletGuideTitle}>{t('noWallet.title')}</Text>
+          <Text style={styles.noWalletGuideBody}>{t('noWallet.body')}</Text>
 
           <View style={styles.noWalletStep}>
             <View style={styles.noWalletStepNum}><Text style={styles.noWalletStepNumText}>1</Text></View>
             <Text style={styles.noWalletStepText}>
-              Download <Text style={{ fontWeight: '700' }}>Vespr</Text> — it's the easiest Cardano wallet for beginners, built for mobile.
+              <Trans
+                t={t}
+                i18nKey="noWallet.step1"
+                components={{ bold: <Text style={{ fontWeight: '700' }} /> }}
+              />
             </Text>
           </View>
 
           <View style={styles.noWalletStep}>
             <View style={styles.noWalletStepNum}><Text style={styles.noWalletStepNumText}>2</Text></View>
-            <Text style={styles.noWalletStepText}>
-              Create your wallet and safely write down your recovery phrase.
-            </Text>
+            <Text style={styles.noWalletStepText}>{t('noWallet.step2')}</Text>
           </View>
 
           <View style={styles.noWalletStep}>
             <View style={styles.noWalletStepNum}><Text style={styles.noWalletStepNumText}>3</Text></View>
-            <Text style={styles.noWalletStepText}>
-              Add some ADA — a few dollars worth is enough to publish proposals.
-            </Text>
+            <Text style={styles.noWalletStepText}>{t('noWallet.step3')}</Text>
           </View>
 
           <View style={styles.noWalletStep}>
             <View style={styles.noWalletStepNum}><Text style={styles.noWalletStepNumText}>4</Text></View>
-            <Text style={styles.noWalletStepText}>
-              Come back here, tap Vespr, and paste your address.
-            </Text>
+            <Text style={styles.noWalletStepText}>{t('noWallet.step4')}</Text>
           </View>
 
           <TouchableOpacity
@@ -688,18 +680,18 @@ export default function CreateProposalScreen({
               try {
                 await Linking.openURL('https://play.google.com/store/apps/details?id=art.nft_craze.gallery.main');
               } catch {
-                Alert.alert('Could not open link', 'Search for "Vespr Wallet" in the Play Store.');
+                Alert.alert(t('walletSelect.linkErrorTitle'), t('noWallet.linkErrorMessage'));
               }
             }}
           >
-            <Text style={styles.noWalletDownloadText}>⬇️  Download Vespr Wallet</Text>
+            <Text style={styles.noWalletDownloadText}>{t('noWallet.downloadButton')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.noWalletBack}
             onPress={() => setWalletFlow('select')}
           >
-            <Text style={styles.noWalletBackText}>← Back to wallet options</Text>
+            <Text style={styles.noWalletBackText}>{t('noWallet.back')}</Text>
           </TouchableOpacity>
         </View>
       );
@@ -708,10 +700,8 @@ export default function CreateProposalScreen({
     // STATE: Select wallet (default)
     return (
       <View>
-        <Text style={styles.walletSectionTitle}>Connect Your Wallet</Text>
-        <Text style={styles.walletSectionSubtitle}>
-          Required to pay the proposal creation fee. Voters never need a wallet.
-        </Text>
+        <Text style={styles.walletSectionTitle}>{t('walletSelect.title')}</Text>
+        <Text style={styles.walletSectionSubtitle}>{t('walletSelect.subtitle')}</Text>
 
         {/* Wallet Options */}
         {CARDANO_WALLETS.map((wallet) => (
@@ -730,10 +720,10 @@ export default function CreateProposalScreen({
                 <View style={styles.walletOptionNameRow}>
                   <Text style={styles.walletOptionName}>{wallet.name}</Text>
                   <View style={[styles.walletBadge, { backgroundColor: wallet.badgeColor }]}>
-                    <Text style={styles.walletBadgeText}>{wallet.badge}</Text>
+                    <Text style={styles.walletBadgeText}>{t(wallet.badgeKey)}</Text>
                   </View>
                 </View>
-                <Text style={styles.walletOptionDesc}>{wallet.description}</Text>
+                <Text style={styles.walletOptionDesc}>{t(wallet.descriptionKey)}</Text>
               </View>
             </View>
             <Text style={[styles.walletOptionArrow, { color: wallet.accentColor }]}>›</Text>
@@ -743,7 +733,7 @@ export default function CreateProposalScreen({
         {/* Divider */}
         <View style={styles.walletDivider}>
           <View style={styles.walletDividerLine} />
-          <Text style={styles.walletDividerText}>or</Text>
+          <Text style={styles.walletDividerText}>{t('walletSelect.or')}</Text>
           <View style={styles.walletDividerLine} />
         </View>
 
@@ -755,21 +745,19 @@ export default function CreateProposalScreen({
             setWalletFlow('manual-entry');
           }}
         >
-          <Text style={styles.walletSecondaryText}>📋  Enter address manually</Text>
+          <Text style={styles.walletSecondaryText}>{t('walletSelect.enterManually')}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={[styles.walletSecondaryBtn, { marginTop: 8 }]}
           onPress={() => setWalletFlow('no-wallet-guide')}
         >
-          <Text style={styles.walletSecondaryText}>❓  I don't have a wallet yet</Text>
+          <Text style={styles.walletSecondaryText}>{t('walletSelect.noWallet')}</Text>
         </TouchableOpacity>
 
         {/* Future WalletConnect note */}
         <View style={styles.walletFutureNote}>
-          <Text style={styles.walletFutureText}>
-            🔗 WalletConnect support coming soon — one-tap connection across 600+ wallets
-          </Text>
+          <Text style={styles.walletFutureText}>{t('walletSelect.walletConnectSoon')}</Text>
         </View>
       </View>
     );
@@ -784,17 +772,15 @@ export default function CreateProposalScreen({
     >
       <View style={[styles.header, { paddingTop: insets.top + 12 }]}>
         <TouchableOpacity onPress={onBack} style={styles.backButton} disabled={isSubmitting}>
-          <Text style={styles.backText}>Back</Text>
+          <Text style={styles.backText}>{t('header.back')}</Text>
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Create Proposal</Text>
+        <Text style={styles.headerTitle}>{t('header.title')}</Text>
         <QueueIndicator />
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.infoBox}>
-          <Text style={styles.infoText}>
-            Cardano secured · 80% gas savings · Free for voters
-          </Text>
+          <Text style={styles.infoText}>{t('infoBanner')}</Text>
         </View>
 
         {isSubmitting && (
@@ -813,25 +799,25 @@ export default function CreateProposalScreen({
 
           {/* ── PROPOSAL TITLE ── */}
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>Proposal Title *</Text>
+            <Text style={styles.label}>{t('form.titleLabel')}</Text>
             <TextInput
               style={styles.input}
-              placeholder="Enter a clear, concise title"
+              placeholder={t('form.titlePlaceholder')}
               placeholderTextColor="#9ca3af"
               value={title}
               onChangeText={setTitle}
               maxLength={100}
               editable={!isSubmitting}
             />
-            <Text style={styles.helperText}>{title.length}/100 characters</Text>
+            <Text style={styles.helperText}>{t('form.characterCount', { current: title.length, max: 100 })}</Text>
           </View>
 
           {/* ── DESCRIPTION ── */}
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>Description *</Text>
+            <Text style={styles.label}>{t('form.descriptionLabel')}</Text>
             <TextInput
               style={[styles.input, styles.textArea]}
-              placeholder="Explain your proposal in detail..."
+              placeholder={t('form.descriptionPlaceholder')}
               placeholderTextColor="#9ca3af"
               value={description}
               onChangeText={setDescription}
@@ -841,14 +827,14 @@ export default function CreateProposalScreen({
               maxLength={1000}
               editable={!isSubmitting}
             />
-            <Text style={styles.helperText}>{description.length}/1000 characters</Text>
+            <Text style={styles.helperText}>{t('form.characterCount', { current: description.length, max: 1000 })}</Text>
           </View>
 
           {/* ── ATTACHMENTS ── */}
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>Attachments (optional)</Text>
+            <Text style={styles.label}>{t('attachments.label')}</Text>
             <Text style={styles.helperText}>
-              Up to {MAX_ATTACHMENTS} images to accompany your proposal
+              {t('attachments.helper', { max: MAX_ATTACHMENTS })}
             </Text>
             <View style={styles.attachmentRow}>
               {attachments.map((uri) => (
@@ -872,7 +858,7 @@ export default function CreateProposalScreen({
                   {isPickingAttachment ? (
                     <ActivityIndicator size="small" color="#22c55e" />
                   ) : (
-                    <Text style={styles.attachmentAddText}>+{'\n'}Photo</Text>
+                    <Text style={styles.attachmentAddText}>{t('attachments.addPhoto')}</Text>
                   )}
                 </TouchableOpacity>
               )}
@@ -881,7 +867,7 @@ export default function CreateProposalScreen({
 
           {/* ── DURATION ── */}
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>Voting Duration (days) *</Text>
+            <Text style={styles.label}>{t('form.durationLabel')}</Text>
             <TextInput
               style={styles.input}
               placeholder="7"
@@ -892,14 +878,14 @@ export default function CreateProposalScreen({
               maxLength={3}
               editable={!isSubmitting && paymentFlow === 'not-started'}
             />
-            <Text style={styles.helperText}>Recommended: 7–14 days</Text>
+            <Text style={styles.helperText}>{t('form.durationHelper')}</Text>
           </View>
 
           {/* ── EXPECTED VOTERS ── */}
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>Expected Voters *</Text>
+            <Text style={styles.label}>{t('form.votersLabel')}</Text>
             <Text style={[styles.helperText, { marginBottom: 12 }]}>
-              Estimate participant count (minimum 2)
+              {t('form.votersHelper')}
             </Text>
             <View style={styles.presetsGrid}>
               {VOTER_PRESETS.map((preset) => (
@@ -925,7 +911,7 @@ export default function CreateProposalScreen({
             </View>
             <TextInput
               style={[styles.input, { marginTop: 12 }]}
-              placeholder="Or enter custom amount (min 2)"
+              placeholder={t('form.customVotersPlaceholder')}
               placeholderTextColor="#9ca3af"
               value={customVoters}
               onChangeText={handleCustomVotersChange}
@@ -933,7 +919,7 @@ export default function CreateProposalScreen({
               editable={!isSubmitting && paymentFlow === 'not-started'}
             />
             <Text style={styles.helperText}>
-              Selected: {expectedVoters.toLocaleString()} voters
+              {t('form.selectedVoters', { count: expectedVoters, voters: expectedVoters.toLocaleString() })}
             </Text>
           </View>
 
@@ -943,13 +929,13 @@ export default function CreateProposalScreen({
             onPress={handleEstimateFee}
             disabled={isSubmitting || paymentFlow !== 'not-started'}
           >
-            <Text style={styles.estimateButtonText}>Calculate Total Cost</Text>
+            <Text style={styles.estimateButtonText}>{t('fees.calculateButton')}</Text>
           </TouchableOpacity>
 
           {/* ── FEE BREAKDOWN ── */}
           {feeEstimate && (
             <View style={styles.feeBox}>
-              <Text style={styles.feeTitle}>Total Cost Breakdown</Text>
+              <Text style={styles.feeTitle}>{t('fees.breakdownTitle')}</Text>
               <Text style={styles.feeAmount}>
                 {feeEstimate.grandTotalADA} ADA
               </Text>
@@ -958,31 +944,29 @@ export default function CreateProposalScreen({
               </Text>
               <View style={styles.feeBreakdownContainer}>
                 <View style={styles.feeBreakdownRow}>
-                  <Text style={styles.feeBreakdownLabel}>Gas costs:</Text>
+                  <Text style={styles.feeBreakdownLabel}>{t('fees.gasCosts')}</Text>
                   <Text style={styles.feeBreakdownValue}>
                     {feeEstimate.gasCostADA} ADA
                   </Text>
                 </View>
                 <View style={[styles.feeBreakdownRow, { paddingTop: 8, borderTopWidth: 1, borderTopColor: '#fde047' }]}>
-                  <Text style={styles.feeBreakdownLabel}>Foundation fee:</Text>
+                  <Text style={styles.feeBreakdownLabel}>{t('fees.foundationFee')}</Text>
                   <Text style={styles.feeBreakdownValue}>
                     {feeEstimate.foundationFeeADA} ADA
                   </Text>
                 </View>
                 <View style={[styles.feeBreakdownRow, { marginTop: 8, paddingTop: 8, borderTopWidth: 2, borderTopColor: '#fbbf24' }]}>
-                  <Text style={[styles.feeBreakdownLabel, { fontWeight: 'bold' }]}>Total:</Text>
+                  <Text style={[styles.feeBreakdownLabel, { fontWeight: 'bold' }]}>{t('fees.total')}</Text>
                   <Text style={[styles.feeBreakdownValue, { fontWeight: 'bold', fontSize: 14 }]}>
                     {feeEstimate.grandTotalADA} ADA
                   </Text>
                 </View>
               </View>
               {feeEstimate.isMinimumApplied && (
-                <Text style={styles.feeMinimumNote}>Platform minimum of 1.2 ADA applied</Text>
+                <Text style={styles.feeMinimumNote}>{t('fees.minimumApplied')}</Text>
               )}
               <View style={styles.foundationInfoBox}>
-                <Text style={styles.foundationInfoText}>
-                  Foundation fee supports VoteBoxApp open-source development
-                </Text>
+                <Text style={styles.foundationInfoText}>{t('fees.foundationInfo')}</Text>
               </View>
             </View>
           )}
@@ -992,14 +976,8 @@ export default function CreateProposalScreen({
 
           {/* ── BATCH INFO ── */}
           <View style={styles.optimizationBox}>
-            <Text style={styles.optimizationTitle}>Vote Batching System</Text>
-            <Text style={styles.optimizationText}>
-              Votes batched up to 100 for gas optimization{'\n'}
-              Smaller batches auto-submit every 10 min{'\n'}
-              All votes recorded when proposal ends{'\n'}
-              80% cost reduction vs individual votes{'\n'}
-              Voting is completely FREE for participants
-            </Text>
+            <Text style={styles.optimizationTitle}>{t('batching.title')}</Text>
+            <Text style={styles.optimizationText}>{t('batching.body')}</Text>
           </View>
         </View>
       </ScrollView>
@@ -1016,7 +994,7 @@ export default function CreateProposalScreen({
             disabled={isSubmitting || walletFlow !== 'connected'}
           >
             <Text style={styles.publishButtonText}>
-              {walletFlow !== 'connected' ? 'Connect Wallet to Publish' : 'Continue to Payment'}
+              {walletFlow !== 'connected' ? t('publish.connectWalletButton') : t('publish.continueButton')}
             </Text>
           </TouchableOpacity>
         </View>

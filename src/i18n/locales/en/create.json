@@ -1,1 +1,176 @@
-{}
+{
+  "header": {
+    "back": "Back",
+    "title": "Create Proposal"
+  },
+  "infoBanner": "Cardano secured · 80% gas savings · Free for voters",
+  "buttons": {
+    "cancel": "Cancel",
+    "ok": "OK",
+    "continue": "Continue",
+    "remove": "Remove",
+    "done": "Done"
+  },
+  "wallets": {
+    "eternl": {
+      "badge": "RECOMMENDED",
+      "description": "Most powerful Cardano wallet. WalletConnect support."
+    },
+    "vespr": {
+      "badge": "BEST FOR BEGINNERS",
+      "description": "Mobile-native, fast, and easy to set up."
+    },
+    "lace": {
+      "badge": "OFFICIAL IOG",
+      "description": "Built by Cardano's founders. All-in-one Web3 hub."
+    }
+  },
+  "walletSelect": {
+    "title": "Connect Your Wallet",
+    "subtitle": "Required to pay the proposal creation fee. Voters never need a wallet.",
+    "or": "or",
+    "enterManually": "📋  Enter address manually",
+    "noWallet": "❓  I don't have a wallet yet",
+    "walletConnectSoon": "🔗 WalletConnect support coming soon — one-tap connection across 600+ wallets",
+    "openAlertTitle": "Open {{wallet}}?",
+    "openAlertMessage": "This will open the {{wallet}} wallet app (or take you to download it).\n\nAfter connecting, copy your Cardano address (starts with addr_test1...) and come back here to paste it.",
+    "openAlertButton": "Open {{wallet}}",
+    "linkErrorTitle": "Could not open link",
+    "linkErrorMessage": "Please search for the wallet in the Play Store manually."
+  },
+  "walletManual": {
+    "welcomeBack": "👋 Welcome back! Open your wallet app, copy your address (addr_test1...), and paste it below.",
+    "addressLabel": "Your Cardano Address",
+    "addressHelper": "Starts with \"addr_test1\" · Found in your wallet under \"Receive\" or \"Address\"",
+    "back": "← Back",
+    "confirm": "Confirm Address",
+    "invalidTitle": "Invalid Address",
+    "invalidMessage": "Please enter a valid Cardano address. It should start with \"addr_test1\" (testnet) and be at least 50 characters long."
+  },
+  "walletConnected": {
+    "label": "Wallet Connected",
+    "removeButton": "Remove & Change Wallet",
+    "removeAlertTitle": "Remove Wallet",
+    "removeAlertMessage": "Are you sure you want to remove your wallet address?"
+  },
+  "noWallet": {
+    "title": "Getting a Cardano Wallet",
+    "body": "A Cardano wallet lets you hold ADA (Cardano's currency) and pay the small fee to publish a proposal. Voters never need one — only proposal creators do.",
+    "step1": "Download <bold>Vespr</bold> — it's the easiest Cardano wallet for beginners, built for mobile.",
+    "step2": "Create your wallet and safely write down your recovery phrase.",
+    "step3": "Add some ADA — a few dollars worth is enough to publish proposals.",
+    "step4": "Come back here, tap Vespr, and paste your address.",
+    "downloadButton": "⬇️  Download Vespr Wallet",
+    "back": "← Back to wallet options",
+    "linkErrorMessage": "Search for \"Vespr Wallet\" in the Play Store."
+  },
+  "form": {
+    "titleLabel": "Proposal Title *",
+    "titlePlaceholder": "Enter a clear, concise title",
+    "characterCount": "{{current}}/{{max}} characters",
+    "descriptionLabel": "Description *",
+    "descriptionPlaceholder": "Explain your proposal in detail...",
+    "durationLabel": "Voting Duration (days) *",
+    "durationHelper": "Recommended: 7–14 days",
+    "votersLabel": "Expected Voters *",
+    "votersHelper": "Estimate participant count (minimum 2)",
+    "customVotersPlaceholder": "Or enter custom amount (min 2)",
+    "selectedVoters_one": "Selected: {{voters}} voter",
+    "selectedVoters_other": "Selected: {{voters}} voters"
+  },
+  "attachments": {
+    "label": "Attachments (optional)",
+    "helper": "Up to {{max}} images to accompany your proposal",
+    "addPhoto": "+\nPhoto",
+    "limitTitle": "Limit Reached",
+    "limitMessage": "You can attach up to {{max}} images per proposal.",
+    "permissionTitle": "Permission Needed",
+    "permissionMessage": "Allow photo library access to attach an image.",
+    "errorTitle": "Could not add image"
+  },
+  "validation": {
+    "missingInfoTitle": "Missing Information",
+    "missingInfoMessage": "Please fill in all required fields first, including your wallet address",
+    "invalidVotersTitle": "Invalid Voter Count",
+    "minVotersMessage": "Minimum expected voters is 2",
+    "votersAtLeastMessage": "Expected voters must be at least 2",
+    "missingTitleTitle": "Missing Title",
+    "missingTitleMessage": "Please enter a proposal title",
+    "missingDescriptionTitle": "Missing Description",
+    "missingDescriptionMessage": "Please enter a proposal description",
+    "invalidDurationTitle": "Invalid Duration",
+    "invalidDurationMessage": "Duration must be at least 1 day",
+    "walletRequiredTitle": "Wallet Required",
+    "walletRequiredMessage": "Please connect your Cardano wallet to pay the creation fee"
+  },
+  "fees": {
+    "calculateButton": "Calculate Total Cost",
+    "breakdownTitle": "Total Cost Breakdown",
+    "gasCosts": "Gas costs:",
+    "foundationFee": "Foundation fee:",
+    "total": "Total:",
+    "minimumApplied": "Platform minimum of 1.2 ADA applied",
+    "foundationInfo": "Foundation fee supports VoteBoxApp open-source development",
+    "alertTitle": "Complete Fee Breakdown",
+    "alertExpectedVoters": "Expected voters: {{voters}}",
+    "alertGasCosts_one": "Gas costs ({{count}} batch): {{amount}} ADA",
+    "alertGasCosts_other": "Gas costs ({{count}} batches): {{amount}} ADA",
+    "alertFoundationFee": "Foundation fee: {{amount}} ADA",
+    "alertTotal": "TOTAL: {{ada}} ADA (~${{usd}} USD)",
+    "alertMinimumApplied": "(platform minimum of 1.2 ADA applied)",
+    "alertFoundationInfo": "Foundation fee supports VoteBoxApp open-source development.",
+    "votingFree": "Voting is FREE for all participants!"
+  },
+  "payment": {
+    "title": "Send Payment to Publish",
+    "instructions": "Send exactly this amount from your own wallet app, then paste the transaction hash below.",
+    "sendTo": "Send to",
+    "amount": "Amount",
+    "copy": "Copy",
+    "txHashLabel": "Transaction Hash",
+    "txHashPlaceholder": "Paste the tx hash from your wallet app",
+    "verifying": "Verifying payment...",
+    "verifyButton": "Verify & Publish",
+    "editProposal": "← Edit Proposal",
+    "overpayTitle": "Amount much higher than required",
+    "overpayMessage": "You sent {{sent}} ADA, but only {{required}} ADA was required. This can't be refunded — continue anyway?",
+    "verifyErrors": {
+      "malformed_hash": "That doesn't look like a valid transaction hash. It should be 64 hex characters — check what you pasted.",
+      "not_found_or_pending": "Not found on-chain yet. If you just sent it, wait 30-60 seconds for confirmation and try again.",
+      "wrong_recipient": "This transaction doesn't pay the Foundation wallet address shown above.",
+      "insufficient_amount": "The amount sent is less than required — see the amount above.",
+      "already_used": "This transaction has already been used for another proposal.",
+      "network_error": "Could not reach the network to verify — check your connection and try again.",
+      "generic": "Verification failed — please try again."
+    }
+  },
+  "publish": {
+    "statusInitializing": "Initializing blockchain service...",
+    "statusConnecting": "Connecting to Cardano network...",
+    "statusUploading": "Uploading to IPFS...",
+    "statusRecording": "Recording on blockchain...",
+    "incompleteResponse": "Incomplete response from blockchain service",
+    "unknownError": "Unknown error",
+    "queuedToast": "⏳ No connection — proposal queued, will publish when back online",
+    "failedTitle": "Publication Failed",
+    "failedMessage": "{{error}}\n\nCheck console for detailed logs.",
+    "connectWalletButton": "Connect Wallet to Publish",
+    "continueButton": "Continue to Payment"
+  },
+  "success": {
+    "title": "🎉 Proposal Published!",
+    "live": "Your proposal is now live!",
+    "ipfs": "IPFS: {{cid}}...",
+    "tx": "TX:   {{hash}}...",
+    "verifyOn": "Verify on preprod.cardanoscan.io",
+    "totalPaid": "Total paid: {{ada}} ADA (~${{usd}} USD)",
+    "configuredFor_one": "Configured for {{voters}} voter",
+    "configuredFor_other": "Configured for {{voters}} voters",
+    "copyTxHash": "📋 Copy TX Hash",
+    "share": "📢 Share"
+  },
+  "batching": {
+    "title": "Vote Batching System",
+    "body": "Votes batched up to 100 for gas optimization\nSmaller batches auto-submit every 10 min\nAll votes recorded when proposal ends\n80% cost reduction vs individual votes\nVoting is completely FREE for participants"
+  }
+}
