@@ -1,5 +1,6 @@
 {
   "header": {
+    "title": "Список предложений",
     "updatedAt": "Обновлено {{time}}",
     "createButton": "+ Создать"
   },

@@ -1,5 +1,6 @@
 {
   "header": {
+    "title": "Elenco proposte",
     "updatedAt": "Aggiornato: {{time}}",
     "createButton": "+ Crea"
   },

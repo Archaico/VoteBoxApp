@@ -1,5 +1,6 @@
 {
   "header": {
+    "title": "प्रस्तावों की सूची",
     "updatedAt": "{{time}} अपडेट किया गया",
     "createButton": "+ बनाएँ"
   },

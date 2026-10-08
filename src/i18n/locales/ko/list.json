@@ -1,5 +1,6 @@
 {
   "header": {
+    "title": "제안 목록",
     "updatedAt": "{{time}} 업데이트",
     "createButton": "+ 만들기"
   },

@@ -1,5 +1,6 @@
 {
   "header": {
+    "title": "提案列表",
     "updatedAt": "更新于 {{time}}",
     "createButton": "+ 创建"
   },

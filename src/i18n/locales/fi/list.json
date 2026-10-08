@@ -1,5 +1,6 @@
 {
   "header": {
+    "title": "Ehdotusluettelo",
     "updatedAt": "Päivitetty {{time}}",
     "createButton": "+ Luo"
   },

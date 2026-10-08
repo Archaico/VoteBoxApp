@@ -1,5 +1,6 @@
 {
   "header": {
+    "title": "提案一覧",
     "updatedAt": "{{time}} に更新",
     "createButton": "+ 作成"
   },

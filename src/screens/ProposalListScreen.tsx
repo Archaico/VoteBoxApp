@@ -201,8 +201,8 @@ export default function ProposalListScreen({
   return (
     <View style={styles.container}>
       <View style={[styles.header, { paddingTop: insets.top + 12 }]}>
-        <View>
-          <Text style={styles.headerTitle}>VoteBoxApp</Text>
+        <View style={styles.headerTitleBlock}>
+          <Text style={styles.headerTitle} numberOfLines={1} adjustsFontSizeToFit>{t('header.title')}</Text>
           {lastUpdated && (
             <Text style={styles.lastUpdated}>
               {t('header.updatedAt', { time: lastUpdated.toLocaleTimeString() })}
@@ -246,6 +246,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
     padding: 16, backgroundColor: '#fff', borderBottomWidth: 1, borderBottomColor: '#e5e7eb',
   },
+  headerTitleBlock: { flexShrink: 1, marginRight: 8 },
   headerTitle: { fontSize: 24, fontWeight: '700', color: '#111827' },
   lastUpdated: { fontSize: 11, color: '#9ca3af', marginTop: 4 },
   headerActions: { flexDirection: 'row', alignItems: 'center', gap: 8 },

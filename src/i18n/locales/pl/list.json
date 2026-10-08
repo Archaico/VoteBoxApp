@@ -1,5 +1,6 @@
 {
   "header": {
+    "title": "Lista propozycji",
     "updatedAt": "Zaktualizowano {{time}}",
     "createButton": "+ Utwórz"
   },

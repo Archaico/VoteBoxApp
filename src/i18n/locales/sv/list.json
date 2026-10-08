@@ -1,5 +1,6 @@
 {
   "header": {
+    "title": "Förslagslista",
     "updatedAt": "Uppdaterad {{time}}",
     "createButton": "+ Skapa"
   },

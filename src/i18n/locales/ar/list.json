@@ -1,5 +1,6 @@
 {
   "header": {
+    "title": "قائمة المقترحات",
     "updatedAt": "آخر تحديث {{time}}",
     "createButton": "+ إنشاء"
   },

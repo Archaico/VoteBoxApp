@@ -1,5 +1,6 @@
 {
   "header": {
+    "title": "Λίστα προτάσεων",
     "updatedAt": "Ενημέρωση {{time}}",
     "createButton": "+ Νέα"
   },

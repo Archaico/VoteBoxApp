@@ -1,5 +1,6 @@
 {
   "header": {
+    "title": "Voorstellenlijst",
     "updatedAt": "Bijgewerkt {{time}}",
     "createButton": "+ Nieuw"
   },
