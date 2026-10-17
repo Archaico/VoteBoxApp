@@ -1,5 +1,5 @@
 // src/screens/CreateProposalScreen.tsx
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -13,7 +13,10 @@ import {
   ActivityIndicator,
   Linking,
   Image,
+  AppState,
+  AppStateStatus,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Clipboard from 'expo-clipboard';
 import * as Haptics from 'expo-haptics';
 import * as ImagePicker from 'expo-image-picker';
@@ -46,49 +49,40 @@ const MAX_ATTACHMENTS = 2;
 const ATTACHMENT_MAX_DIMENSION = 1280;
 const ATTACHMENT_COMPRESSION = 0.7;
 
-// Supported Cardano wallets for mobile
-const CARDANO_WALLETS = [
-  {
-    id: 'eternl',
-    name: 'Eternl',
-    badgeKey: 'wallets.eternl.badge',
-    badgeColor: '#22c55e',
-    descriptionKey: 'wallets.eternl.description',
-    emoji: '🟢',
-    playStoreUrl: 'https://play.google.com/store/apps/details?id=io.ccvault.v1.main',
-    accentColor: '#1d4ed8',
-    accentBg: '#eff6ff',
-  },
-  {
-    id: 'vespr',
-    name: 'Vespr',
-    badgeKey: 'wallets.vespr.badge',
-    badgeColor: '#8b5cf6',
-    descriptionKey: 'wallets.vespr.description',
-    emoji: '🟣',
-    playStoreUrl: 'https://play.google.com/store/apps/details?id=art.nft_craze.gallery.main',
-    accentColor: '#7c3aed',
-    accentBg: '#f5f3ff',
-  },
-  {
-    id: 'lace',
-    name: 'Lace',
-    badgeKey: 'wallets.lace.badge',
-    badgeColor: '#0891b2',
-    descriptionKey: 'wallets.lace.description',
-    emoji: '🔵',
-    playStoreUrl: 'https://play.google.com/store/apps/details?id=io.lace.mobilewallet',
-    accentColor: '#0e7490',
-    accentBg: '#ecfeff',
-  },
-];
+// Wallet connection (WalletConnect) exists but stays dormant — see
+// WalletConnectService.ts and memory: no Cardano wallet supports it publicly
+// yet (checked 2026-10-09). Creators pay from their own wallet app instead,
+// and the paying address becomes the proposal's creator (BlockchainService).
 
-type WalletFlowState = 'select' | 'no-wallet-guide' | 'manual-entry' | 'connected';
+const VESPR_PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=art.nft_craze.gallery.main';
+const TEST_ADA_FAUCET_URL = 'https://docs.cardano.org/cardano-testnets/tools/faucet';
 
-// Separate from WalletFlowState — that answers "do we have an address",
-// this answers "has that address's payment been proved". Conflating them
-// would make walletFlow === 'connected' ambiguous.
-type PaymentFlowState = 'not-started' | 'awaiting-payment' | 'verifying' | 'verify-failed';
+// Unfinished proposals survive the app being closed — Android often kills
+// background apps while the creator is in their wallet app paying.
+const DRAFT_KEY = 'voteboxapp.createProposalDraft.v1';
+
+// After a transaction ID is entered, keep checking until the payment confirms.
+const PAYMENT_POLL_INTERVAL_MS = 10_000;
+const PAYMENT_POLL_MAX_ATTEMPTS = 30; // ~5 minutes
+
+type Step = 'write' | 'pay' | 'published';
+type PaymentState = 'idle' | 'waiting' | 'failed' | 'publishing';
+
+interface Draft {
+  title: string;
+  description: string;
+  duration: string;
+  expectedVoters: number;
+  customVoters: string;
+  attachments: string[];
+  step: 'write' | 'pay';
+  paymentTxHashInput: string;
+}
+
+interface PublishedProposal {
+  cid: string;
+  metadataTxHash: string;
+}
 
 // Failure reasons from treasuryService.verifyPaymentTransaction → create.json keys.
 const VERIFY_FAILURE_KEYS: Record<string, string> = {
@@ -100,109 +94,123 @@ const VERIFY_FAILURE_KEYS: Record<string, string> = {
   network_error: 'payment.verifyErrors.network_error',
 };
 
+// Pulls a 64-character transaction ID out of whatever was copied — a bare ID
+// or a cardanoscan link. Returns null if there isn't one.
+const extractTxId = (text: string): string | null => {
+  const match = text.match(/[0-9a-f]{64}/i);
+  return match ? match[0].toLowerCase() : null;
+};
+
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 export default function CreateProposalScreen({
   onBack,
   onProposalCreated,
 }: CreateProposalScreenProps) {
   const { t } = useTranslation('create');
   const insets = useSafeAreaInsets();
+  const [step, setStep] = useState<Step>('write');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [duration, setDuration] = useState('7');
-  const [walletAddress, setWalletAddress] = useState('');
-  const [manualAddressInput, setManualAddressInput] = useState('');
   const [expectedVoters, setExpectedVoters] = useState(2);
   const [customVoters, setCustomVoters] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [uploadStatus, setUploadStatus] = useState('');
   const [attachments, setAttachments] = useState<string[]>([]);
   const [isPickingAttachment, setIsPickingAttachment] = useState(false);
-  const [feeEstimate, setFeeEstimate] = useState<FeeCalculation | null>(null);
+  const [showFeeDetails, setShowFeeDetails] = useState(false);
+  const [draftLoaded, setDraftLoaded] = useState(false);
 
-  // Wallet connection flow state
-  const [walletFlow, setWalletFlow] = useState<WalletFlowState>('select');
-  const [selectedWallet, setSelectedWallet] = useState<string | null>(null);
-  const [showManualAfterWallet, setShowManualAfterWallet] = useState(false);
-
-  // Payment flow state — see PaymentFlowState comment above
-  const [paymentFlow, setPaymentFlow] = useState<PaymentFlowState>('not-started');
+  // Payment step
   const [lockedFees, setLockedFees] = useState<FeeCalculation | null>(null);
   const [paymentTxHashInput, setPaymentTxHashInput] = useState('');
-  const [paymentVerifyError, setPaymentVerifyError] = useState<string | null>(null);
+  const [paymentState, setPaymentState] = useState<PaymentState>('idle');
+  const [paymentError, setPaymentError] = useState<string | null>(null);
+  const [foundOnClipboard, setFoundOnClipboard] = useState(false);
+  const [copiedField, setCopiedField] = useState<'address' | 'amount' | null>(null);
+  const [showWalletHelp, setShowWalletHelp] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState('');
+  const [published, setPublished] = useState<PublishedProposal | null>(null);
 
-  // ─── Wallet Flow Handlers ────────────────────────────────────────────
-  // Real WalletConnect integration exists (see WalletConnectService.ts,
-  // App.tsx's <WalletConnectModal> mount) but is deliberately not wired up
-  // here — tested 2026-08-13, none of the 3 recommended wallets connected
-  // reliably (WalletConnect's Cardano registry is currently empty; see
-  // memory). Kept dormant rather than deleted so it's ready to re-enable
-  // once wallet support matures. This screen uses the original
-  // Play-Store-then-manual-paste flow.
+  // Bumped to cancel a running payment check (edit, new ID, leaving the screen).
+  const verifyRunRef = useRef(0);
+  const lastClipboardTxIdRef = useRef<string | null>(null);
+  const appStateRef = useRef<AppStateStatus>(AppState.currentState);
 
-  const handleWalletSelect = async (wallet: typeof CARDANO_WALLETS[0]) => {
-    setSelectedWallet(wallet.id);
-    Alert.alert(
-      t('walletSelect.openAlertTitle', { wallet: wallet.name }),
-      t('walletSelect.openAlertMessage', { wallet: wallet.name }),
-      [
-        { text: t('buttons.cancel'), style: 'cancel', onPress: () => setSelectedWallet(null) },
-        {
-          text: t('walletSelect.openAlertButton', { wallet: wallet.name }),
-          onPress: async () => {
-            try {
-              await Linking.openURL(wallet.playStoreUrl);
-            } catch {
-              Alert.alert(t('walletSelect.linkErrorTitle'), t('walletSelect.linkErrorMessage'));
-            }
-            // After returning, show manual entry to paste their address
-            setShowManualAfterWallet(true);
-            setWalletFlow('manual-entry');
-          },
+  const fees = useMemo(
+    () => treasuryService.calculateProposalFees(Math.max(expectedVoters, 2)),
+    [expectedVoters]
+  );
+  const isBusy = paymentState === 'waiting' || paymentState === 'publishing';
+
+  useEffect(() => () => { verifyRunRef.current++; }, []);
+
+  // ─── Draft ─────────────────────────────────────────────────────────────
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const raw = await AsyncStorage.getItem(DRAFT_KEY);
+        if (!raw) return;
+        const draft: Draft = JSON.parse(raw);
+        setTitle(draft.title ?? '');
+        setDescription(draft.description ?? '');
+        setDuration(draft.duration ?? '7');
+        setExpectedVoters(draft.expectedVoters ?? 2);
+        setCustomVoters(draft.customVoters ?? '');
+        setAttachments(draft.attachments ?? []);
+        setPaymentTxHashInput(draft.paymentTxHashInput ?? '');
+        if (draft.step === 'pay') {
+          setLockedFees(treasuryService.calculateProposalFees(Math.max(draft.expectedVoters ?? 2, 2)));
+          setStep('pay');
+        }
+        toastService.info(t('draft.restored'));
+      } catch {
+        // A corrupt draft just means starting fresh.
+      } finally {
+        setDraftLoaded(true);
+      }
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (!draftLoaded || step === 'published') return;
+    const timer = setTimeout(() => {
+      const isEmpty = !title.trim() && !description.trim() && attachments.length === 0;
+      if (isEmpty && step === 'write') {
+        AsyncStorage.removeItem(DRAFT_KEY).catch(() => {});
+        return;
+      }
+      const draft: Draft = {
+        title, description, duration, expectedVoters, customVoters, attachments,
+        step, paymentTxHashInput,
+      };
+      AsyncStorage.setItem(DRAFT_KEY, JSON.stringify(draft)).catch(() => {});
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [draftLoaded, step, title, description, duration, expectedVoters, customVoters, attachments, paymentTxHashInput]);
+
+  const clearDraft = () => AsyncStorage.removeItem(DRAFT_KEY).catch(() => {});
+
+  const handleDiscardDraft = () => {
+    Alert.alert(t('draft.discardTitle'), t('draft.discardMessage'), [
+      { text: t('buttons.cancel'), style: 'cancel' },
+      {
+        text: t('draft.discard'),
+        style: 'destructive',
+        onPress: () => {
+          setTitle('');
+          setDescription('');
+          setDuration('7');
+          setExpectedVoters(2);
+          setCustomVoters('');
+          setAttachments([]);
+          setPaymentTxHashInput('');
+          clearDraft();
         },
-      ]
-    );
+      },
+    ]);
   };
-
-  const handleConfirmManualAddress = () => {
-    const cleaned = manualAddressInput.trim();
-    // The app runs entirely on Cardano preprod testnet (addr_test1...), not
-    // mainnet (addr1...) — this only ever checked for the mainnet prefix,
-    // which silently rejected every real testnet address a user could paste.
-    const hasValidPrefix = cleaned.startsWith('addr1') || cleaned.startsWith('addr_test1');
-    if (!hasValidPrefix || cleaned.length < 50) {
-      Alert.alert(
-        t('walletManual.invalidTitle'),
-        t('walletManual.invalidMessage')
-      );
-      return;
-    }
-    setWalletAddress(cleaned);
-    setWalletFlow('connected');
-  };
-
-  const handleDisconnectWallet = () => {
-    Alert.alert(
-      t('walletConnected.removeAlertTitle'),
-      t('walletConnected.removeAlertMessage'),
-      [
-        { text: t('buttons.cancel'), style: 'cancel' },
-        {
-          text: t('buttons.remove'),
-          style: 'destructive',
-          onPress: () => {
-            setWalletAddress('');
-            setManualAddressInput('');
-            setSelectedWallet(null);
-            setShowManualAfterWallet(false);
-            setWalletFlow('select');
-          },
-        },
-      ]
-    );
-  };
-
-  const truncateAddress = (addr: string) =>
-    addr.length > 20 ? addr.slice(0, 10) + '...' + addr.slice(-8) : addr;
 
   // ─── Attachment Handlers ───────────────────────────────────────────────
   // MVP scope: images only, capped at 2 per proposal, compressed client-side
@@ -251,7 +259,7 @@ export default function CreateProposalScreen({
     setAttachments(prev => prev.filter(a => a !== uri));
   };
 
-  // ─── Fee & Publish Handlers ──────────────────────────────────────────
+  // ─── Write Step ─────────────────────────────────────────────────────────
 
   const handleVoterPresetSelect = (value: number) => {
     setExpectedVoters(value);
@@ -266,39 +274,8 @@ export default function CreateProposalScreen({
     }
   };
 
-  const handleEstimateFee = () => {
-    if (!title.trim() || !description.trim() || !walletAddress.trim()) {
-      Alert.alert(t('validation.missingInfoTitle'), t('validation.missingInfoMessage'));
-      return;
-    }
-    if (expectedVoters < 2) {
-      Alert.alert(t('validation.invalidVotersTitle'), t('validation.minVotersMessage'));
-      return;
-    }
-
-    const fees = treasuryService.calculateProposalFees(expectedVoters);
-    setFeeEstimate(fees);
-
-    const batchCount = Math.ceil(expectedVoters / 100);
-    const message = [
-      t('fees.alertExpectedVoters', { voters: expectedVoters.toLocaleString() }),
-      '',
-      t('fees.alertGasCosts', { count: batchCount, amount: fees.gasCostADA }),
-      t('fees.alertFoundationFee', { amount: fees.foundationFeeADA }),
-      '---',
-      t('fees.alertTotal', { ada: fees.grandTotalADA, usd: fees.grandTotalUSD }),
-      fees.isMinimumApplied ? t('fees.alertMinimumApplied') : '',
-      '',
-      t('fees.alertFoundationInfo'),
-      t('fees.votingFree'),
-    ].filter(Boolean).join('\n');
-
-    Alert.alert(t('fees.alertTitle'), message, [{ text: t('buttons.ok') }]);
-  };
-
-  // Step 1: validate the form, freeze a fee quote, reveal the payment card.
-  // No network calls yet.
-  const handleBeginPublish = () => {
+  // Validate the form, freeze the fee quote, move to the payment step.
+  const handleContinueToPayment = () => {
     if (!title.trim()) {
       Alert.alert(t('validation.missingTitleTitle'), t('validation.missingTitleMessage'));
       return;
@@ -311,75 +288,153 @@ export default function CreateProposalScreen({
       Alert.alert(t('validation.invalidDurationTitle'), t('validation.invalidDurationMessage'));
       return;
     }
-    if (!walletAddress.trim()) {
-      Alert.alert(t('validation.walletRequiredTitle'), t('validation.walletRequiredMessage'));
-      return;
-    }
     if (expectedVoters < 2) {
       Alert.alert(t('validation.invalidVotersTitle'), t('validation.votersAtLeastMessage'));
       return;
     }
 
-    const fees = treasuryService.calculateProposalFees(expectedVoters);
-    setLockedFees(fees);
-    setPaymentTxHashInput('');
-    setPaymentVerifyError(null);
-    setPaymentFlow('awaiting-payment');
+    setLockedFees(treasuryService.calculateProposalFees(expectedVoters));
+    setPaymentError(null);
+    setPaymentState('idle');
+    setStep('pay');
   };
 
-  // Step 2: user pastes their payment's tx hash, we verify it on-chain.
-  const handleVerifyAndPublish = async () => {
+  // ─── Pay Step ───────────────────────────────────────────────────────────
+
+  const handleCopy = async (field: 'address' | 'amount', value: string) => {
+    await Clipboard.setStringAsync(value);
+    setCopiedField(field);
+    setTimeout(() => setCopiedField(current => (current === field ? null : current)), 2000);
+  };
+
+  // Opens whichever Cardano wallet handles payment links (CIP-13). Most
+  // wallets open without filling in the amount, so the copy fields stay
+  // the main path.
+  const handleOpenWallet = async () => {
     if (!lockedFees) return;
-    setPaymentFlow('verifying');
-    setPaymentVerifyError(null);
-
-    const result = await treasuryService.verifyPaymentTransaction(paymentTxHashInput, lockedFees.grandTotal);
-    if (!result.ok) {
-      setPaymentFlow('verify-failed');
-      const failureKey = VERIFY_FAILURE_KEYS[result.reason ?? 'network_error'];
-      setPaymentVerifyError(failureKey ? t(failureKey) : t('payment.verifyErrors.generic'));
-      return;
+    try {
+      await Linking.openURL(`web+cardano:${TREASURY_CONFIG.FOUNDATION_WALLET}?amount=${lockedFees.grandTotalADA}`);
+    } catch {
+      Alert.alert(t('payment.openWalletFailedTitle'), t('payment.openWalletFailedMessage'));
     }
+  };
 
-    // Soft guard against likely unit-confusion (e.g. pasting a tx sized for
-    // 1000 ADA instead of 1.2) — informational only, doesn't block.
-    if (result.paidLovelace! > lockedFees.grandTotal * 10) {
-      const proceed = await new Promise<boolean>(resolve => {
-        Alert.alert(
-          t('payment.overpayTitle'),
-          t('payment.overpayMessage', {
-            sent: (result.paidLovelace! / 1_000_000).toFixed(4),
-            required: lockedFees.grandTotalADA,
-          }),
-          [
-            { text: t('buttons.cancel'), style: 'cancel', onPress: () => resolve(false) },
-            { text: t('buttons.continue'), onPress: () => resolve(true) },
-          ]
-        );
-      });
-      if (!proceed) {
-        setPaymentFlow('awaiting-payment');
+  const cancelPaymentCheck = () => {
+    verifyRunRef.current++;
+    setPaymentState('idle');
+  };
+
+  const handleEditProposal = () => {
+    cancelPaymentCheck();
+    setPaymentError(null);
+    setFoundOnClipboard(false);
+    setStep('write');
+  };
+
+  const failPayment = (message: string) => {
+    setPaymentState('failed');
+    setPaymentError(message);
+  };
+
+  // Checks the payment, waiting for it to confirm if needed, then publishes.
+  const checkPaymentAndPublish = async (rawInput: string) => {
+    if (!lockedFees) return;
+    const txId = extractTxId(rawInput) ?? rawInput.trim();
+    const run = ++verifyRunRef.current;
+    setPaymentState('waiting');
+    setPaymentError(null);
+
+    for (let attempt = 0; attempt < PAYMENT_POLL_MAX_ATTEMPTS; attempt++) {
+      const result = await treasuryService.verifyPaymentTransaction(txId, lockedFees.grandTotal);
+      if (run !== verifyRunRef.current) return;
+
+      if (result.ok) {
+        // Soft guard against likely unit-confusion (e.g. a tx sized for
+        // 1000 ADA instead of 1.2) — informational only, doesn't block.
+        if (result.paidLovelace! > lockedFees.grandTotal * 10) {
+          const proceed = await new Promise<boolean>(resolve => {
+            Alert.alert(
+              t('payment.overpayTitle'),
+              t('payment.overpayMessage', {
+                sent: (result.paidLovelace! / 1_000_000).toFixed(4),
+                required: lockedFees.grandTotalADA,
+              }),
+              [
+                { text: t('buttons.cancel'), style: 'cancel', onPress: () => resolve(false) },
+                { text: t('buttons.continue'), onPress: () => resolve(true) },
+              ]
+            );
+          });
+          if (!proceed) {
+            setPaymentState('idle');
+            return;
+          }
+        }
+        await executePublish(txId, lockedFees.grandTotal);
         return;
       }
+
+      if (result.reason !== 'not_found_or_pending') {
+        const failureKey = VERIFY_FAILURE_KEYS[result.reason ?? 'network_error'];
+        failPayment(failureKey ? t(failureKey) : t('payment.verifyErrors.generic'));
+        return;
+      }
+
+      await sleep(PAYMENT_POLL_INTERVAL_MS);
+      if (run !== verifyRunRef.current) return;
     }
 
-    await executePublish(paymentTxHashInput.trim().toLowerCase(), lockedFees.grandTotal);
+    failPayment(t('payment.verifyErrors.not_found_or_pending'));
   };
 
-  // Step 3: the actual publish, now given an already-verified payment.
+  const handlePasteTxId = async () => {
+    const text = await Clipboard.getStringAsync();
+    if (!text) return;
+    setPaymentTxHashInput(extractTxId(text) ?? text.trim());
+    setPaymentError(null);
+    setFoundOnClipboard(false);
+  };
+
+  // When the creator comes back from their wallet app with the transaction ID
+  // copied, pick it up and start checking without them having to paste.
+  const checkClipboardForTxId = useCallback(async () => {
+    if (step !== 'pay' || isBusy) return;
+    try {
+      const txId = extractTxId(await Clipboard.getStringAsync());
+      if (!txId || txId === lastClipboardTxIdRef.current) return;
+      lastClipboardTxIdRef.current = txId;
+      setPaymentTxHashInput(txId);
+      setFoundOnClipboard(true);
+      checkPaymentAndPublish(txId);
+    } catch {
+      // Clipboard unavailable — the Paste button still works.
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step, isBusy, lockedFees]);
+
+  useEffect(() => {
+    if (step !== 'pay') return;
+    const subscription = AppState.addEventListener('change', nextState => {
+      const cameBack = /inactive|background/.test(appStateRef.current) && nextState === 'active';
+      appStateRef.current = nextState;
+      // Android only allows clipboard reads once the app has focus again.
+      if (cameBack) setTimeout(checkClipboardForTxId, 500);
+    });
+    return () => subscription.remove();
+  }, [step, checkClipboardForTxId]);
+
+  // The actual publish, given an already-verified payment.
   const executePublish = async (paymentTxHash: string, requiredLovelace: number) => {
-    setIsSubmitting(true);
-    setUploadStatus(t('publish.statusInitializing'));
+    setPaymentState('publishing');
+    setUploadStatus(t('publish.statusConnecting'));
 
     try {
-      setUploadStatus(t('publish.statusConnecting'));
       await blockchainService.initialize();
 
       setUploadStatus(t('publish.statusUploading'));
       const result = await blockchainService.createProposal({
         title: title.trim(),
         description: description.trim(),
-        creator: walletAddress.trim(),
         duration: parseInt(duration),
         expectedVoters,
         attachmentUris: attachments,
@@ -398,405 +453,54 @@ export default function CreateProposalScreen({
       notificationService.subscribeToProposal(result.proposalId, 'creator', proposalDeadline, title.trim()).catch(() => {});
       notificationService.notifyProposalLive(result.proposalId, title.trim()).catch(() => {});
 
-      const fees = treasuryService.calculateProposalFees(expectedVoters);
-
-      setIsSubmitting(false);
+      clearDraft();
       setUploadStatus('');
-      setPaymentFlow('not-started');
-      setLockedFees(null);
-      setPaymentTxHashInput('');
-
-      const successMessage = [
-        t('success.live'),
-        '',
-        t('success.ipfs', { cid: result.cid.slice(0, 24) }),
-        t('success.tx', { hash: result.metadataTxHash.slice(0, 24) }),
-        '',
-        t('success.verifyOn'),
-        '',
-        t('success.totalPaid', { ada: fees.grandTotalADA, usd: fees.grandTotalUSD }),
-        '',
-        t('success.configuredFor', { count: expectedVoters, voters: expectedVoters.toLocaleString() }),
-        '',
-        t('fees.votingFree'),
-      ].join('\n');
-
-      Alert.alert(t('success.title'), successMessage, [
-        {
-          text: t('success.copyTxHash'),
-          onPress: async () => {
-            await Clipboard.setStringAsync(result.metadataTxHash);
-            onProposalCreated();
-          },
-        },
-        {
-          text: t('success.share'),
-          onPress: () => {
-            shareService.shareProposalInvite({
-              id: result.cid,
-              title: title.trim(),
-              description: description.trim(),
-              deadline: Date.now() + (parseInt(duration) * 24 * 60 * 60 * 1000),
-              totalVotes: 0,
-            });
-            onProposalCreated();
-          },
-        },
-        {
-          text: t('buttons.done'),
-          onPress: onProposalCreated,
-          style: 'cancel',
-        },
-      ]);
+      setPaymentState('idle');
+      setPublished({ cid: result.cid, metadataTxHash: result.metadataTxHash });
+      setStep('published');
     } catch (error) {
-      setIsSubmitting(false);
       setUploadStatus('');
 
       if (isNetworkError(error)) {
         await offlineQueueService.queueProposal({
           title: title.trim(),
           description: description.trim(),
-          creator: walletAddress.trim(),
           duration: parseInt(duration),
           expectedVoters,
           attachmentUris: attachments,
           paymentTxHash,
           requiredLovelace,
         });
+        clearDraft();
         toastService.warning(t('publish.queuedToast'));
-        setPaymentFlow('not-started');
-        setLockedFees(null);
+        onProposalCreated();
         return;
       }
 
       // Terminal payment failures (wrong recipient/insufficient/already used)
       // surface here via BlockchainService's defensive re-verify — don't queue
-      // those, retrying later won't fix a bad payment. Send the user back to
-      // the payment step so they can paste a different hash.
+      // those, retrying later won't fix a bad payment.
       const errorMessage = error instanceof Error ? error.message : t('publish.unknownError');
-      setPaymentFlow('verify-failed');
-      setPaymentVerifyError(errorMessage);
-      Alert.alert(
-        t('publish.failedTitle'),
-        t('publish.failedMessage', { error: errorMessage }),
-        [{ text: t('buttons.ok') }]
-      );
+      failPayment(t('publish.failedMessage', { error: errorMessage }));
     }
   };
 
-  const handleEditProposal = () => {
-    setPaymentFlow('not-started');
-    setLockedFees(null);
-    setPaymentTxHashInput('');
-    setPaymentVerifyError(null);
+  const handleHeaderBack = () => {
+    if (step === 'pay') handleEditProposal();
+    else if (step === 'published') onProposalCreated();
+    else onBack();
   };
 
-  // ─── Payment Section Renderer ───────────────────────────────────────
+  // ─── Renderers ──────────────────────────────────────────────────────────
 
-  const renderPaymentSection = () => {
-    if (paymentFlow === 'not-started' || !lockedFees) return null;
-
-    return (
-      <View style={styles.paymentBox}>
-        <Text style={styles.paymentTitle}>{t('payment.title')}</Text>
-        <Text style={styles.paymentInstructions}>{t('payment.instructions')}</Text>
-
-        <View style={styles.paymentField}>
-          <Text style={styles.paymentFieldLabel}>{t('payment.sendTo')}</Text>
-          <View style={styles.paymentCopyRow}>
-            <Text style={styles.paymentFieldValue} numberOfLines={1}>
-              {truncateAddress(TREASURY_CONFIG.FOUNDATION_WALLET)}
-            </Text>
-            <TouchableOpacity
-              style={styles.paymentCopyBtn}
-              onPress={() => Clipboard.setStringAsync(TREASURY_CONFIG.FOUNDATION_WALLET)}
-            >
-              <Text style={styles.paymentCopyBtnText}>{t('payment.copy')}</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        <View style={styles.paymentField}>
-          <Text style={styles.paymentFieldLabel}>{t('payment.amount')}</Text>
-          <View style={styles.paymentCopyRow}>
-            <Text style={styles.paymentFieldValue}>{lockedFees.grandTotalADA} ADA</Text>
-            <TouchableOpacity
-              style={styles.paymentCopyBtn}
-              onPress={() => Clipboard.setStringAsync(lockedFees.grandTotalADA)}
-            >
-              <Text style={styles.paymentCopyBtnText}>{t('payment.copy')}</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        <Text style={styles.label}>{t('payment.txHashLabel')}</Text>
-        <TextInput
-          style={styles.walletManualInput}
-          placeholder={t('payment.txHashPlaceholder')}
-          placeholderTextColor="#9ca3af"
-          value={paymentTxHashInput}
-          onChangeText={text => { setPaymentTxHashInput(text); setPaymentVerifyError(null); }}
-          autoCapitalize="none"
-          autoCorrect={false}
-          multiline={false}
-          editable={paymentFlow !== 'verifying'}
-        />
-
-        {paymentVerifyError && (
-          <Text style={styles.paymentErrorText}>{paymentVerifyError}</Text>
-        )}
-
-        <TouchableOpacity
-          style={[
-            styles.paymentVerifyBtn,
-            (paymentFlow === 'verifying' || !paymentTxHashInput.trim()) && styles.paymentVerifyBtnDisabled,
-          ]}
-          onPress={handleVerifyAndPublish}
-          disabled={paymentFlow === 'verifying' || !paymentTxHashInput.trim()}
-        >
-          {paymentFlow === 'verifying' ? (
-            <>
-              <ActivityIndicator size="small" color="white" />
-              <Text style={styles.paymentVerifyBtnText}>{t('payment.verifying')}</Text>
-            </>
-          ) : (
-            <Text style={styles.paymentVerifyBtnText}>{t('payment.verifyButton')}</Text>
-          )}
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={handleEditProposal} disabled={paymentFlow === 'verifying' || isSubmitting}>
-          <Text style={styles.paymentEditLink}>{t('payment.editProposal')}</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  };
-
-  // ─── Wallet Section Renderers ────────────────────────────────────────
-
-  const renderWalletSection = () => {
-    // STATE: Connected
-    if (walletFlow === 'connected') {
-      return (
-        <View style={styles.walletConnectedBox}>
-          <View style={styles.walletConnectedHeader}>
-            <View style={styles.walletConnectedDot} />
-            <Text style={styles.walletConnectedLabel}>{t('walletConnected.label')}</Text>
-          </View>
-          <Text style={styles.walletConnectedAddress}>
-            {truncateAddress(walletAddress)}
-          </Text>
-          <TouchableOpacity onPress={handleDisconnectWallet} style={styles.walletDisconnectBtn}>
-            <Text style={styles.walletDisconnectText}>{t('walletConnected.removeButton')}</Text>
-          </TouchableOpacity>
-        </View>
-      );
-    }
-
-    // STATE: Manual address entry
-    if (walletFlow === 'manual-entry') {
-      return (
-        <View style={styles.walletManualContainer}>
-          {showManualAfterWallet && (
-            <View style={styles.walletReturnHint}>
-              <Text style={styles.walletReturnHintText}>{t('walletManual.welcomeBack')}</Text>
-            </View>
-          )}
-          <Text style={styles.label}>{t('walletManual.addressLabel')}</Text>
-          <TextInput
-            style={styles.walletManualInput}
-            placeholder="addr_test1..."
-            placeholderTextColor="#9ca3af"
-            value={manualAddressInput}
-            onChangeText={setManualAddressInput}
-            autoCapitalize="none"
-            autoCorrect={false}
-            autoFocus={true}
-            multiline={false}
-          />
-          <Text style={styles.helperText}>{t('walletManual.addressHelper')}</Text>
-          <View style={styles.walletManualButtons}>
-            <TouchableOpacity
-              style={styles.walletManualBack}
-              onPress={() => {
-                setWalletFlow('select');
-                setShowManualAfterWallet(false);
-                setManualAddressInput('');
-                setSelectedWallet(null);
-              }}
-            >
-              <Text style={styles.walletManualBackText}>{t('walletManual.back')}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.walletManualConfirm,
-                !manualAddressInput.trim() && styles.walletManualConfirmDisabled,
-              ]}
-              onPress={handleConfirmManualAddress}
-              disabled={!manualAddressInput.trim()}
-            >
-              <Text style={styles.walletManualConfirmText}>{t('walletManual.confirm')}</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      );
-    }
-
-    // STATE: No wallet guidance
-    if (walletFlow === 'no-wallet-guide') {
-      return (
-        <View style={styles.noWalletGuide}>
-          <Text style={styles.noWalletGuideTitle}>{t('noWallet.title')}</Text>
-          <Text style={styles.noWalletGuideBody}>{t('noWallet.body')}</Text>
-
-          <View style={styles.noWalletStep}>
-            <View style={styles.noWalletStepNum}><Text style={styles.noWalletStepNumText}>1</Text></View>
-            <Text style={styles.noWalletStepText}>
-              <Trans
-                t={t}
-                i18nKey="noWallet.step1"
-                components={{ bold: <Text style={{ fontWeight: '700' }} /> }}
-              />
-            </Text>
-          </View>
-
-          <View style={styles.noWalletStep}>
-            <View style={styles.noWalletStepNum}><Text style={styles.noWalletStepNumText}>2</Text></View>
-            <Text style={styles.noWalletStepText}>{t('noWallet.step2')}</Text>
-          </View>
-
-          <View style={styles.noWalletStep}>
-            <View style={styles.noWalletStepNum}><Text style={styles.noWalletStepNumText}>3</Text></View>
-            <Text style={styles.noWalletStepText}>{t('noWallet.step3')}</Text>
-          </View>
-
-          <View style={styles.noWalletStep}>
-            <View style={styles.noWalletStepNum}><Text style={styles.noWalletStepNumText}>4</Text></View>
-            <Text style={styles.noWalletStepText}>{t('noWallet.step4')}</Text>
-          </View>
-
-          <TouchableOpacity
-            style={styles.noWalletDownloadBtn}
-            onPress={async () => {
-              try {
-                await Linking.openURL('https://play.google.com/store/apps/details?id=art.nft_craze.gallery.main');
-              } catch {
-                Alert.alert(t('walletSelect.linkErrorTitle'), t('noWallet.linkErrorMessage'));
-              }
-            }}
-          >
-            <Text style={styles.noWalletDownloadText}>{t('noWallet.downloadButton')}</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.noWalletBack}
-            onPress={() => setWalletFlow('select')}
-          >
-            <Text style={styles.noWalletBackText}>{t('noWallet.back')}</Text>
-          </TouchableOpacity>
-        </View>
-      );
-    }
-
-    // STATE: Select wallet (default)
-    return (
-      <View>
-        <Text style={styles.walletSectionTitle}>{t('walletSelect.title')}</Text>
-        <Text style={styles.walletSectionSubtitle}>{t('walletSelect.subtitle')}</Text>
-
-        {/* Wallet Options */}
-        {CARDANO_WALLETS.map((wallet) => (
-          <TouchableOpacity
-            key={wallet.id}
-            style={[
-              styles.walletOption,
-              selectedWallet === wallet.id && { borderColor: wallet.accentColor, backgroundColor: wallet.accentBg },
-            ]}
-            onPress={() => handleWalletSelect(wallet)}
-            activeOpacity={0.8}
-          >
-            <View style={styles.walletOptionLeft}>
-              <Text style={styles.walletOptionEmoji}>{wallet.emoji}</Text>
-              <View style={styles.walletOptionInfo}>
-                <View style={styles.walletOptionNameRow}>
-                  <Text style={styles.walletOptionName}>{wallet.name}</Text>
-                  <View style={[styles.walletBadge, { backgroundColor: wallet.badgeColor }]}>
-                    <Text style={styles.walletBadgeText}>{t(wallet.badgeKey)}</Text>
-                  </View>
-                </View>
-                <Text style={styles.walletOptionDesc}>{t(wallet.descriptionKey)}</Text>
-              </View>
-            </View>
-            <Text style={[styles.walletOptionArrow, { color: wallet.accentColor }]}>›</Text>
-          </TouchableOpacity>
-        ))}
-
-        {/* Divider */}
-        <View style={styles.walletDivider}>
-          <View style={styles.walletDividerLine} />
-          <Text style={styles.walletDividerText}>{t('walletSelect.or')}</Text>
-          <View style={styles.walletDividerLine} />
-        </View>
-
-        {/* Secondary options */}
-        <TouchableOpacity
-          style={styles.walletSecondaryBtn}
-          onPress={() => {
-            setShowManualAfterWallet(false);
-            setWalletFlow('manual-entry');
-          }}
-        >
-          <Text style={styles.walletSecondaryText}>{t('walletSelect.enterManually')}</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[styles.walletSecondaryBtn, { marginTop: 8 }]}
-          onPress={() => setWalletFlow('no-wallet-guide')}
-        >
-          <Text style={styles.walletSecondaryText}>{t('walletSelect.noWallet')}</Text>
-        </TouchableOpacity>
-
-        {/* Future WalletConnect note */}
-        <View style={styles.walletFutureNote}>
-          <Text style={styles.walletFutureText}>{t('walletSelect.walletConnectSoon')}</Text>
-        </View>
-      </View>
-    );
-  };
-
-  // ─── Main Render ─────────────────────────────────────────────────────
-
-  return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}
-    >
-      <View style={[styles.header, { paddingTop: insets.top + 12 }]}>
-        <TouchableOpacity onPress={onBack} style={styles.backButton} disabled={isSubmitting}>
-          <Text style={styles.backText}>{t('header.back')}</Text>
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>{t('header.title')}</Text>
-        <QueueIndicator />
-      </View>
-
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+  const renderWriteStep = () => (
+    <>
+      <ScrollView style={styles.content} contentContainerStyle={styles.contentInner} showsVerticalScrollIndicator={false}>
         <View style={styles.infoBox}>
           <Text style={styles.infoText}>{t('infoBanner')}</Text>
         </View>
 
-        {isSubmitting && (
-          <View style={styles.statusBox}>
-            <ActivityIndicator size="small" color="#22c55e" />
-            <Text style={styles.statusText}>{uploadStatus}</Text>
-          </View>
-        )}
-
         <View style={styles.formCard}>
-
-          {/* ── WALLET SECTION ── */}
-          <View style={styles.inputGroup}>
-            {renderWalletSection()}
-          </View>
-
           {/* ── PROPOSAL TITLE ── */}
           <View style={styles.inputGroup}>
             <Text style={styles.label}>{t('form.titleLabel')}</Text>
@@ -807,7 +511,6 @@ export default function CreateProposalScreen({
               value={title}
               onChangeText={setTitle}
               maxLength={100}
-              editable={!isSubmitting}
             />
             <Text style={styles.helperText}>{t('form.characterCount', { current: title.length, max: 100 })}</Text>
           </View>
@@ -825,7 +528,6 @@ export default function CreateProposalScreen({
               numberOfLines={6}
               textAlignVertical="top"
               maxLength={1000}
-              editable={!isSubmitting}
             />
             <Text style={styles.helperText}>{t('form.characterCount', { current: description.length, max: 1000 })}</Text>
           </View>
@@ -843,7 +545,6 @@ export default function CreateProposalScreen({
                   <TouchableOpacity
                     style={styles.attachmentRemoveBtn}
                     onPress={() => handleRemoveAttachment(uri)}
-                    disabled={isSubmitting}
                   >
                     <Text style={styles.attachmentRemoveText}>×</Text>
                   </TouchableOpacity>
@@ -853,7 +554,7 @@ export default function CreateProposalScreen({
                 <TouchableOpacity
                   style={styles.attachmentAddBtn}
                   onPress={handleAddAttachment}
-                  disabled={isSubmitting || isPickingAttachment}
+                  disabled={isPickingAttachment}
                 >
                   {isPickingAttachment ? (
                     <ActivityIndicator size="small" color="#22c55e" />
@@ -876,13 +577,12 @@ export default function CreateProposalScreen({
               onChangeText={setDuration}
               keyboardType="number-pad"
               maxLength={3}
-              editable={!isSubmitting && paymentFlow === 'not-started'}
             />
             <Text style={styles.helperText}>{t('form.durationHelper')}</Text>
           </View>
 
           {/* ── EXPECTED VOTERS ── */}
-          <View style={styles.inputGroup}>
+          <View style={[styles.inputGroup, { marginBottom: 0 }]}>
             <Text style={styles.label}>{t('form.votersLabel')}</Text>
             <Text style={[styles.helperText, { marginBottom: 12 }]}>
               {t('form.votersHelper')}
@@ -896,7 +596,6 @@ export default function CreateProposalScreen({
                     expectedVoters === preset.value && styles.presetButtonSelected,
                   ]}
                   onPress={() => handleVoterPresetSelect(preset.value)}
-                  disabled={isSubmitting || paymentFlow !== 'not-started'}
                 >
                   <Text
                     style={[
@@ -916,92 +615,301 @@ export default function CreateProposalScreen({
               value={customVoters}
               onChangeText={handleCustomVotersChange}
               keyboardType="number-pad"
-              editable={!isSubmitting && paymentFlow === 'not-started'}
             />
             <Text style={styles.helperText}>
               {t('form.selectedVoters', { count: expectedVoters, voters: expectedVoters.toLocaleString() })}
             </Text>
+            <Text style={styles.votingFreeText}>{t('fees.votingFree')}</Text>
+          </View>
+        </View>
+
+        {(title.trim() || description.trim() || attachments.length > 0) && (
+          <TouchableOpacity onPress={handleDiscardDraft} style={styles.discardLink}>
+            <Text style={styles.discardLinkText}>{t('draft.discard')}</Text>
+          </TouchableOpacity>
+        )}
+      </ScrollView>
+
+      {/* ── COST + CONTINUE ── */}
+      <View style={[styles.footer, { paddingBottom: 16 + insets.bottom }]}>
+        <TouchableOpacity
+          style={styles.costRow}
+          onPress={() => setShowFeeDetails(v => !v)}
+          activeOpacity={0.7}
+        >
+          <View style={styles.costLabelBlock}>
+            <Text style={styles.costLabel}>{t('cost.label')}</Text>
+            <Text style={styles.costDetailsToggle}>
+              {showFeeDetails ? t('cost.hideBreakdown') : t('cost.showBreakdown')}
+            </Text>
+          </View>
+          <View style={styles.costAmountBlock}>
+            <Text style={styles.costAmount}>{fees.grandTotalADA} ADA</Text>
+            <Text style={styles.costUsd}>{t('cost.usd', { usd: fees.grandTotalUSD })}</Text>
+          </View>
+        </TouchableOpacity>
+
+        {showFeeDetails && (
+          <View style={styles.feeBreakdown}>
+            <View style={styles.feeBreakdownRow}>
+              <Text style={styles.feeBreakdownLabel}>{t('fees.gasCosts')}</Text>
+              <Text style={styles.feeBreakdownValue}>{fees.gasCostADA} ADA</Text>
+            </View>
+            <View style={styles.feeBreakdownRow}>
+              <Text style={styles.feeBreakdownLabel}>{t('fees.foundationFee')}</Text>
+              <Text style={styles.feeBreakdownValue}>{fees.foundationFeeADA} ADA</Text>
+            </View>
+            {fees.isMinimumApplied && (
+              <Text style={styles.feeNote}>{t('fees.minimumApplied')}</Text>
+            )}
+            <Text style={styles.feeNote}>{t('fees.foundationInfo')}</Text>
+          </View>
+        )}
+
+        <TouchableOpacity style={styles.primaryButton} onPress={handleContinueToPayment}>
+          <Text style={styles.primaryButtonText}>{t('publish.continueButton')}</Text>
+        </TouchableOpacity>
+      </View>
+    </>
+  );
+
+  const renderPayStep = () => {
+    if (!lockedFees) return null;
+    return (
+      <ScrollView
+        style={styles.content}
+        contentContainerStyle={[styles.contentInner, { paddingBottom: 32 + insets.bottom }]}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+      >
+        <Text style={styles.payTitle}>{t('payment.title', { amount: lockedFees.grandTotalADA })}</Text>
+
+        {/* Step 1 — copy address and amount */}
+        <View style={styles.payCard}>
+          <View style={styles.payStepHeader}>
+            <View style={styles.payStepNum}><Text style={styles.payStepNumText}>1</Text></View>
+            <Text style={styles.payStepTitle}>{t('payment.step1')}</Text>
           </View>
 
-          {/* ── FEE ESTIMATOR ── */}
-          <TouchableOpacity
-            style={styles.estimateButton}
-            onPress={handleEstimateFee}
-            disabled={isSubmitting || paymentFlow !== 'not-started'}
-          >
-            <Text style={styles.estimateButtonText}>{t('fees.calculateButton')}</Text>
-          </TouchableOpacity>
+          <Text style={styles.payFieldLabel}>{t('payment.sendTo')}</Text>
+          <View style={styles.payCopyRow}>
+            <Text style={styles.payFieldValue} numberOfLines={1} ellipsizeMode="middle">
+              {TREASURY_CONFIG.FOUNDATION_WALLET}
+            </Text>
+            <TouchableOpacity
+              style={styles.payCopyBtn}
+              onPress={() => handleCopy('address', TREASURY_CONFIG.FOUNDATION_WALLET)}
+            >
+              <Text style={styles.payCopyBtnText}>
+                {copiedField === 'address' ? t('payment.copied') : t('payment.copy')}
+              </Text>
+            </TouchableOpacity>
+          </View>
 
-          {/* ── FEE BREAKDOWN ── */}
-          {feeEstimate && (
-            <View style={styles.feeBox}>
-              <Text style={styles.feeTitle}>{t('fees.breakdownTitle')}</Text>
-              <Text style={styles.feeAmount}>
-                {feeEstimate.grandTotalADA} ADA
+          <Text style={styles.payFieldLabel}>{t('payment.amount')}</Text>
+          <View style={styles.payCopyRow}>
+            <Text style={styles.payFieldValue}>{lockedFees.grandTotalADA} ADA</Text>
+            <TouchableOpacity
+              style={styles.payCopyBtn}
+              onPress={() => handleCopy('amount', lockedFees.grandTotalADA)}
+            >
+              <Text style={styles.payCopyBtnText}>
+                {copiedField === 'amount' ? t('payment.copied') : t('payment.copy')}
               </Text>
-              <Text style={styles.feeAmountUSD}>
-                (${feeEstimate.grandTotalUSD} USD)
-              </Text>
-              <View style={styles.feeBreakdownContainer}>
-                <View style={styles.feeBreakdownRow}>
-                  <Text style={styles.feeBreakdownLabel}>{t('fees.gasCosts')}</Text>
-                  <Text style={styles.feeBreakdownValue}>
-                    {feeEstimate.gasCostADA} ADA
-                  </Text>
-                </View>
-                <View style={[styles.feeBreakdownRow, { paddingTop: 8, borderTopWidth: 1, borderTopColor: '#fde047' }]}>
-                  <Text style={styles.feeBreakdownLabel}>{t('fees.foundationFee')}</Text>
-                  <Text style={styles.feeBreakdownValue}>
-                    {feeEstimate.foundationFeeADA} ADA
-                  </Text>
-                </View>
-                <View style={[styles.feeBreakdownRow, { marginTop: 8, paddingTop: 8, borderTopWidth: 2, borderTopColor: '#fbbf24' }]}>
-                  <Text style={[styles.feeBreakdownLabel, { fontWeight: 'bold' }]}>{t('fees.total')}</Text>
-                  <Text style={[styles.feeBreakdownValue, { fontWeight: 'bold', fontSize: 14 }]}>
-                    {feeEstimate.grandTotalADA} ADA
-                  </Text>
-                </View>
-              </View>
-              {feeEstimate.isMinimumApplied && (
-                <Text style={styles.feeMinimumNote}>{t('fees.minimumApplied')}</Text>
-              )}
-              <View style={styles.foundationInfoBox}>
-                <Text style={styles.foundationInfoText}>{t('fees.foundationInfo')}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* Step 2 — pay from own wallet */}
+        <View style={styles.payCard}>
+          <View style={styles.payStepHeader}>
+            <View style={styles.payStepNum}><Text style={styles.payStepNumText}>2</Text></View>
+            <Text style={styles.payStepTitle}>{t('payment.step2')}</Text>
+          </View>
+          <TouchableOpacity style={styles.primaryButton} onPress={handleOpenWallet}>
+            <Text style={styles.primaryButtonText}>{t('payment.openWallet')}</Text>
+          </TouchableOpacity>
+          <Text style={styles.payNote}>{t('payment.ownWalletNote')}</Text>
+        </View>
+
+        {/* Step 3 — transaction ID */}
+        <View style={styles.payCard}>
+          <View style={styles.payStepHeader}>
+            <View style={styles.payStepNum}><Text style={styles.payStepNumText}>3</Text></View>
+            <Text style={styles.payStepTitle}>{t('payment.step3')}</Text>
+          </View>
+          <Text style={styles.payNote}>{t('payment.step3Helper')}</Text>
+
+          {foundOnClipboard && (
+            <Text style={styles.payFoundText}>✓ {t('payment.foundOnClipboard')}</Text>
+          )}
+
+          <Text style={styles.payFieldLabel}>{t('payment.txHashLabel')}</Text>
+          <View style={styles.payInputRow}>
+            <TextInput
+              style={styles.payInput}
+              placeholder={t('payment.txHashPlaceholder')}
+              placeholderTextColor="#9ca3af"
+              value={paymentTxHashInput}
+              onChangeText={text => {
+                setPaymentTxHashInput(text);
+                setPaymentError(null);
+                setFoundOnClipboard(false);
+              }}
+              autoCapitalize="none"
+              autoCorrect={false}
+              editable={!isBusy}
+            />
+            <TouchableOpacity style={styles.payCopyBtn} onPress={handlePasteTxId} disabled={isBusy}>
+              <Text style={styles.payCopyBtnText}>{t('payment.paste')}</Text>
+            </TouchableOpacity>
+          </View>
+
+          {paymentState === 'waiting' && (
+            <View style={styles.payStatusBox}>
+              <ActivityIndicator size="small" color="#22c55e" />
+              <View style={{ flex: 1 }}>
+                <Text style={styles.payStatusTitle}>{t('payment.waitingTitle')}</Text>
+                <Text style={styles.payStatusBody}>{t('payment.waitingBody')}</Text>
               </View>
             </View>
           )}
 
-          {/* ── PAYMENT ── */}
-          {renderPaymentSection()}
+          {paymentState === 'publishing' && (
+            <View style={styles.payStatusBox}>
+              <ActivityIndicator size="small" color="#22c55e" />
+              <Text style={[styles.payStatusTitle, { flex: 1 }]}>{uploadStatus}</Text>
+            </View>
+          )}
 
-          {/* ── BATCH INFO ── */}
-          <View style={styles.optimizationBox}>
-            <Text style={styles.optimizationTitle}>{t('batching.title')}</Text>
-            <Text style={styles.optimizationText}>{t('batching.body')}</Text>
-          </View>
+          {paymentError && paymentState === 'failed' && (
+            <Text style={styles.payErrorText}>{paymentError}</Text>
+          )}
+
+          {paymentState === 'waiting' ? (
+            <TouchableOpacity style={styles.secondaryButton} onPress={cancelPaymentCheck}>
+              <Text style={styles.secondaryButtonText}>{t('payment.cancelWaiting')}</Text>
+            </TouchableOpacity>
+          ) : paymentState !== 'publishing' && (
+            <TouchableOpacity
+              style={[styles.primaryButton, !paymentTxHashInput.trim() && styles.primaryButtonDisabled]}
+              onPress={() => checkPaymentAndPublish(paymentTxHashInput)}
+              disabled={!paymentTxHashInput.trim()}
+            >
+              <Text style={styles.primaryButtonText}>{t('payment.verifyButton')}</Text>
+            </TouchableOpacity>
+          )}
         </View>
-      </ScrollView>
 
-      {/* ── PUBLISH BUTTON ── */}
-      {paymentFlow === 'not-started' && (
-        <View style={styles.footer}>
-          <TouchableOpacity
-            style={[
-              styles.publishButton,
-              (isSubmitting || walletFlow !== 'connected') && styles.publishButtonDisabled,
-            ]}
-            onPress={handleBeginPublish}
-            disabled={isSubmitting || walletFlow !== 'connected'}
-          >
-            <Text style={styles.publishButtonText}>
-              {walletFlow !== 'connected' ? t('publish.connectWalletButton') : t('publish.continueButton')}
-            </Text>
+        {/* First-timer help */}
+        <View style={styles.helpCard}>
+          <TouchableOpacity onPress={() => setShowWalletHelp(v => !v)} style={styles.helpToggle}>
+            <Text style={styles.helpToggleText}>{t('payment.newToWallets')}</Text>
+            <Text style={styles.helpToggleArrow}>{showWalletHelp ? '−' : '+'}</Text>
           </TouchableOpacity>
+          {showWalletHelp && (
+            <View style={styles.helpBody}>
+              <Text style={styles.helpText}>{t('noWallet.body')}</Text>
+              <Text style={styles.helpText}>
+                <Trans t={t} i18nKey="noWallet.step1" components={{ bold: <Text style={{ fontWeight: '700' }} /> }} />
+              </Text>
+              <Text style={styles.helpText}>{t('noWallet.step2')}</Text>
+              <TouchableOpacity
+                style={styles.secondaryButton}
+                onPress={() => Linking.openURL(VESPR_PLAY_STORE_URL).catch(() =>
+                  Alert.alert(t('noWallet.linkErrorTitle'), t('noWallet.linkErrorMessage')))}
+              >
+                <Text style={styles.secondaryButtonText}>{t('noWallet.downloadButton')}</Text>
+              </TouchableOpacity>
+              <Text style={styles.helpText}>{t('payment.faucetNote')}</Text>
+              <TouchableOpacity
+                style={styles.secondaryButton}
+                onPress={() => Linking.openURL(TEST_ADA_FAUCET_URL).catch(() => {})}
+              >
+                <Text style={styles.secondaryButtonText}>{t('payment.faucetLink')}</Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
-      )}
+
+        <TouchableOpacity onPress={handleEditProposal} disabled={paymentState === 'publishing'}>
+          <Text style={styles.editLink}>{t('payment.editProposal')}</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    );
+  };
+
+  const renderPublishedStep = () => {
+    if (!published) return null;
+    const days = parseInt(duration);
+    return (
+      <ScrollView style={styles.content} contentContainerStyle={[styles.contentInner, styles.publishedInner]}>
+        <View style={styles.publishedCheck}>
+          <Text style={styles.publishedCheckText}>✓</Text>
+        </View>
+        <Text style={styles.publishedTitle}>{t('success.live')}</Text>
+        <Text style={styles.publishedBody}>{t('success.votingOpen', { count: days })}</Text>
+        <Text style={styles.publishedMeta}>
+          {t('success.totalPaid', { ada: lockedFees?.grandTotalADA ?? fees.grandTotalADA, usd: lockedFees?.grandTotalUSD ?? fees.grandTotalUSD })}
+        </Text>
+
+        <TouchableOpacity
+          style={[styles.primaryButton, styles.publishedButton]}
+          onPress={() => shareService.shareProposalInvite({
+            id: published.cid,
+            title: title.trim(),
+            description: description.trim(),
+            deadline: Date.now() + (days * 24 * 60 * 60 * 1000),
+            totalVotes: 0,
+          })}
+        >
+          <Text style={styles.primaryButtonText}>{t('success.share')}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.secondaryButton, styles.publishedButton]}
+          onPress={async () => {
+            await Clipboard.setStringAsync(published.metadataTxHash);
+            toastService.success(t('payment.copied'));
+          }}
+        >
+          <Text style={styles.secondaryButtonText}>{t('success.copyTxHash')}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.secondaryButton, styles.publishedButton]} onPress={onProposalCreated}>
+          <Text style={styles.secondaryButtonText}>{t('buttons.done')}</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    );
+  };
+
+  // ─── Main Render ─────────────────────────────────────────────────────
+
+  const headerTitle = step === 'published' ? t('success.title') : t('header.title');
+
+  return (
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+    >
+      <View style={[styles.header, { paddingTop: insets.top + 12 }]}>
+        <TouchableOpacity
+          onPress={handleHeaderBack}
+          style={styles.backButton}
+          disabled={paymentState === 'publishing'}
+        >
+          <Text style={styles.backText}>{t('header.back')}</Text>
+        </TouchableOpacity>
+        <Text style={styles.headerTitle} numberOfLines={1}>{headerTitle}</Text>
+        <QueueIndicator />
+      </View>
+
+      {step === 'write' && renderWriteStep()}
+      {step === 'pay' && renderPayStep()}
+      {step === 'published' && renderPublishedStep()}
     </KeyboardAvoidingView>
   );
 }
+
+const MONO = Platform.OS === 'ios' ? 'Menlo' : 'monospace';
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f9fafb' },
@@ -1016,36 +924,22 @@ const styles = StyleSheet.create({
   },
   backButton: { padding: 8 },
   backText: { fontSize: 16, color: '#22c55e', fontWeight: '600' },
-  headerTitle: { fontSize: 18, fontWeight: '600', color: '#111827' },
-  placeholder: { width: 80 },
-  content: { flex: 1, padding: 16 },
+  headerTitle: { fontSize: 18, fontWeight: '600', color: '#111827', flexShrink: 1, marginHorizontal: 8 },
+  content: { flex: 1 },
+  contentInner: { padding: 16 },
   infoBox: {
-    backgroundColor: '#dbeafe',
-    padding: 12,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#93c5fd',
-    marginBottom: 16,
-  },
-  infoText: { fontSize: 12, color: '#1e40af', textAlign: 'center', fontWeight: '500' },
-  statusBox: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: '#f0fdf4',
     padding: 12,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#bbf7d0',
     marginBottom: 16,
-    gap: 8,
   },
-  statusText: { fontSize: 14, color: '#15803d', fontWeight: '500' },
+  infoText: { fontSize: 12, color: '#15803d', textAlign: 'center', fontWeight: '500' },
   formCard: {
     backgroundColor: 'white',
     borderRadius: 12,
     padding: 16,
-    marginBottom: 100,
   },
   inputGroup: { marginBottom: 20 },
   label: { fontSize: 14, fontWeight: '600', color: '#374151', marginBottom: 8 },
@@ -1060,6 +954,9 @@ const styles = StyleSheet.create({
   },
   textArea: { height: 100, paddingTop: 12 },
   helperText: { fontSize: 12, color: '#9ca3af', marginTop: 4 },
+  votingFreeText: { fontSize: 12, color: '#15803d', fontWeight: '600', marginTop: 10 },
+  discardLink: { alignItems: 'center', padding: 14 },
+  discardLinkText: { fontSize: 13, color: '#ef4444', fontWeight: '500' },
 
   // ── Attachments ──
   attachmentRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginTop: 10 },
@@ -1079,164 +976,7 @@ const styles = StyleSheet.create({
   },
   attachmentAddText: { fontSize: 12, color: '#22c55e', fontWeight: '700', textAlign: 'center' },
 
-  // ── Wallet Select State ──
-  walletSectionTitle: { fontSize: 16, fontWeight: '700', color: '#111827', marginBottom: 4, letterSpacing: -0.2 },
-  walletSectionSubtitle: { fontSize: 12.5, color: '#6b7280', marginBottom: 18, lineHeight: 18 },
-  walletOption: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 16,
-    borderRadius: 14,
-    borderWidth: 1.5,
-    borderColor: '#eef1f4',
-    marginBottom: 10,
-    backgroundColor: 'white',
-    shadowColor: '#0f172a',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 3,
-    elevation: 1,
-  },
-  walletOptionLeft: { flexDirection: 'row', alignItems: 'center', flex: 1 },
-  walletOptionEmoji: { fontSize: 24, marginRight: 12 },
-  walletOptionInfo: { flex: 1 },
-  walletOptionNameRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 4, flexWrap: 'wrap' },
-  walletOptionName: { fontSize: 16, fontWeight: '700', color: '#111827' },
-  walletBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 20 },
-  walletBadgeText: { fontSize: 9, fontWeight: '800', color: 'white', letterSpacing: 0.5 },
-  walletOptionDesc: { fontSize: 12, color: '#6b7280', lineHeight: 17 },
-  walletOptionArrow: { fontSize: 22, fontWeight: '300', marginLeft: 8 },
-  walletDivider: { flexDirection: 'row', alignItems: 'center', marginVertical: 18, gap: 12 },
-  walletDividerLine: { flex: 1, height: 1, backgroundColor: '#e5e7eb' },
-  walletDividerText: { fontSize: 11, color: '#9ca3af', fontWeight: '600', letterSpacing: 1, textTransform: 'uppercase' },
-  walletSecondaryBtn: {
-    padding: 14,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#e5e7eb',
-    backgroundColor: '#f9fafb',
-    alignItems: 'center',
-  },
-  walletSecondaryText: { fontSize: 14, color: '#374151', fontWeight: '500' },
-  walletFutureNote: {
-    marginTop: 16,
-    padding: 12,
-    backgroundColor: '#f0fdf4',
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#bbf7d0',
-  },
-  walletFutureText: { fontSize: 11, color: '#15803d', textAlign: 'center', lineHeight: 16, fontWeight: '500' },
-
-  // ── Wallet Connected State ──
-  walletConnectedBox: {
-    padding: 18,
-    borderRadius: 14,
-    backgroundColor: '#f0fdf4',
-    borderWidth: 1.5,
-    borderColor: '#86efac',
-    shadowColor: '#15803d',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 6,
-    elevation: 1,
-  },
-  walletConnectedHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 10 },
-  walletConnectedDot: {
-    width: 9, height: 9, borderRadius: 5,
-    backgroundColor: '#22c55e', marginRight: 9,
-    shadowColor: '#22c55e', shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.5, shadowRadius: 4, elevation: 2,
-  },
-  walletConnectedLabel: { fontSize: 13, fontWeight: '700', color: '#15803d', letterSpacing: 0.1 },
-  walletConnectedAddress: {
-    fontSize: 15, fontWeight: '600', color: '#111827',
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
-    marginBottom: 14,
-  },
-  walletDisconnectBtn: { alignSelf: 'flex-start' },
-  walletDisconnectText: { fontSize: 13, color: '#ef4444', fontWeight: '500' },
-
-  // ── Manual Entry State ──
-  walletManualContainer: {},
-  walletReturnHint: {
-    backgroundColor: '#f0fdf4',
-    padding: 13,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#bbf7d0',
-    marginBottom: 16,
-  },
-  walletReturnHintText: { fontSize: 13, color: '#15803d', lineHeight: 20 },
-  walletManualInput: {
-    backgroundColor: '#f9fafb',
-    borderWidth: 1.5,
-    borderColor: '#22c55e',
-    borderRadius: 10,
-    padding: 13,
-    fontSize: 14,
-    color: '#111827',
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
-    marginBottom: 4,
-  },
-  walletManualButtons: { flexDirection: 'row', gap: 10, marginTop: 16 },
-  walletManualBack: {
-    flex: 1, padding: 13, borderRadius: 10,
-    borderWidth: 1, borderColor: '#e5e7eb',
-    alignItems: 'center',
-  },
-  walletManualBackText: { fontSize: 14, color: '#6b7280', fontWeight: '500' },
-  walletManualConfirm: {
-    flex: 2, padding: 13, borderRadius: 10,
-    backgroundColor: '#22c55e', alignItems: 'center',
-    shadowColor: '#22c55e', shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.18, shadowRadius: 5, elevation: 2,
-  },
-  walletManualConfirmDisabled: { backgroundColor: '#d1d5db', shadowOpacity: 0 },
-  walletManualConfirmText: { fontSize: 14, color: 'white', fontWeight: '700' },
-
-  // ── No Wallet Guide State ──
-  noWalletGuide: {
-    backgroundColor: '#fafafa',
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: '#eef1f4',
-    padding: 18,
-    shadowColor: '#0f172a',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.04,
-    shadowRadius: 3,
-    elevation: 1,
-  },
-  noWalletGuideTitle: {
-    fontSize: 16, fontWeight: '700', color: '#111827', marginBottom: 10, letterSpacing: -0.2,
-  },
-  noWalletGuideBody: {
-    fontSize: 13, color: '#4b5563', lineHeight: 20, marginBottom: 18,
-  },
-  noWalletStep: {
-    flexDirection: 'row', alignItems: 'flex-start', marginBottom: 14, gap: 12,
-  },
-  noWalletStepNum: {
-    width: 26, height: 26, borderRadius: 13,
-    backgroundColor: '#8b5cf6', justifyContent: 'center', alignItems: 'center',
-    flexShrink: 0, marginTop: 1,
-  },
-  noWalletStepNumText: { fontSize: 13, fontWeight: '700', color: 'white' },
-  noWalletStepText: { fontSize: 13, color: '#374151', lineHeight: 20, flex: 1 },
-  noWalletDownloadBtn: {
-    backgroundColor: '#8b5cf6',
-    padding: 15, borderRadius: 12,
-    alignItems: 'center', marginTop: 6, marginBottom: 12,
-    shadowColor: '#7c3aed', shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.16, shadowRadius: 5, elevation: 2,
-  },
-  noWalletDownloadText: { fontSize: 15, fontWeight: '700', color: 'white' },
-  noWalletBack: { alignItems: 'center', padding: 8 },
-  noWalletBackText: { fontSize: 13, color: '#6b7280' },
-
-  // ── Fee & Other ──
+  // ── Voters ──
   presetsGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   presetButton: {
     paddingHorizontal: 16, paddingVertical: 10,
@@ -1246,71 +986,92 @@ const styles = StyleSheet.create({
   presetButtonSelected: { borderColor: '#22c55e', backgroundColor: '#f0fdf4' },
   presetButtonText: { fontSize: 14, fontWeight: '600', color: '#6b7280' },
   presetButtonTextSelected: { color: '#15803d' },
-  estimateButton: {
-    flexDirection: 'row', backgroundColor: '#f0fdf4',
-    padding: 14, borderRadius: 8, borderWidth: 2, borderColor: '#22c55e',
-    alignItems: 'center', justifyContent: 'center',
-    marginTop: 8, marginBottom: 16, gap: 8,
-  },
-  estimateButtonLoading: { opacity: 0.7 },
-  estimateButtonText: { fontSize: 15, color: '#15803d', fontWeight: '700' },
-  feeBox: {
-    backgroundColor: '#fef3c7', padding: 16, borderRadius: 12,
-    borderWidth: 2, borderColor: '#fde047', marginBottom: 16,
-  },
-  feeTitle: { fontSize: 13, fontWeight: '600', color: '#92400e', marginBottom: 8, textAlign: 'center' },
-  feeAmount: { fontSize: 32, fontWeight: 'bold', color: '#78350f', textAlign: 'center' },
-  feeAmountUSD: { fontSize: 16, color: '#92400e', textAlign: 'center', marginTop: 4, marginBottom: 12 },
-  feeBreakdownContainer: { backgroundColor: '#fffbeb', padding: 12, borderRadius: 8, marginBottom: 12 },
-  feeBreakdownRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 },
-  feeBreakdownLabel: { fontSize: 12, color: '#92400e' },
-  feeBreakdownValue: { fontSize: 12, color: '#78350f', fontWeight: '600' },
-  foundationInfoBox: {
-    backgroundColor: '#dbeafe', padding: 10, borderRadius: 6, borderWidth: 1, borderColor: '#93c5fd',
-  },
-  foundationInfoText: { fontSize: 11, color: '#1e40af', textAlign: 'center', lineHeight: 16 },
-  feeMinimumNote: { fontSize: 11, color: '#92400e', textAlign: 'center', fontStyle: 'italic', marginBottom: 8 },
 
-  // ── Payment Section ──
-  paymentBox: {
-    backgroundColor: '#eff6ff', padding: 16, borderRadius: 12,
-    borderWidth: 2, borderColor: '#93c5fd', marginBottom: 16,
-  },
-  paymentTitle: { fontSize: 15, fontWeight: '700', color: '#1e40af', marginBottom: 6, textAlign: 'center' },
-  paymentInstructions: { fontSize: 12.5, color: '#1e3a8a', lineHeight: 18, marginBottom: 14, textAlign: 'center' },
-  paymentField: { marginBottom: 12 },
-  paymentFieldLabel: { fontSize: 11, fontWeight: '600', color: '#1e40af', marginBottom: 4, textTransform: 'uppercase', letterSpacing: 0.3 },
-  paymentCopyRow: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-    backgroundColor: 'white', borderRadius: 8, borderWidth: 1, borderColor: '#bfdbfe',
-    paddingVertical: 10, paddingHorizontal: 12,
-  },
-  paymentFieldValue: {
-    fontSize: 14, fontWeight: '600', color: '#111827', flex: 1, marginRight: 8,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
-  },
-  paymentCopyBtn: { paddingHorizontal: 10, paddingVertical: 5, backgroundColor: '#dbeafe', borderRadius: 6 },
-  paymentCopyBtnText: { fontSize: 12, fontWeight: '700', color: '#1e40af' },
-  paymentErrorText: { fontSize: 12.5, color: '#dc2626', marginTop: 8, marginBottom: 4, lineHeight: 18 },
-  paymentVerifyBtn: {
-    flexDirection: 'row', backgroundColor: '#1d4ed8', padding: 14, borderRadius: 10,
-    alignItems: 'center', justifyContent: 'center', marginTop: 14, gap: 8,
-  },
-  paymentVerifyBtnDisabled: { backgroundColor: '#9ca3af' },
-  paymentVerifyBtnText: { fontSize: 15, color: 'white', fontWeight: '700' },
-  paymentEditLink: { fontSize: 13, color: '#6b7280', textAlign: 'center', marginTop: 14, fontWeight: '500' },
-  optimizationBox: {
-    marginTop: 8, padding: 14, backgroundColor: '#f0fdf4',
-    borderRadius: 8, borderWidth: 1, borderColor: '#bbf7d0',
-  },
-  optimizationTitle: { fontSize: 14, fontWeight: '600', color: '#15803d', marginBottom: 8 },
-  optimizationText: { fontSize: 12, color: '#15803d', lineHeight: 18 },
+  // ── Footer: live cost + continue ──
   footer: {
-    position: 'absolute', bottom: 0, left: 0, right: 0,
-    padding: 16, backgroundColor: 'white',
-    borderTopWidth: 1, borderTopColor: '#e5e7eb',
+    paddingHorizontal: 16, paddingTop: 12, backgroundColor: 'white',
+    borderTopWidth: 1, borderTopColor: '#e5e7eb', gap: 10,
   },
-  publishButton: { backgroundColor: '#22c55e', padding: 16, borderRadius: 12, alignItems: 'center' },
-  publishButtonDisabled: { backgroundColor: '#9ca3af' },
-  publishButtonText: { color: 'white', fontSize: 16, fontWeight: '700' },
+  costRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 12 },
+  costLabelBlock: { flexShrink: 1 },
+  costLabel: { fontSize: 14, fontWeight: '600', color: '#374151' },
+  costDetailsToggle: { fontSize: 12, color: '#22c55e', fontWeight: '600', marginTop: 2 },
+  costAmountBlock: { alignItems: 'flex-end' },
+  costAmount: { fontSize: 20, fontWeight: '700', color: '#111827' },
+  costUsd: { fontSize: 12, color: '#6b7280' },
+  feeBreakdown: { backgroundColor: '#f9fafb', borderRadius: 8, padding: 12, gap: 6 },
+  feeBreakdownRow: { flexDirection: 'row', justifyContent: 'space-between' },
+  feeBreakdownLabel: { fontSize: 12, color: '#4b5563' },
+  feeBreakdownValue: { fontSize: 12, color: '#111827', fontWeight: '600' },
+  feeNote: { fontSize: 11, color: '#6b7280', lineHeight: 16 },
+
+  // ── Buttons ──
+  primaryButton: {
+    flexDirection: 'row', backgroundColor: '#22c55e', padding: 15, borderRadius: 12,
+    alignItems: 'center', justifyContent: 'center', gap: 8,
+  },
+  primaryButtonDisabled: { backgroundColor: '#9ca3af' },
+  primaryButtonText: { color: 'white', fontSize: 16, fontWeight: '700', textAlign: 'center' },
+  secondaryButton: {
+    padding: 13, borderRadius: 12, borderWidth: 1, borderColor: '#d1d5db',
+    alignItems: 'center', backgroundColor: 'white',
+  },
+  secondaryButtonText: { fontSize: 15, color: '#374151', fontWeight: '600', textAlign: 'center' },
+
+  // ── Pay step ──
+  payTitle: { fontSize: 22, fontWeight: '700', color: '#111827', marginBottom: 14, marginTop: 4 },
+  payCard: { backgroundColor: 'white', borderRadius: 12, padding: 16, marginBottom: 12, gap: 10 },
+  payStepHeader: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  payStepNum: {
+    width: 26, height: 26, borderRadius: 13, backgroundColor: '#22c55e',
+    alignItems: 'center', justifyContent: 'center',
+  },
+  payStepNumText: { color: 'white', fontSize: 13, fontWeight: '700' },
+  payStepTitle: { fontSize: 15, fontWeight: '700', color: '#111827', flex: 1, lineHeight: 21 },
+  payFieldLabel: {
+    fontSize: 11, fontWeight: '600', color: '#6b7280',
+    textTransform: 'uppercase', letterSpacing: 0.4, marginBottom: -4,
+  },
+  payCopyRow: {
+    flexDirection: 'row', alignItems: 'center', gap: 8,
+    backgroundColor: '#f9fafb', borderRadius: 8, borderWidth: 1, borderColor: '#e5e7eb',
+    paddingVertical: 8, paddingLeft: 12, paddingRight: 8,
+  },
+  payFieldValue: { fontSize: 14, fontWeight: '600', color: '#111827', flex: 1, fontFamily: MONO },
+  payCopyBtn: { paddingHorizontal: 12, paddingVertical: 7, backgroundColor: '#dcfce7', borderRadius: 6 },
+  payCopyBtnText: { fontSize: 13, fontWeight: '700', color: '#15803d' },
+  payNote: { fontSize: 13, color: '#6b7280', lineHeight: 19 },
+  payFoundText: { fontSize: 13, color: '#15803d', fontWeight: '600' },
+  payInputRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  payInput: {
+    flex: 1, backgroundColor: '#f9fafb', borderWidth: 1, borderColor: '#e5e7eb',
+    borderRadius: 8, padding: 11, fontSize: 13, color: '#111827', fontFamily: MONO,
+  },
+  payStatusBox: {
+    flexDirection: 'row', alignItems: 'center', gap: 12,
+    backgroundColor: '#f0fdf4', borderRadius: 8, padding: 12,
+    borderWidth: 1, borderColor: '#bbf7d0',
+  },
+  payStatusTitle: { fontSize: 14, fontWeight: '600', color: '#15803d' },
+  payStatusBody: { fontSize: 12.5, color: '#15803d', marginTop: 2, lineHeight: 18 },
+  payErrorText: { fontSize: 13, color: '#dc2626', lineHeight: 19 },
+  helpCard: { backgroundColor: 'white', borderRadius: 12, marginBottom: 12, overflow: 'hidden' },
+  helpToggle: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16 },
+  helpToggleText: { fontSize: 15, fontWeight: '600', color: '#374151', flex: 1 },
+  helpToggleArrow: { fontSize: 20, color: '#22c55e', fontWeight: '600', marginLeft: 12 },
+  helpBody: { paddingHorizontal: 16, paddingBottom: 16, gap: 10 },
+  helpText: { fontSize: 13, color: '#4b5563', lineHeight: 20 },
+  editLink: { fontSize: 14, color: '#6b7280', textAlign: 'center', padding: 12, fontWeight: '500' },
+
+  // ── Published step ──
+  publishedInner: { alignItems: 'center', paddingTop: 40 },
+  publishedCheck: {
+    width: 72, height: 72, borderRadius: 36, backgroundColor: '#dcfce7',
+    alignItems: 'center', justifyContent: 'center', marginBottom: 18,
+  },
+  publishedCheckText: { fontSize: 36, color: '#15803d', fontWeight: '700' },
+  publishedTitle: { fontSize: 22, fontWeight: '700', color: '#111827', textAlign: 'center' },
+  publishedBody: { fontSize: 15, color: '#4b5563', textAlign: 'center', marginTop: 8, lineHeight: 22 },
+  publishedMeta: { fontSize: 13, color: '#6b7280', textAlign: 'center', marginTop: 6, marginBottom: 28 },
+  publishedButton: { alignSelf: 'stretch', marginBottom: 10 },
 });

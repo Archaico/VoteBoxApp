@@ -3,66 +3,19 @@
     "back": "Koma",
     "title": "Ƙirƙiri Ƙuduri"
   },
-  "infoBanner": "Cardano ce ke tsare shi · Ragin kuɗin network 80% · Kyauta ga masu kaɗa ƙuri'a",
+  "infoBanner": "An adana a Cardano · Kaɗa ƙuri'a kyauta ne",
   "buttons": {
     "cancel": "Soke",
-    "ok": "To",
     "continue": "Ci gaba",
-    "remove": "Cire",
     "done": "An gama"
   },
-  "wallets": {
-    "eternl": {
-      "badge": "SHAWARARMU",
-      "description": "Walat ɗin Cardano mafi ƙarfi. Tana aiki da WalletConnect."
-    },
-    "vespr": {
-      "badge": "MAFI SAUƘI GA SABABBI",
-      "description": "An yi ta don waya, tana da sauri, kuma saitinta da sauƙi."
-    },
-    "lace": {
-      "badge": "NA HUKUMA DAGA IOG",
-      "description": "Waɗanda suka kafa Cardano ne suka gina ta. Duk abin Web3 a wuri ɗaya."
-    }
-  },
-  "walletSelect": {
-    "title": "Haɗa Walat ɗinku",
-    "subtitle": "Ana buƙatarta don biyan kuɗin ƙirƙirar ƙuduri. Masu kaɗa ƙuri'a ba sa buƙatar walat ko kaɗan.",
-    "or": "ko",
-    "enterManually": "📋  Shigar da adireshi da hannu",
-    "noWallet": "❓  Ba ni da walat tukuna",
-    "walletConnectSoon": "🔗 WalletConnect na nan tafe — haɗawa da taɓawa ɗaya da walat sama da 600",
-    "openAlertTitle": "A buɗe {{wallet}}?",
-    "openAlertMessage": "Wannan zai buɗe manhajar walat ta {{wallet}} (ko ya kai ku inda za ku sauke ta).\n\nBayan kun haɗa, ku kwafi adireshinku na Cardano (yana farawa da addr_test1...) sannan ku dawo nan ku liƙa shi.",
-    "openAlertButton": "Buɗe {{wallet}}",
-    "linkErrorTitle": "Ba a iya buɗe mahaɗin ba",
-    "linkErrorMessage": "Ku nemi walat ɗin a Play Store da kanku."
-  },
-  "walletManual": {
-    "welcomeBack": "👋 Barka da dawowa! Ku buɗe manhajar walat ɗinku, ku kwafi adireshinku (addr_test1...), sannan ku liƙa shi a ƙasa.",
-    "addressLabel": "Adireshinku na Cardano",
-    "addressHelper": "Yana farawa da \"addr_test1\" · Za ku same shi a walat ɗinku ƙarƙashin \"Receive\" ko \"Address\"",
-    "back": "← Koma",
-    "confirm": "Tabbatar da Adireshi",
-    "invalidTitle": "Adireshi Ba Daidai Ba Ne",
-    "invalidMessage": "Ku shigar da ingantaccen adireshin Cardano. Ya kamata ya fara da \"addr_test1\" (testnet) kuma ya kai aƙalla haruffa 50."
-  },
-  "walletConnected": {
-    "label": "An Haɗa Walat",
-    "removeButton": "Cire kuma Canza Walat",
-    "removeAlertTitle": "Cire Walat",
-    "removeAlertMessage": "Kun tabbata kuna son cire adireshin walat ɗinku?"
-  },
   "noWallet": {
-    "title": "Samun Walat ta Cardano",
     "body": "Walat ta Cardano tana ba ku damar ajiye ADA (kuɗin Cardano) da kuma biyan ƙaramin kuɗi don wallafa ƙuduri. Masu kaɗa ƙuri'a ba sa buƙatarta ko kaɗan — masu ƙirƙirar ƙudurori kaɗai ke buƙatarta.",
     "step1": "Ku sauke <bold>Vespr</bold> — ita ce walat ɗin Cardano mafi sauƙi ga sababbi, an yi ta don waya.",
     "step2": "Ku ƙirƙiri walat ɗinku sannan ku rubuta kalmomin dawo da ita (recovery phrase) ku ajiye su a wuri mai aminci.",
-    "step3": "Ku saka ADA kaɗan — na 'yan daloli ya isa don wallafa ƙudurori.",
-    "step4": "Ku dawo nan, ku taɓa Vespr, sannan ku liƙa adireshinku.",
     "downloadButton": "⬇️  Sauke Walat ta Vespr",
-    "back": "← Koma zuwa zaɓuɓɓukan walat",
-    "linkErrorMessage": "Ku nemi \"Vespr Wallet\" a Play Store."
+    "linkErrorMessage": "Ku nemi \"Vespr Wallet\" a Play Store.",
+    "linkErrorTitle": "Ba a iya buɗe mahaɗin ba"
   },
   "form": {
     "titleLabel": "Taken Ƙuduri *",
@@ -89,63 +42,62 @@
     "errorTitle": "Ba a iya ƙara hoto ba"
   },
   "validation": {
-    "missingInfoTitle": "Bayanai Ba Su Cika Ba",
-    "missingInfoMessage": "Ku cike dukkan wuraren da ake buƙata tukuna, har da adireshin walat ɗinku",
     "invalidVotersTitle": "Adadin Masu Zaɓe Ba Daidai Ba",
-    "minVotersMessage": "Mafi ƙarancin adadin masu kaɗa ƙuri'a shi ne 2",
     "votersAtLeastMessage": "Adadin masu kaɗa ƙuri'a dole ya kai aƙalla 2",
     "missingTitleTitle": "Babu Take",
     "missingTitleMessage": "Ku shigar da taken ƙuduri",
     "missingDescriptionTitle": "Babu Bayani",
     "missingDescriptionMessage": "Ku shigar da bayanin ƙuduri",
     "invalidDurationTitle": "Tsawon Lokaci Ba Daidai Ba",
-    "invalidDurationMessage": "Tsawon lokaci dole ya kai aƙalla kwana 1",
-    "walletRequiredTitle": "Ana Buƙatar Walat",
-    "walletRequiredMessage": "Ku haɗa walat ɗinku ta Cardano don biyan kuɗin ƙirƙira"
+    "invalidDurationMessage": "Tsawon lokaci dole ya kai aƙalla kwana 1"
   },
   "fees": {
-    "calculateButton": "Ƙididdige Jimillar Kuɗi",
-    "breakdownTitle": "Bayanin Jimillar Kuɗi",
-    "gasCosts": "Kuɗin network (gas):",
+    "gasCosts": "Kuɗin hanyar sadarwar Cardano:",
     "foundationFee": "Kuɗin Gidauniya:",
-    "total": "Jimilla:",
     "minimumApplied": "An yi amfani da mafi ƙarancin kuɗi na 1.2 ADA",
     "foundationInfo": "Kuɗin Gidauniya na tallafa wa ci gaban VoteBoxApp, manhaja mai buɗaɗɗen tushe",
-    "alertTitle": "Cikakken Bayanin Kuɗi",
-    "alertExpectedVoters": "Masu kaɗa ƙuri'a da ake tsammani: {{voters}}",
-    "alertGasCosts_one": "Kuɗin network (rukuni {{count}}): {{amount}} ADA",
-    "alertGasCosts_other": "Kuɗin network (rukunoni {{count}}): {{amount}} ADA",
-    "alertFoundationFee": "Kuɗin Gidauniya: {{amount}} ADA",
-    "alertTotal": "JIMILLA: {{ada}} ADA (~${{usd}} USD)",
-    "alertMinimumApplied": "(an yi amfani da mafi ƙarancin kuɗi na 1.2 ADA)",
-    "alertFoundationInfo": "Kuɗin Gidauniya na tallafa wa ci gaban VoteBoxApp, manhaja mai buɗaɗɗen tushe.",
     "votingFree": "Kaɗa ƙuri'a KYAUTA ne ga kowa!"
   },
   "payment": {
-    "title": "Aika Kuɗi Don Wallafawa",
-    "instructions": "Ku aika daidai wannan adadin daga manhajar walat ɗinku, sannan ku liƙa lambar mu'amala a ƙasa.",
+    "title": "Biya ADA {{amount}} don wallafawa",
     "sendTo": "Aika zuwa",
     "amount": "Adadi",
     "copy": "Kwafi",
-    "txHashLabel": "Lambar Mu'amala (hash)",
-    "txHashPlaceholder": "Liƙa lambar mu'amala daga walat ɗinku",
+    "txHashLabel": "Lambar mu'amala",
+    "txHashPlaceholder": "Liƙa lambar mu'amala",
     "verifying": "Ana tabbatar da biyan kuɗi...",
-    "verifyButton": "Tabbatar kuma Wallafa",
+    "verifyButton": "Duba biyan kuɗi ku wallafa",
     "editProposal": "← Gyara Ƙuduri",
     "overpayTitle": "Adadin ya fi abin da ake buƙata yawa sosai",
     "overpayMessage": "Kun aika {{sent}} ADA, amma {{required}} ADA kawai ake buƙata. Ba za a iya mayar da wannan kuɗi ba — ku ci gaba duk da haka?",
     "verifyErrors": {
-      "malformed_hash": "Wannan bai yi kama da ingantacciyar lambar mu'amala ba. Ya kamata ta zama haruffan hex 64 — ku duba abin da kuka liƙa.",
-      "not_found_or_pending": "Ba a same ta a blockchain ba tukuna. Idan yanzu kuka aika, ku jira daƙiƙa 30-60 don a tabbatar, sannan ku sake gwadawa.",
+      "malformed_hash": "Wannan ba lambar mu'amala ba ce. Ya kamata ta kasance haruffa da lambobi 64. Ku sake kwafa ta daga walat ɗinku.",
+      "not_found_or_pending": "Biyan kuɗin bai iso ba bayan minti 5. Ku duba walat ɗinku ko an aika shi, sannan ku sake taɓa \"Duba biyan kuɗi ku wallafa\".",
       "wrong_recipient": "Wannan mu'amalar ba ta biya adireshin walat ɗin Gidauniya da aka nuna a sama ba.",
       "insufficient_amount": "Adadin da aka aika bai kai abin da ake buƙata ba — ku duba adadin da ke sama.",
       "already_used": "An riga an yi amfani da wannan mu'amalar don wani ƙuduri.",
       "network_error": "Ba a iya kaiwa ga network don tabbatarwa ba — ku duba haɗin intanet ɗinku sannan ku sake gwadawa.",
       "generic": "Tabbatarwa ta gaza — ku sake gwadawa."
-    }
+    },
+    "step1": "Kwafi adireshin da adadin kuɗin",
+    "step2": "Aika kuɗin daga walat ɗinku na Cardano",
+    "openWallet": "Buɗe walat ɗina",
+    "ownWalletNote": "Ku aika daga walat ɗinku na kanku, ba daga kasuwar canjin kuɗi ba. Adireshin da kuka biya daga gare shi zai bayyana a matsayin wanda ya gabatar da ƙudurin.",
+    "openWalletFailedTitle": "Ba a sami manhajar walat ba",
+    "openWalletFailedMessage": "Ku buɗe walat ɗinku na Cardano da kanku, sannan ku aika kuɗin zuwa adireshin da ke sama.",
+    "step3": "Kwafi lambar mu'amala sannan ku dawo nan",
+    "step3Helper": "Walat ɗinku yana nuna ta a cikin bayanan biyan kuɗin, wani lokaci da sunan \"Tx hash\". Idan kun dawo, VoteBoxApp zai same ta a allon kwafi.",
+    "paste": "Liƙa",
+    "copied": "An kwafa",
+    "foundOnClipboard": "An sami lambar mu'amala a allon kwafi",
+    "waitingTitle": "Ana jiran biyan kuɗinku…",
+    "waitingBody": "Yawanci bai kai minti ɗaya ba. Ku bar wannan shafin a buɗe.",
+    "cancelWaiting": "Daina dubawa",
+    "newToWallets": "Sababbi ne a walat ɗin Cardano?",
+    "faucetNote": "VoteBoxApp yana aiki a kan hanyar gwaji ta Cardano, don haka kuna biya da ADA na gwaji kyauta.",
+    "faucetLink": "Sami ADA na gwaji kyauta"
   },
   "publish": {
-    "statusInitializing": "Ana shirya sabis na blockchain...",
     "statusConnecting": "Ana haɗawa da network ɗin Cardano...",
     "statusUploading": "Ana lodawa zuwa IPFS...",
     "statusRecording": "Ana rubutawa a blockchain...",
@@ -153,24 +105,27 @@
     "unknownError": "Kuskuren da ba a sani ba",
     "queuedToast": "⏳ Babu intanet — ƙuduri yana jira, za a wallafa shi idan intanet ya dawo",
     "failedTitle": "Wallafawa Ta Gaza",
-    "failedMessage": "{{error}}\n\nKu duba console don cikakkun bayanai.",
-    "connectWalletButton": "Haɗa Walat Don Wallafawa",
+    "failedMessage": "Ba a iya wallafawa ba: {{error}}",
     "continueButton": "Ci Gaba Zuwa Biyan Kuɗi"
   },
   "success": {
     "title": "🎉 An Wallafa Ƙuduri!",
     "live": "Ƙudurinku yanzu yana kan layi!",
-    "ipfs": "IPFS: {{cid}}...",
-    "tx": "TX:   {{hash}}...",
-    "verifyOn": "Tabbatar a preprod.cardanoscan.io",
     "totalPaid": "Jimillar kuɗin da aka biya: {{ada}} ADA (~${{usd}} USD)",
-    "configuredFor_one": "An saita don mai kaɗa ƙuri'a {{voters}}",
-    "configuredFor_other": "An saita don masu kaɗa ƙuri'a {{voters}}",
-    "copyTxHash": "📋 Kwafi Lambar TX",
-    "share": "📢 Raba"
+    "copyTxHash": "Kwafi lambar mu'amala",
+    "share": "Raba wa masu kaɗa ƙuri'a",
+    "votingOpen": "An adana shi a Cardano kuma an buɗe kaɗa ƙuri'a yanzu."
   },
-  "batching": {
-    "title": "Tsarin Haɗa Ƙuri'u Rukuni-rukuni",
-    "body": "Ana haɗa ƙuri'u har 100 a rukuni ɗaya don rage kuɗi\nƘananan rukunoni ana aika su da kansu bayan kowane minti 10\nAna rubuta dukkan ƙuri'u idan ƙuduri ya ƙare\nRagin kuɗi 80% idan aka kwatanta da aika kowace ƙuri'a ita kaɗai\nKaɗa ƙuri'a KYAUTA ne gaba ɗaya ga mahalarta"
+  "cost": {
+    "label": "Kuɗin wallafawa",
+    "usd": "≈ ${{usd}} USD",
+    "showBreakdown": "Me ya ƙunsa?",
+    "hideBreakdown": "Ɓoye bayanai"
+  },
+  "draft": {
+    "restored": "An dawo da ƙudurinku da ba a gama ba",
+    "discard": "Share daftari",
+    "discardTitle": "A share wannan daftarin?",
+    "discardMessage": "Za a share taken, bayanin da hotunanku."
   }
 }
