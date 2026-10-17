@@ -36,7 +36,7 @@ export interface QueuedProposal {
   id: string;
   title: string;
   description: string;
-  creator: string;
+  creator?: string; // legacy — the creator is now read from the payment
   duration: number;
   expectedVoters: number;
   attachmentUris?: string[];
@@ -144,7 +144,7 @@ class OfflineQueueService {
   async queueProposal(proposalData: {
     title: string;
     description: string;
-    creator: string;
+    creator?: string;
     duration: number;
     expectedVoters: number;
     attachmentUris?: string[];

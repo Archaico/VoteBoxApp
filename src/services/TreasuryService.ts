@@ -118,6 +118,9 @@ export interface TreasurySummary {
 export interface PaymentVerificationResult {
   ok: boolean;
   paidLovelace?: number;
+  // Address of the wallet that sent the payment (first regular input) — the
+  // proposal's creator. Only set when ok.
+  payerAddress?: string;
   reason?:
     | 'malformed_hash'
     | 'not_found_or_pending'
@@ -330,7 +333,13 @@ class TreasuryService {
         // ignore — best-effort
       }
 
-      return { ok: true, paidLovelace };
+      // The paying wallet becomes the proposal's creator. Skip collateral and
+      // reference inputs, which aren't spent from the sender's own funds.
+      const payerAddress: string | undefined = (utxos.inputs ?? [])
+        .find((i: any) => !i.collateral && !i.reference && i.address !== TREASURY_CONFIG.FOUNDATION_WALLET)
+        ?.address;
+
+      return { ok: true, paidLovelace, payerAddress };
     } catch (error) {
       console.error('[Treasury] Payment verification failed:', error);
       return { ok: false, reason: 'network_error', detail: error instanceof Error ? error.message : String(error) };

@@ -282,7 +282,7 @@ class BlockchainService {
   async createProposal(proposalData: {
     title: string;
     description: string;
-    creator: string;
+    creator?: string; // ignored when the payment reveals its sender — see below
     duration: number;
     expectedVoters?: number;
     attachmentUris?: string[];
@@ -300,6 +300,11 @@ class BlockchainService {
       throw new Error(`Payment verification failed: ${verify.reason ?? 'unknown'}`);
     }
 
+    // The creator is whoever paid, read from the payment itself. A typed-in
+    // address can't be trusted, so it's only a fallback for older queued
+    // proposals if the payment's sender can't be determined.
+    const creator = verify.payerAddress ?? proposalData.creator ?? '';
+
     const attachments: string[] = [];
     for (const uri of (proposalData.attachmentUris ?? []).slice(0, MAX_ATTACHMENTS)) {
       const cid = await this.uploadFileToIPFS(uri);
@@ -310,7 +315,7 @@ class BlockchainService {
       id:             `prop_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
       title:          proposalData.title,
       description:    proposalData.description,
-      creator:        proposalData.creator,
+      creator,
       deadline:       Date.now() + (proposalData.duration * 24 * 60 * 60 * 1000),
       options:        ['Yes', 'No', 'Abstain'],
       totalVotes:     0,
@@ -341,7 +346,7 @@ class BlockchainService {
 
     const treasuryTx = await treasuryService.recordProposalFeeCollection(
       proposal.id!,
-      proposalData.creator,
+      creator,
       expectedVoters,
       paymentTxHash,
       verify.paidLovelace!,
