@@ -83,6 +83,7 @@
     "step1": "Copia l'indirizzo e l'importo",
     "step2": "Invia il pagamento dal tuo wallet Cardano",
     "openWallet": "Apri il mio wallet",
+    "prefillNote": "Vespr compila per te l'indirizzo e l'importo. Con altri wallet, incolla l'indirizzo e l'importo che hai copiato al passaggio 1.",
     "ownWalletNote": "Invia dal tuo wallet personale, non da un exchange. L'indirizzo da cui paghi viene mostrato come autore della proposta.",
     "openWalletFailedTitle": "Nessun wallet trovato",
     "openWalletFailedMessage": "Apri tu l'app del tuo wallet Cardano e invia il pagamento all'indirizzo qui sopra.",

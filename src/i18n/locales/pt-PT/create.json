@@ -83,6 +83,7 @@
     "step1": "Copie o endereço e o montante",
     "step2": "Envie o pagamento a partir da sua carteira Cardano",
     "openWallet": "Abrir a minha carteira",
+    "prefillNote": "O Vespr preenche o endereço e o montante por si. Noutras carteiras, cole o endereço e o montante que copiou no passo 1.",
     "ownWalletNote": "Envie a partir da sua própria carteira, não de uma corretora. O endereço de onde paga aparece como criador da proposta.",
     "openWalletFailedTitle": "Nenhuma carteira encontrada",
     "openWalletFailedMessage": "Abra a aplicação da sua carteira Cardano e envie o pagamento para o endereço acima.",

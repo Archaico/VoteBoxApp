@@ -82,6 +82,7 @@
     "step1": "Kwafi adireshin da adadin kuɗin",
     "step2": "Aika kuɗin daga walat ɗinku na Cardano",
     "openWallet": "Buɗe walat ɗina",
+    "prefillNote": "Vespr na cike muku adireshin da adadin kuɗin. A wasu walat, ku liƙa adireshin da adadin da kuka kwafa a mataki na 1.",
     "ownWalletNote": "Ku aika daga walat ɗinku na kanku, ba daga kasuwar canjin kuɗi ba. Adireshin da kuka biya daga gare shi zai bayyana a matsayin wanda ya gabatar da ƙudurin.",
     "openWalletFailedTitle": "Ba a sami manhajar walat ba",
     "openWalletFailedMessage": "Ku buɗe walat ɗinku na Cardano da kanku, sannan ku aika kuɗin zuwa adireshin da ke sama.",

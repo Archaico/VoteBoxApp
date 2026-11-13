@@ -82,6 +82,7 @@
     "step1": "Kopiér adressen og beløbet",
     "step2": "Send betalingen fra din Cardano-tegnebog",
     "openWallet": "Åbn min tegnebog",
+    "prefillNote": "Vespr udfylder adressen og beløbet for dig. I andre tegnebøger indsætter du adressen og beløbet, som du kopierede i trin 1.",
     "ownWalletNote": "Send fra din egen tegnebog, ikke fra en kryptobørs. Adressen, du betaler fra, vises som forslagets opretter.",
     "openWalletFailedTitle": "Ingen tegnebogsapp fundet",
     "openWalletFailedMessage": "Åbn selv din Cardano-tegnebog, og send betalingen til adressen ovenfor.",

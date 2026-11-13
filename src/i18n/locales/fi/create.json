@@ -82,6 +82,7 @@
     "step1": "Kopioi osoite ja summa",
     "step2": "Lähetä maksu Cardano-lompakostasi",
     "openWallet": "Avaa lompakkoni",
+    "prefillNote": "Vespr täyttää osoitteen ja summan puolestasi. Muissa lompakoissa liitä osoite ja summa, jotka kopioit vaiheessa 1.",
     "ownWalletNote": "Lähetä omasta lompakostasi, älä pörssistä. Osoite, josta maksat, näytetään ehdotuksen tekijänä.",
     "openWalletFailedTitle": "Lompakkosovellusta ei löytynyt",
     "openWalletFailedMessage": "Avaa Cardano-lompakkosi itse ja lähetä maksu yllä olevaan osoitteeseen.",

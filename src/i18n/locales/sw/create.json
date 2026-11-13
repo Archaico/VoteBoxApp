@@ -82,6 +82,7 @@
     "step1": "Nakili anwani na kiasi",
     "step2": "Tuma malipo kutoka kwenye wallet yako ya Cardano",
     "openWallet": "Fungua wallet yangu",
+    "prefillNote": "Vespr hujaza anwani na kiasi kwa ajili yako. Kwenye wallet nyingine, bandika anwani na kiasi ulichonakili katika hatua ya 1.",
     "ownWalletNote": "Tuma kutoka kwenye wallet yako mwenyewe, si kutoka kwenye soko la kubadilisha fedha. Anwani unayolipa kutoka itaonyeshwa kama mwanzilishi wa pendekezo.",
     "openWalletFailedTitle": "Hakuna programu ya wallet iliyopatikana",
     "openWalletFailedMessage": "Fungua wallet yako ya Cardano mwenyewe na utume malipo kwa anwani iliyo hapo juu.",

@@ -81,6 +81,7 @@
     "step1": "アドレスと金額をコピー",
     "step2": "Cardanoウォレットから送金",
     "openWallet": "ウォレットを開く",
+    "prefillNote": "Vesprではアドレスと金額が自動で入力されます。ほかのウォレットでは、手順1でコピーしたアドレスと金額を貼り付けてください。",
     "ownWalletNote": "取引所ではなく、ご自身のウォレットから送金してください。支払い元のアドレスが提案の作成者として表示されます。",
     "openWalletFailedTitle": "ウォレットアプリが見つかりません",
     "openWalletFailedMessage": "Cardanoウォレットを自分で開き、上のアドレスに送金してください。",

@@ -83,6 +83,7 @@
     "step1": "Copia la dirección y el importe",
     "step2": "Envía el pago desde tu billetera de Cardano",
     "openWallet": "Abrir mi billetera",
+    "prefillNote": "Vespr rellena la dirección y el importe por ti. En otras billeteras, pega la dirección y el importe que copiaste en el paso 1.",
     "ownWalletNote": "Envíalo desde tu propia billetera, no desde un exchange. La dirección desde la que pagas aparecerá como creadora de la propuesta.",
     "openWalletFailedTitle": "No se encontró ninguna billetera",
     "openWalletFailedMessage": "Abre tú mismo tu billetera de Cardano y envía el pago a la dirección de arriba.",

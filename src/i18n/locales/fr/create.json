@@ -83,6 +83,7 @@
     "step1": "Copiez l'adresse et le montant",
     "step2": "Envoyez le paiement depuis votre portefeuille Cardano",
     "openWallet": "Ouvrir mon portefeuille",
+    "prefillNote": "Vespr remplit l'adresse et le montant pour vous. Avec d'autres portefeuilles, collez l'adresse et le montant copiés à l'étape 1.",
     "ownWalletNote": "Envoyez depuis votre propre portefeuille, pas depuis une plateforme d'échange. L'adresse qui paie est affichée comme créatrice de la proposition.",
     "openWalletFailedTitle": "Aucun portefeuille trouvé",
     "openWalletFailedMessage": "Ouvrez vous-même votre portefeuille Cardano et envoyez le paiement à l'adresse ci-dessus.",

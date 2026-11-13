@@ -82,6 +82,7 @@
     "step1": "Kopieer het adres en het bedrag",
     "step2": "Verstuur de betaling vanuit je Cardano-wallet",
     "openWallet": "Mijn wallet openen",
+    "prefillNote": "Vespr vult het adres en het bedrag voor je in. Bij andere wallets plak je het adres en het bedrag die je in stap 1 hebt gekopieerd.",
     "ownWalletNote": "Betaal vanuit je eigen wallet, niet vanaf een exchange. Het adres waarmee je betaalt, wordt getoond als maker van het voorstel.",
     "openWalletFailedTitle": "Geen wallet-app gevonden",
     "openWalletFailedMessage": "Open je Cardano-wallet zelf en stuur de betaling naar het adres hierboven.",

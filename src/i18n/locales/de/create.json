@@ -82,6 +82,7 @@
     "step1": "Adresse und Betrag kopieren",
     "step2": "Zahlung aus deiner Cardano-Wallet senden",
     "openWallet": "Meine Wallet öffnen",
+    "prefillNote": "Vespr trägt Adresse und Betrag für dich ein. Bei anderen Wallets fügst du die Adresse und den Betrag ein, die du in Schritt 1 kopiert hast.",
     "ownWalletNote": "Sende aus deiner eigenen Wallet, nicht von einer Börse. Die Adresse, von der du zahlst, wird als Ersteller des Vorschlags angezeigt.",
     "openWalletFailedTitle": "Keine Wallet-App gefunden",
     "openWalletFailedMessage": "Öffne deine Cardano-Wallet selbst und sende die Zahlung an die Adresse oben.",

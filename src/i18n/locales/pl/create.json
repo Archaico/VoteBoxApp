@@ -84,6 +84,7 @@
     "step1": "Skopiuj adres i kwotę",
     "step2": "Wyślij płatność ze swojego portfela Cardano",
     "openWallet": "Otwórz mój portfel",
+    "prefillNote": "Vespr sam uzupełnia adres i kwotę. W innych portfelach wklej adres i kwotę skopiowane w kroku 1.",
     "ownWalletNote": "Wyślij z własnego portfela, nie z giełdy. Adres, z którego płacisz, będzie widoczny jako autor propozycji.",
     "openWalletFailedTitle": "Nie znaleziono aplikacji portfela",
     "openWalletFailedMessage": "Otwórz samodzielnie portfel Cardano i wyślij płatność na adres powyżej.",

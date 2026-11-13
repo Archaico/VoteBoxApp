@@ -81,6 +81,7 @@
     "step1": "复制地址和金额",
     "step2": "从你的 Cardano 钱包付款",
     "openWallet": "打开我的钱包",
+    "prefillNote": "Vespr 会自动为你填写地址和金额。使用其他钱包时，请粘贴你在第 1 步复制的地址和金额。",
     "ownWalletNote": "请从你自己的钱包付款，不要从交易所付款。付款地址将显示为提案的创建者。",
     "openWalletFailedTitle": "未找到钱包应用",
     "openWalletFailedMessage": "请自行打开你的 Cardano 钱包，并向上方地址付款。",

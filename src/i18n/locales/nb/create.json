@@ -82,6 +82,7 @@
     "step1": "Kopier adressen og beløpet",
     "step2": "Send betalingen fra Cardano-lommeboken din",
     "openWallet": "Åpne lommeboken min",
+    "prefillNote": "Vespr fyller inn adressen og beløpet for deg. I andre lommebøker limer du inn adressen og beløpet du kopierte i trinn 1.",
     "ownWalletNote": "Send fra din egen lommebok, ikke fra en kryptobørs. Adressen du betaler fra, vises som forslagets oppretter.",
     "openWalletFailedTitle": "Fant ingen lommebok-app",
     "openWalletFailedMessage": "Åpne Cardano-lommeboken selv og send betalingen til adressen over.",

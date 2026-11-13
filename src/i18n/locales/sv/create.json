@@ -82,6 +82,7 @@
     "step1": "Kopiera adressen och beloppet",
     "step2": "Skicka betalningen från din Cardano-plånbok",
     "openWallet": "Öppna min plånbok",
+    "prefillNote": "Vespr fyller i adressen och beloppet åt dig. I andra plånböcker klistrar du in adressen och beloppet som du kopierade i steg 1.",
     "ownWalletNote": "Skicka från din egen plånbok, inte från en kryptobörs. Adressen du betalar från visas som förslagets skapare.",
     "openWalletFailedTitle": "Ingen plånboksapp hittades",
     "openWalletFailedMessage": "Öppna din Cardano-plånbok själv och skicka betalningen till adressen ovan.",

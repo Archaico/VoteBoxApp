@@ -729,6 +729,7 @@ export default function CreateProposalScreen({
           <TouchableOpacity style={styles.primaryButton} onPress={handleOpenWallet}>
             <Text style={styles.primaryButtonText}>{t('payment.openWallet')}</Text>
           </TouchableOpacity>
+          <Text style={styles.payNote}>{t('payment.prefillNote')}</Text>
           <Text style={styles.payNote}>{t('payment.ownWalletNote')}</Text>
         </View>
 

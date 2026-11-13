@@ -81,6 +81,7 @@
     "step1": "주소와 금액 복사하기",
     "step2": "Cardano 지갑에서 결제 보내기",
     "openWallet": "내 지갑 열기",
+    "prefillNote": "Vespr는 주소와 금액을 자동으로 채워 줘요. 다른 지갑에서는 1단계에서 복사한 주소와 금액을 붙여 넣으세요.",
     "ownWalletNote": "거래소가 아닌 본인 지갑에서 보내세요. 결제한 주소가 제안 작성자로 표시돼요.",
     "openWalletFailedTitle": "지갑 앱을 찾을 수 없어요",
     "openWalletFailedMessage": "Cardano 지갑 앱을 직접 열고 위 주소로 결제를 보내세요.",
