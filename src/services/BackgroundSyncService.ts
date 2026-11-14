@@ -1,7 +1,7 @@
 // src/services/BackgroundSyncService.ts
 //
 // Phase 2 background polling — runs every ~15 min even when app is closed.
-// Lightweight: one Blockfrost wallet-address lookup + batched metadata fetch.
+// Lightweight: reads only new Foundation wallet transactions (ChainIndex).
 // No IPFS calls — keeps well within the 30-second background task budget.
 //
 // Android: reliable ~15 min interval via WorkManager.
@@ -12,7 +12,7 @@
 import * as BackgroundFetch from 'expo-background-fetch';
 import * as TaskManager from 'expo-task-manager';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { TREASURY_CONFIG } from './TreasuryService';
+import { syncChainIndex, getChainIndex } from './ChainIndex';
 import { notificationService } from './NotificationService';
 import { cidRegistryService } from './CIDRegistryService';
 
@@ -52,12 +52,6 @@ export async function getSyncDiagnostics(): Promise<SyncDiagnostics> {
     lastRunSubCount:    run.subCount ?? null,
   };
 }
-
-const BLOCKFROST_URL = TREASURY_CONFIG.BLOCKFROST_API_URL;
-const BLOCKFROST_ID  = TREASURY_CONFIG.BLOCKFROST_PROJECT_ID;
-const FOUNDATION_WALLET = TREASURY_CONFIG.FOUNDATION_WALLET;
-
-const LABEL_VOTE = 1337;
 
 // ── Task Definition (must live at module top level) ──────────────────────────
 // This runs in a headless JS context — no UI, minimal APIs available.
@@ -137,39 +131,12 @@ async function runSync(): Promise<number> {
   const subIds = Object.keys(subs);
   if (subIds.length === 0) return 0;
 
-  // 2. Fetch recent foundation wallet transactions (for vote counts).
-  //    Comment detection (step 5) uses Firestore, not this, so a Blockfrost
-  //    hiccup here shouldn't also block comment notifications.
-  const txs = await bfGet<any[]>(
-    `/addresses/${FOUNDATION_WALLET}/transactions?order=desc&count=100`
-  ).catch(() => null);
-
-  // 3. Batch-fetch metadata (max 50 txs, batches of 10)
-  const metaResults: Array<{ txHash: string; meta: Record<number, any> }> = [];
-  const BATCH = 10;
-  for (let i = 0; i < Math.min(txs?.length ?? 0, 50); i += BATCH) {
-    const settled = await Promise.allSettled(
-      txs!.slice(i, i + BATCH).map(async tx => ({
-        txHash: tx.tx_hash,
-        meta:   await fetchTxMeta(tx.tx_hash),
-      }))
-    );
-    for (const r of settled) {
-      if (r.status === 'fulfilled') metaResults.push(r.value);
-    }
-  }
-
-  // 4. Aggregate vote counts (label 1337) for subscribed proposals
-  const voteCounts: Record<string, { yes: number; no: number; abstain: number }> = {};
-  for (const { meta } of metaResults) {
-    const m = meta[LABEL_VOTE];
-    if (!m?.proposalId || !m?.choice || m?.type !== 'vote') continue;
-    if (!subIds.includes(m.proposalId)) continue;
-    const pid: string = m.proposalId;
-    if (!voteCounts[pid]) voteCounts[pid] = { yes: 0, no: 0, abstain: 0 };
-    const c = (m.choice as string).toLowerCase();
-    if (c === 'yes' || c === 'no' || c === 'abstain') voteCounts[pid][c as 'yes' | 'no' | 'abstain']++;
-  }
+  // 2–4. Bring the shared chain index up to date (only new transactions are
+  //    read) and take the full vote tallies from it. Comment detection
+  //    (step 5) uses Firestore, not this, so a Blockfrost hiccup here
+  //    shouldn't also block comment notifications.
+  const { index } = await syncChainIndex().catch(async () => ({ index: await getChainIndex() }));
+  const voteCounts = index.votes;
 
   // 5. Get latest comment CIDs from the Firestore registry — this is the
   //    live, per-comment signal (updated on every post via cidRegistryService
@@ -217,31 +184,4 @@ async function runSync(): Promise<number> {
   }
 
   return subIds.length;
-}
-
-// ── Blockfrost Helpers ────────────────────────────────────────────────────────
-
-function fetchWithTimeout(url: string, options: RequestInit, ms: number): Promise<Response> {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), ms);
-  return fetch(url, { ...options, signal: controller.signal }).finally(() => clearTimeout(timer));
-}
-
-async function bfGet<T>(path: string, timeoutMs = 8000): Promise<T> {
-  const res = await fetchWithTimeout(
-    `${BLOCKFROST_URL}${path}`,
-    { headers: { project_id: BLOCKFROST_ID } },
-    timeoutMs
-  );
-  if (!res.ok) throw new Error(`Blockfrost ${path} → ${res.status}`);
-  return res.json();
-}
-
-async function fetchTxMeta(txHash: string): Promise<Record<number, any>> {
-  try {
-    const entries = await bfGet<any[]>(`/txs/${txHash}/metadata`, 5000);
-    return Object.fromEntries((entries ?? []).map((e: any) => [e.label, e.json_metadata]));
-  } catch {
-    return {};
-  }
 }

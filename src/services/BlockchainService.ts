@@ -10,6 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { treasuryService, TREASURY_CONFIG } from './TreasuryService';
 import { buildSignedTx, CardanoTxPaymentOutput } from '../lib/CardanoTxBuilder';
 import { fetchIpfsJson, getImageUrls } from './IpfsGateways';
+import { syncChainIndex, ProposalAnchor, VoteTally } from './ChainIndex';
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 
@@ -152,11 +153,11 @@ class BlockchainService {
 
   private async fetchAndMergeChainProposals(): Promise<Proposal[]> {
     try {
+      const existing = await this.getCachedProposals() ?? [];
       const { chainProposals, voteCounts } = await this.fetchWalletData();
 
-      if (chainProposals.length === 0) return await this.getCachedProposals() ?? [];
+      if (chainProposals.length === 0) return existing;
 
-      const existing = await this.getCachedProposals() ?? [];
       const chainIds = new Set(chainProposals.map(p => p.id));
       const localOnly = existing.filter(p => !chainIds.has(p.id));
       const now = Date.now();
@@ -195,81 +196,51 @@ class BlockchainService {
   }
 
   // ── Wallet Data Fetch ─────────────────────────────────────────────────────
-  // Queries the foundation wallet's transactions and extracts both proposals
-  // (label 674) and votes (label 1337) in a single address lookup + batched
-  // metadata fetches. Uses address-based lookup so we only see VoteBox txs,
-  // not other projects that happen to share the same metadata label numbers.
+  // Proposals (label 674) and votes (label 1337) come from the Foundation
+  // wallet's transactions via ChainIndex, which reads each transaction only
+  // once and has no history limit. Uses address-based lookup so we only see
+  // VoteBoxApp txs, not other projects that share the same metadata labels.
+  // Proposal content is downloaded from IPFS only when its CID is new to
+  // this device.
 
   private async fetchWalletData(): Promise<{
     chainProposals: Proposal[];
-    voteCounts: Record<string, { yes: number; no: number; abstain: number; total: number }>;
+    voteCounts: Record<string, VoteTally>;
   }> {
-    const empty = { chainProposals: [], voteCounts: {} };
-
-    const txs = await this.blockfrostGet<any[]>(
-      `/addresses/${FOUNDATION.WALLET_ADDRESS}/transactions?order=desc&count=100`
-    ).catch((e: Error) => {
-      this._lastFetchError = `Wallet fetch: ${e.message}`;
-      console.warn('[BlockchainService] Wallet tx fetch failed:', e.message);
-      return null;
-    });
-
-    if (!txs?.length) {
-      if (!this._lastFetchError) this._lastFetchError = 'No transactions found for foundation wallet';
-      return empty;
+    const { index, error } = await syncChainIndex();
+    this._lastFetchError = error;
+    if (!error && Object.keys(index.anchors).length === 0) {
+      this._lastFetchError = 'No proposals found for foundation wallet';
     }
-    this._lastFetchError = null;
 
-    // Fetch metadata for all wallet txs in parallel batches of 10
-    const BATCH = 10;
-    const metadataResults: Array<{ txHash: string; metadata: Record<number, any> }> = [];
+    const known = new Map((await this.getCachedProposalsAnyAge()).map(p => [p.id, p]));
+    const chainProposals: Proposal[] = [];
+    const toFetch: Array<[string, ProposalAnchor]> = [];
 
-    for (let i = 0; i < txs.length; i += BATCH) {
-      const batch = txs.slice(i, i + BATCH);
+    for (const [proposalId, anchor] of Object.entries(index.anchors)) {
+      const cachedP = known.get(proposalId);
+      if (cachedP && cachedP.cid === anchor.cid) {
+        chainProposals.push({ ...cachedP, txHash: anchor.txHash });
+      } else {
+        toFetch.push([proposalId, anchor]);
+      }
+    }
+
+    // New proposals: fetch from IPFS in parallel batches.
+    const BATCH = 6;
+    for (let i = 0; i < toFetch.length; i += BATCH) {
       const settled = await Promise.allSettled(
-        batch.map(async tx => ({
-          txHash: tx.tx_hash,
-          metadata: await this.fetchTxMetadata(tx.tx_hash),
-        }))
+        toFetch.slice(i, i + BATCH).map(async ([proposalId, anchor]) => {
+          const proposal = await this.fetchProposalFromIPFS(anchor.cid, proposalId);
+          return proposal ? { ...proposal, cid: anchor.cid, txHash: anchor.txHash } : null;
+        })
       );
       for (const r of settled) {
-        if (r.status === 'fulfilled') metadataResults.push(r.value);
+        if (r.status === 'fulfilled' && r.value) chainProposals.push(r.value);
       }
     }
 
-    // Aggregate vote counts from label 1337 txs
-    const voteCounts: Record<string, { yes: number; no: number; abstain: number; total: number }> = {};
-    for (const { metadata } of metadataResults) {
-      const m = metadata[METADATA_LABELS.VOTE];
-      if (!m?.proposalId || !m?.choice || m?.type !== 'vote') continue;
-      const pid = m.proposalId as string;
-      if (!voteCounts[pid]) voteCounts[pid] = { yes: 0, no: 0, abstain: 0, total: 0 };
-      const choice = (m.choice as string).toLowerCase() as 'yes' | 'no' | 'abstain';
-      if (choice === 'yes' || choice === 'no' || choice === 'abstain') {
-        voteCounts[pid][choice]++;
-        voteCounts[pid].total++;
-      }
-    }
-
-    // Extract proposal entries from label 674 txs
-    const proposalEntries = metadataResults.filter(({ metadata }) => {
-      const m = metadata[METADATA_LABELS.PROPOSAL];
-      // Accept both — proposals published before the VoteBoxApp rename are
-      // permanently on-chain with the old value and must stay visible.
-      return m?.cid && (m?.platform === 'VoteBoxApp' || m?.platform === 'VoteBox');
-    });
-
-    // Fetch proposal JSON from IPFS for each entry
-    const chainProposals: Proposal[] = [];
-    for (const { txHash, metadata } of proposalEntries) {
-      try {
-        const anchor = metadata[METADATA_LABELS.PROPOSAL];
-        const proposal = await this.fetchProposalFromIPFS(anchor.cid, anchor.proposalId);
-        if (proposal) chainProposals.push({ ...proposal, txHash });
-      } catch { continue; }
-    }
-
-    return { chainProposals, voteCounts };
+    return { chainProposals, voteCounts: index.votes };
   }
 
   // ── Proposal Creation ─────────────────────────────────────────────────────
@@ -700,16 +671,6 @@ class BlockchainService {
     return response.json();
   }
 
-  // Fetch tx metadata by hash — kept for label 1338 (comment CID) lookups
-  private async fetchTxMetadata(txHash: string): Promise<Record<number, any>> {
-    try {
-      const metadata = await this.blockfrostGet<any[]>(`/txs/${txHash}/metadata`, 5000);
-      return Object.fromEntries((metadata ?? []).map((m: any) => [m.label, m.json_metadata]));
-    } catch {
-      return {};
-    }
-  }
-
   // Register the final comment-thread CID on-chain when a proposal closes (label 1338)
   async registerCommentCID(proposalId: string, cid: string): Promise<string> {
     return this.buildAndSubmitMetadataTx(
@@ -752,6 +713,18 @@ class BlockchainService {
       return data;
     } catch {
       return null;
+    }
+  }
+
+  // Proposal content behind a CID never changes, so for reusing already
+  // downloaded content the cache's age doesn't matter.
+  private async getCachedProposalsAnyAge(): Promise<Proposal[]> {
+    try {
+      const cached = await AsyncStorage.getItem(CACHE_KEY);
+      const data = cached ? JSON.parse(cached).data : null;
+      return Array.isArray(data) ? data : [];
+    } catch {
+      return [];
     }
   }
 
