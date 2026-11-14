@@ -1,0 +1,45 @@
+# Keeps a second copy of all VoteBoxApp IPFS content on an independent
+# pinning service (Filebase). See scripts/ipfs-mirror.js.
+#
+# Repository secrets needed (Settings → Secrets and variables → Actions):
+#   BLOCKFROST_PROJECT_ID   preprod Blockfrost key
+#   PIN_SERVICE_TOKEN       Filebase IPFS Pinning Service API token for the mirror bucket
+#   FIREBASE_PROJECT_ID     Firebase project ID (enables discussion-thread mirroring)
+
+name: IPFS mirror
+
+on:
+  schedule:
+    - cron: '17 * * * *'   # hourly: anchors from the last 3 hours
+    - cron: '43 3 * * 0'   # weekly (Sunday): full scan, catches anything missed
+  workflow_dispatch:
+    inputs:
+      since_hours:
+        description: 'Only scan anchors newer than this many hours (0 = everything)'
+        default: '0'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ipfs-mirror
+  cancel-in-progress: false
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: scripts/ipfs-mirror.js
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node scripts/ipfs-mirror.js
+        env:
+          BLOCKFROST_PROJECT_ID: ${{ secrets.BLOCKFROST_PROJECT_ID }}
+          PIN_SERVICE_TOKEN: ${{ secrets.PIN_SERVICE_TOKEN }}
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          SINCE_HOURS: ${{ github.event_name == 'workflow_dispatch' && inputs.since_hours || (github.event.schedule == '17 * * * *' && '3' || '0') }}
