@@ -321,7 +321,14 @@ export default function CreateProposalScreen({
     // Keep the same tag and start time if the creator went back to edit, so a
     // payment they already sent can still be recognised.
     setPaymentTag(tag => tag ?? treasuryService.generatePaymentTag());
-    setPayStartedAt(at => at ?? Date.now());
+    if (payStartedAt == null) {
+      setPayStartedAt(Date.now());
+      // A phone clock running fast would hide the payment from the watcher;
+      // use the chain's clock instead when it is earlier.
+      treasuryService.getChainTimeMs().then(chainMs => {
+        if (chainMs) setPayStartedAt(at => (at != null && chainMs < at ? chainMs : at));
+      });
+    }
     setPaymentError(null);
     setPaymentState('idle');
     setWatchState('watching');
@@ -456,11 +463,14 @@ export default function CreateProposalScreen({
   }, [step, checkClipboardForTxId]);
 
   // Watch the Foundation wallet for a payment of the creator's exact amount,
-  // so most creators never need the transaction ID. Pauses while a payment is
-  // being checked or published, and while the app is in the background.
+  // so most creators never need the transaction ID. Keeps watching while a
+  // transaction ID (e.g. from the clipboard) is being checked — that ID may be
+  // stale or wrong, and the exact-amount match then takes over. Pauses only
+  // while publishing, and while the app is in the background.
+  const isPublishing = paymentState === 'publishing';
   useEffect(() => {
     if (step !== 'pay' || !lockedFees || paymentTag == null || payStartedAt == null) return;
-    if (isBusy || watchState !== 'watching') return;
+    if (isPublishing || watchState !== 'watching') return;
 
     const exact = lockedFees.grandTotal + paymentTag;
     let cancelled = false;
@@ -474,10 +484,11 @@ export default function CreateProposalScreen({
         try {
           const txHash = await treasuryService.findPaymentByExactAmount(exact, payStartedAt, checkedTxsRef.current);
           if (cancelled) return;
+          // Replaces any check already running. The match is remembered in
+          // `checked`, so if verification refuses it, watching carries on.
           if (txHash) {
             setPaymentTxHashInput(txHash);
             checkPaymentAndPublish(txHash);
-            return;
           }
         } catch {
           // Network hiccup — try again on the next tick.
@@ -497,7 +508,7 @@ export default function CreateProposalScreen({
       if (timer) clearTimeout(timer);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [step, lockedFees, paymentTag, payStartedAt, isBusy, watchState]);
+  }, [step, lockedFees, paymentTag, payStartedAt, isPublishing, watchState]);
 
   // The actual publish, given an already-verified payment.
   const executePublish = async (paymentTxHash: string, requiredLovelace: number) => {

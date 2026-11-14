@@ -268,6 +268,19 @@ class TreasuryService {
     }
   }
 
+  // Time of the latest block, i.e. the chain's clock — independent of the
+  // phone's clock. Null if Blockfrost can't be reached.
+  async getChainTimeMs(): Promise<number | null> {
+    try {
+      const res = await this.blockfrostFetch('/blocks/latest');
+      if (!res.ok) return null;
+      const block = await res.json();
+      return typeof block.time === 'number' ? block.time * 1000 : null;
+    } catch {
+      return null;
+    }
+  }
+
   // A small random addition (1–999 lovelace) that makes each pending
   // payment's amount unique, so it can be recognised without a tx ID.
   generatePaymentTag(): number {
