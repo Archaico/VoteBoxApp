@@ -253,6 +253,97 @@ class TreasuryService {
   // wallet at least the required amount, and hasn't been used before. This is
   // the gate proposal publishing sits behind — see CreateProposalScreen.tsx.
 
+  // Hermes ignores AbortSignal.timeout(), so time out by hand — otherwise a
+  // dead connection hangs for the OS's ~60 s TCP timeout.
+  private async blockfrostFetch(path: string, ms = 8000): Promise<Response> {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), ms);
+    try {
+      return await fetch(`${TREASURY_CONFIG.BLOCKFROST_API_URL}${path}`, {
+        headers: { 'project_id': TREASURY_CONFIG.BLOCKFROST_PROJECT_ID },
+        signal: controller.signal,
+      });
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  // A small random addition (1–999 lovelace) that makes each pending
+  // payment's amount unique, so it can be recognised without a tx ID.
+  generatePaymentTag(): number {
+    return 1 + Math.floor(Math.random() * 999);
+  }
+
+  // Looks for a payment of exactly `exactLovelace` to the Foundation wallet,
+  // recorded no earlier than `sinceMs`. `checked` remembers txs already
+  // inspected across calls, so a repeat call usually costs one request.
+  // Returns the tx hash, or null if none matches yet. The match still has to
+  // pass verifyPaymentTransaction before anything is published.
+  async findPaymentByExactAmount(exactLovelace: number, sinceMs: number, checked: Set<string>): Promise<string | null> {
+    const res = await this.blockfrostFetch(
+      `/addresses/${TREASURY_CONFIG.FOUNDATION_WALLET}/transactions?order=desc&count=25`
+    );
+    if (!res.ok) return null;
+    const txs: Array<{ tx_hash: string; block_time: number }> = await res.json();
+
+    // Allow for a phone clock that runs a little fast.
+    const sinceSec = sinceMs / 1000 - 120;
+    const fresh = txs
+      .filter(tx => tx.block_time >= sinceSec && !checked.has(tx.tx_hash))
+      .reverse(); // oldest first
+
+    for (const tx of fresh) {
+      const utxoRes = await this.blockfrostFetch(`/txs/${tx.tx_hash}/utxos`);
+      if (!utxoRes.ok) continue; // try again on the next call
+      checked.add(tx.tx_hash);
+      const utxos = await utxoRes.json();
+
+      // Skip the Foundation's own transactions (proposal anchors, payouts).
+      if ((utxos.inputs ?? []).some((i: any) => i.address === TREASURY_CONFIG.FOUNDATION_WALLET)) continue;
+
+      const paid = (utxos.outputs ?? [])
+        .filter((o: any) => o.address === TREASURY_CONFIG.FOUNDATION_WALLET)
+        .reduce((sum: number, o: any) =>
+          sum + parseInt(o.amount.find((a: any) => a.unit === 'lovelace')?.quantity ?? '0'), 0);
+      if (paid === exactLovelace) return tx.tx_hash;
+    }
+    return null;
+  }
+
+  // Has this payment already been used to publish a proposal — on any device?
+  // Every proposal's anchoring tx (label 674, sent from the Foundation wallet)
+  // records the paymentTxHash it was paid with, and is always recorded after
+  // that payment. So only Foundation txs from the payment's time onward need
+  // checking. Best-effort: a network failure here returns false.
+  private async isPaymentUsedOnChain(txHash: string, paymentBlockTime: number): Promise<boolean> {
+    try {
+      const res = await this.blockfrostFetch(
+        `/addresses/${TREASURY_CONFIG.FOUNDATION_WALLET}/transactions?order=desc&count=50`
+      );
+      if (!res.ok) return false;
+      const txs: Array<{ tx_hash: string; block_time: number }> = await res.json();
+      const later = txs.filter(tx => tx.block_time >= paymentBlockTime && tx.tx_hash !== txHash);
+
+      for (let i = 0; i < later.length; i += 10) {
+        const batch = later.slice(i, i + 10);
+        const metas = await Promise.all(batch.map(tx =>
+          this.blockfrostFetch(`/txs/${tx.tx_hash}/metadata`)
+            .then(r => (r.ok ? r.json() : []))
+            .catch(() => [])
+        ));
+        const used = metas.some((entries: any[]) => entries.some(e =>
+          e.label === '674' &&
+          typeof e.json_metadata?.paymentTxHash === 'string' &&
+          e.json_metadata.paymentTxHash.toLowerCase() === txHash
+        ));
+        if (used) return true;
+      }
+      return false;
+    } catch {
+      return false;
+    }
+  }
+
   async verifyPaymentTransaction(rawTxHash: string, requiredLovelace: number): Promise<PaymentVerificationResult> {
     // 1. Normalize + format-validate (no network call). Tolerate a pasted
     //    cardanoscan URL rather than requiring the bare hash.
@@ -275,23 +366,18 @@ class TreasuryService {
       // 3. Existence/confirmation. Blockfrost only indexes confirmed txs, so a
       //    404 covers both "invalid hash" and "not yet confirmed" — can't
       //    reliably distinguish via this endpoint alone.
-      const txResponse = await fetch(
-        `${TREASURY_CONFIG.BLOCKFROST_API_URL}/txs/${txHash}`,
-        { headers: { 'project_id': TREASURY_CONFIG.BLOCKFROST_PROJECT_ID } }
-      );
+      const txResponse = await this.blockfrostFetch(`/txs/${txHash}`);
       if (txResponse.status === 404) {
         return { ok: false, reason: 'not_found_or_pending' };
       }
       if (!txResponse.ok) {
         return { ok: false, reason: 'network_error', detail: `Blockfrost /txs → ${txResponse.status}` };
       }
+      const txInfo = await txResponse.json();
 
       // 4. Recipient + amount — sum lovelace across ALL outputs paying the
       //    Foundation wallet (a tx could legitimately have multiple such outputs).
-      const utxosResponse = await fetch(
-        `${TREASURY_CONFIG.BLOCKFROST_API_URL}/txs/${txHash}/utxos`,
-        { headers: { 'project_id': TREASURY_CONFIG.BLOCKFROST_PROJECT_ID } }
-      );
+      const utxosResponse = await this.blockfrostFetch(`/txs/${txHash}/utxos`);
       if (!utxosResponse.ok) {
         return { ok: false, reason: 'network_error', detail: `Blockfrost /utxos → ${utxosResponse.status}` };
       }
@@ -308,29 +394,11 @@ class TreasuryService {
         return { ok: false, reason: 'insufficient_amount', paidLovelace };
       }
 
-      // 5. Global (cross-device) replay check — best-effort scan of the most
-      //    recent 100 published proposals' own metadata (label 674, which now
-      //    carries the creator's paymentTxHash — see BlockchainService.ts).
-      //    Not a full history scan; no backend exists to do better.
-      try {
-        const labelResponse = await fetch(
-          `${TREASURY_CONFIG.BLOCKFROST_API_URL}/metadata/txs/labels/674?order=desc&count=100`,
-          { headers: { 'project_id': TREASURY_CONFIG.BLOCKFROST_PROJECT_ID } }
-        );
-        if (labelResponse.ok) {
-          const entries = await labelResponse.json();
-          const reused = (entries as any[]).some(e => {
-            const val = e.json_metadata?.paymentTxHash;
-            return typeof val === 'string' && val.toLowerCase() === txHash;
-          });
-          if (reused) {
-            return { ok: false, reason: 'already_used' };
-          }
-        }
-        // A failure here is not fatal — the local check in step 2 still applies,
-        // and this is a best-effort supplementary check, not the only guard.
-      } catch {
-        // ignore — best-effort
+      // 5. Global (cross-device) replay check. This used to scan label 674
+      //    network-wide, which other projects flood, so it rarely saw our own
+      //    proposals; it now reads the Foundation wallet's own history.
+      if (await this.isPaymentUsedOnChain(txHash, txInfo.block_time ?? 0)) {
+        return { ok: false, reason: 'already_used' };
       }
 
       // The paying wallet becomes the proposal's creator. Skip collateral and
