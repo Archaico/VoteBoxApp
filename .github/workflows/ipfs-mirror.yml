@@ -3,7 +3,7 @@
 #
 # Repository secrets needed (Settings → Secrets and variables → Actions):
 #   BLOCKFROST_PROJECT_ID   preprod Blockfrost key
-#   PIN_SERVICE_TOKEN       Filebase IPFS Pinning Service API token for the mirror bucket
+#   PIN_SERVICE_TOKEN       Filebase bucket access token (Access Keys page; free tier OK)
 #   FIREBASE_PROJECT_ID     Firebase project ID (enables discussion-thread mirroring)
 
 name: IPFS mirror
