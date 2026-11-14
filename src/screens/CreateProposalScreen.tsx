@@ -65,6 +65,11 @@ const DRAFT_KEY = 'voteboxapp.createProposalDraft.v1';
 const PAYMENT_POLL_INTERVAL_MS = 10_000;
 const PAYMENT_POLL_MAX_ATTEMPTS = 30; // ~5 minutes
 
+// Without a transaction ID, watch the Foundation wallet for a payment of the
+// exact (unique) amount. Each visit to the screen watches for ~10 minutes.
+const AUTO_WATCH_INTERVAL_MS = 10_000;
+const AUTO_WATCH_MAX_CHECKS = 60;
+
 type Step = 'write' | 'pay' | 'published';
 type PaymentState = 'idle' | 'waiting' | 'failed' | 'publishing';
 
@@ -77,6 +82,9 @@ interface Draft {
   attachments: string[];
   step: 'write' | 'pay';
   paymentTxHashInput: string;
+  // Unique lovelace added to the fee, and when the pay step first opened.
+  paymentTag?: number;
+  payStartedAt?: number;
 }
 
 interface PublishedProposal {
@@ -130,17 +138,27 @@ export default function CreateProposalScreen({
   const [showWalletHelp, setShowWalletHelp] = useState(false);
   const [uploadStatus, setUploadStatus] = useState('');
   const [published, setPublished] = useState<PublishedProposal | null>(null);
+  const [paymentTag, setPaymentTag] = useState<number | null>(null);
+  const [payStartedAt, setPayStartedAt] = useState<number | null>(null);
+  const [watchState, setWatchState] = useState<'watching' | 'timedOut'>('watching');
+  const [showTxFallback, setShowTxFallback] = useState(false);
 
   // Bumped to cancel a running payment check (edit, new ID, leaving the screen).
   const verifyRunRef = useRef(0);
   const lastClipboardTxIdRef = useRef<string | null>(null);
   const appStateRef = useRef<AppStateStatus>(AppState.currentState);
+  // Foundation txs already inspected by the payment watcher.
+  const checkedTxsRef = useRef<Set<string>>(new Set());
 
   const fees = useMemo(
     () => treasuryService.calculateProposalFees(Math.max(expectedVoters, 2)),
     [expectedVoters]
   );
   const isBusy = paymentState === 'waiting' || paymentState === 'publishing';
+
+  // The amount the creator is asked to send: the fee plus their unique tag.
+  const exactLovelace = lockedFees ? lockedFees.grandTotal + (paymentTag ?? 0) : 0;
+  const exactAda = (exactLovelace / 1_000_000).toFixed(6);
 
   useEffect(() => () => { verifyRunRef.current++; }, []);
 
@@ -161,6 +179,8 @@ export default function CreateProposalScreen({
         setPaymentTxHashInput(draft.paymentTxHashInput ?? '');
         if (draft.step === 'pay') {
           setLockedFees(treasuryService.calculateProposalFees(Math.max(draft.expectedVoters ?? 2, 2)));
+          setPaymentTag(draft.paymentTag ?? treasuryService.generatePaymentTag());
+          setPayStartedAt(draft.payStartedAt ?? Date.now());
           setStep('pay');
         }
         toastService.info(t('draft.restored'));
@@ -184,11 +204,13 @@ export default function CreateProposalScreen({
       const draft: Draft = {
         title, description, duration, expectedVoters, customVoters, attachments,
         step, paymentTxHashInput,
+        paymentTag: paymentTag ?? undefined,
+        payStartedAt: payStartedAt ?? undefined,
       };
       AsyncStorage.setItem(DRAFT_KEY, JSON.stringify(draft)).catch(() => {});
     }, 400);
     return () => clearTimeout(timer);
-  }, [draftLoaded, step, title, description, duration, expectedVoters, customVoters, attachments, paymentTxHashInput]);
+  }, [draftLoaded, step, title, description, duration, expectedVoters, customVoters, attachments, paymentTxHashInput, paymentTag, payStartedAt]);
 
   const clearDraft = () => AsyncStorage.removeItem(DRAFT_KEY).catch(() => {});
 
@@ -206,6 +228,8 @@ export default function CreateProposalScreen({
           setCustomVoters('');
           setAttachments([]);
           setPaymentTxHashInput('');
+          setPaymentTag(null);
+          setPayStartedAt(null);
           clearDraft();
         },
       },
@@ -294,8 +318,13 @@ export default function CreateProposalScreen({
     }
 
     setLockedFees(treasuryService.calculateProposalFees(expectedVoters));
+    // Keep the same tag and start time if the creator went back to edit, so a
+    // payment they already sent can still be recognised.
+    setPaymentTag(tag => tag ?? treasuryService.generatePaymentTag());
+    setPayStartedAt(at => at ?? Date.now());
     setPaymentError(null);
     setPaymentState('idle');
+    setWatchState('watching');
     setStep('pay');
   };
 
@@ -313,7 +342,7 @@ export default function CreateProposalScreen({
   const handleOpenWallet = async () => {
     if (!lockedFees) return;
     try {
-      await Linking.openURL(`web+cardano:${TREASURY_CONFIG.FOUNDATION_WALLET}?amount=${lockedFees.grandTotalADA}`);
+      await Linking.openURL(`web+cardano:${TREASURY_CONFIG.FOUNDATION_WALLET}?amount=${exactAda}`);
     } catch {
       Alert.alert(t('payment.openWalletFailedTitle'), t('payment.openWalletFailedMessage'));
     }
@@ -418,10 +447,57 @@ export default function CreateProposalScreen({
       const cameBack = /inactive|background/.test(appStateRef.current) && nextState === 'active';
       appStateRef.current = nextState;
       // Android only allows clipboard reads once the app has focus again.
-      if (cameBack) setTimeout(checkClipboardForTxId, 500);
+      if (cameBack) {
+        setTimeout(checkClipboardForTxId, 500);
+        setWatchState('watching');
+      }
     });
     return () => subscription.remove();
   }, [step, checkClipboardForTxId]);
+
+  // Watch the Foundation wallet for a payment of the creator's exact amount,
+  // so most creators never need the transaction ID. Pauses while a payment is
+  // being checked or published, and while the app is in the background.
+  useEffect(() => {
+    if (step !== 'pay' || !lockedFees || paymentTag == null || payStartedAt == null) return;
+    if (isBusy || watchState !== 'watching') return;
+
+    const exact = lockedFees.grandTotal + paymentTag;
+    let cancelled = false;
+    let checks = 0;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+
+    const tick = async () => {
+      if (cancelled) return;
+      if (appStateRef.current === 'active') {
+        checks++;
+        try {
+          const txHash = await treasuryService.findPaymentByExactAmount(exact, payStartedAt, checkedTxsRef.current);
+          if (cancelled) return;
+          if (txHash) {
+            setPaymentTxHashInput(txHash);
+            checkPaymentAndPublish(txHash);
+            return;
+          }
+        } catch {
+          // Network hiccup — try again on the next tick.
+        }
+        if (cancelled) return;
+        if (checks >= AUTO_WATCH_MAX_CHECKS) {
+          setWatchState('timedOut');
+          return;
+        }
+      }
+      timer = setTimeout(tick, AUTO_WATCH_INTERVAL_MS);
+    };
+
+    tick();
+    return () => {
+      cancelled = true;
+      if (timer) clearTimeout(timer);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step, lockedFees, paymentTag, payStartedAt, isBusy, watchState]);
 
   // The actual publish, given an already-verified payment.
   const executePublish = async (paymentTxHash: string, requiredLovelace: number) => {
@@ -675,6 +751,7 @@ export default function CreateProposalScreen({
 
   const renderPayStep = () => {
     if (!lockedFees) return null;
+    const txFallbackOpen = showTxFallback || foundOnClipboard || watchState === 'timedOut';
     return (
       <ScrollView
         style={styles.content}
@@ -682,7 +759,7 @@ export default function CreateProposalScreen({
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
-        <Text style={styles.payTitle}>{t('payment.title', { amount: lockedFees.grandTotalADA })}</Text>
+        <Text style={styles.payTitle}>{t('payment.title', { amount: exactAda })}</Text>
 
         {/* Step 1 — copy address and amount */}
         <View style={styles.payCard}>
@@ -708,16 +785,17 @@ export default function CreateProposalScreen({
 
           <Text style={styles.payFieldLabel}>{t('payment.amount')}</Text>
           <View style={styles.payCopyRow}>
-            <Text style={styles.payFieldValue}>{lockedFees.grandTotalADA} ADA</Text>
+            <Text style={styles.payFieldValue}>{exactAda} ADA</Text>
             <TouchableOpacity
               style={styles.payCopyBtn}
-              onPress={() => handleCopy('amount', lockedFees.grandTotalADA)}
+              onPress={() => handleCopy('amount', exactAda)}
             >
               <Text style={styles.payCopyBtnText}>
                 {copiedField === 'amount' ? t('payment.copied') : t('payment.copy')}
               </Text>
             </TouchableOpacity>
           </View>
+          <Text style={styles.payNote}>{t('payment.exactNote')}</Text>
         </View>
 
         {/* Step 2 — pay from own wallet */}
@@ -733,7 +811,7 @@ export default function CreateProposalScreen({
           <Text style={styles.payNote}>{t('payment.ownWalletNote')}</Text>
         </View>
 
-        {/* Step 3 — transaction ID */}
+        {/* Step 3 — come back; the app recognises the payment by its amount */}
         <View style={styles.payCard}>
           <View style={styles.payStepHeader}>
             <View style={styles.payStepNum}><Text style={styles.payStepNumText}>3</Text></View>
@@ -741,30 +819,21 @@ export default function CreateProposalScreen({
           </View>
           <Text style={styles.payNote}>{t('payment.step3Helper')}</Text>
 
-          {foundOnClipboard && (
-            <Text style={styles.payFoundText}>✓ {t('payment.foundOnClipboard')}</Text>
+          {!isBusy && watchState === 'watching' && (
+            <View style={styles.payStatusBox}>
+              <ActivityIndicator size="small" color="#22c55e" />
+              <Text style={[styles.payStatusBody, { flex: 1 }]}>{t('payment.watching')}</Text>
+            </View>
           )}
 
-          <Text style={styles.payFieldLabel}>{t('payment.txHashLabel')}</Text>
-          <View style={styles.payInputRow}>
-            <TextInput
-              style={styles.payInput}
-              placeholder={t('payment.txHashPlaceholder')}
-              placeholderTextColor="#9ca3af"
-              value={paymentTxHashInput}
-              onChangeText={text => {
-                setPaymentTxHashInput(text);
-                setPaymentError(null);
-                setFoundOnClipboard(false);
-              }}
-              autoCapitalize="none"
-              autoCorrect={false}
-              editable={!isBusy}
-            />
-            <TouchableOpacity style={styles.payCopyBtn} onPress={handlePasteTxId} disabled={isBusy}>
-              <Text style={styles.payCopyBtnText}>{t('payment.paste')}</Text>
-            </TouchableOpacity>
-          </View>
+          {!isBusy && watchState === 'timedOut' && (
+            <>
+              <Text style={styles.payNote}>{t('payment.watchTimeout')}</Text>
+              <TouchableOpacity style={styles.secondaryButton} onPress={() => setWatchState('watching')}>
+                <Text style={styles.secondaryButtonText}>{t('payment.keepWatching')}</Text>
+              </TouchableOpacity>
+            </>
+          )}
 
           {paymentState === 'waiting' && (
             <View style={styles.payStatusBox}>
@@ -787,18 +856,57 @@ export default function CreateProposalScreen({
             <Text style={styles.payErrorText}>{paymentError}</Text>
           )}
 
-          {paymentState === 'waiting' ? (
+          {paymentState === 'waiting' && (
             <TouchableOpacity style={styles.secondaryButton} onPress={cancelPaymentCheck}>
               <Text style={styles.secondaryButtonText}>{t('payment.cancelWaiting')}</Text>
             </TouchableOpacity>
-          ) : paymentState !== 'publishing' && (
-            <TouchableOpacity
-              style={[styles.primaryButton, !paymentTxHashInput.trim() && styles.primaryButtonDisabled]}
-              onPress={() => checkPaymentAndPublish(paymentTxHashInput)}
-              disabled={!paymentTxHashInput.trim()}
-            >
-              <Text style={styles.primaryButtonText}>{t('payment.verifyButton')}</Text>
-            </TouchableOpacity>
+          )}
+
+          {/* Backup: the transaction ID, for a payment that wasn't the exact amount */}
+          <TouchableOpacity onPress={() => setShowTxFallback(v => !v)} style={[styles.helpToggle, { paddingHorizontal: 0 }]}>
+            <Text style={styles.helpToggleText}>{t('payment.fallbackToggle')}</Text>
+            <Text style={styles.helpToggleArrow}>{txFallbackOpen ? '−' : '+'}</Text>
+          </TouchableOpacity>
+
+          {txFallbackOpen && (
+            <>
+              <Text style={styles.payNote}>{t('payment.fallbackHelper')}</Text>
+
+              {foundOnClipboard && (
+                <Text style={styles.payFoundText}>✓ {t('payment.foundOnClipboard')}</Text>
+              )}
+
+              <Text style={styles.payFieldLabel}>{t('payment.txHashLabel')}</Text>
+              <View style={styles.payInputRow}>
+                <TextInput
+                  style={styles.payInput}
+                  placeholder={t('payment.txHashPlaceholder')}
+                  placeholderTextColor="#9ca3af"
+                  value={paymentTxHashInput}
+                  onChangeText={text => {
+                    setPaymentTxHashInput(text);
+                    setPaymentError(null);
+                    setFoundOnClipboard(false);
+                  }}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  editable={!isBusy}
+                />
+                <TouchableOpacity style={styles.payCopyBtn} onPress={handlePasteTxId} disabled={isBusy}>
+                  <Text style={styles.payCopyBtnText}>{t('payment.paste')}</Text>
+                </TouchableOpacity>
+              </View>
+
+              {!isBusy && (
+                <TouchableOpacity
+                  style={[styles.primaryButton, !paymentTxHashInput.trim() && styles.primaryButtonDisabled]}
+                  onPress={() => checkPaymentAndPublish(paymentTxHashInput)}
+                  disabled={!paymentTxHashInput.trim()}
+                >
+                  <Text style={styles.primaryButtonText}>{t('payment.verifyButton')}</Text>
+                </TouchableOpacity>
+              )}
+            </>
           )}
         </View>
 
@@ -851,7 +959,7 @@ export default function CreateProposalScreen({
         <Text style={styles.publishedTitle}>{t('success.live')}</Text>
         <Text style={styles.publishedBody}>{t('success.votingOpen', { count: days })}</Text>
         <Text style={styles.publishedMeta}>
-          {t('success.totalPaid', { ada: lockedFees?.grandTotalADA ?? fees.grandTotalADA, usd: lockedFees?.grandTotalUSD ?? fees.grandTotalUSD })}
+          {t('success.totalPaid', { ada: lockedFees ? exactAda : fees.grandTotalADA, usd: lockedFees?.grandTotalUSD ?? fees.grandTotalUSD })}
         </Text>
 
         <TouchableOpacity
