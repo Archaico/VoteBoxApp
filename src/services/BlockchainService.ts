@@ -9,6 +9,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { treasuryService, TREASURY_CONFIG } from './TreasuryService';
 import { buildSignedTx, CardanoTxPaymentOutput } from '../lib/CardanoTxBuilder';
+import { fetchIpfsJson, getImageUrls } from './IpfsGateways';
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 
@@ -26,14 +27,7 @@ const PINATA = {
   JWT:              process.env.EXPO_PUBLIC_PINATA_JWT ?? '',
   UPLOAD_URL:       'https://api.pinata.cloud/pinning/pinJSONToIPFS',
   FILE_UPLOAD_URL:  'https://api.pinata.cloud/pinning/pinFileToIPFS',
-  DEDICATED_GW:     'https://magenta-important-scorpion-739.mypinata.cloud/ipfs',
-  PUBLIC_GW:        'https://gateway.pinata.cloud/ipfs',
 };
-
-const IPFS_FALLBACKS = [
-  'https://ipfs.io/ipfs',
-  'https://dweb.link/ipfs',
-];
 
 // MVP cap — keeps per-proposal attachment cost predictable (Pinata free tier: 1GB
 // storage / 10GB bandwidth / 500 files per month). Images are compressed client-side
@@ -269,7 +263,8 @@ class BlockchainService {
     const chainProposals: Proposal[] = [];
     for (const { txHash, metadata } of proposalEntries) {
       try {
-        const proposal = await this.fetchProposalFromIPFS(metadata[METADATA_LABELS.PROPOSAL].cid);
+        const anchor = metadata[METADATA_LABELS.PROPOSAL];
+        const proposal = await this.fetchProposalFromIPFS(anchor.cid, anchor.proposalId);
         if (proposal) chainProposals.push({ ...proposal, txHash });
       } catch { continue; }
     }
@@ -673,37 +668,18 @@ class BlockchainService {
     }
   }
 
-  // Attachments are read-heavy (viral shares → many viewers), so always route
-  // through free gateways rather than the metered dedicated one. Ordered
-  // fallback chain — same pattern as fetchProposalFromIPFS — since a single
-  // gateway can be briefly slow/unpropagated with no retry otherwise.
+  // Attachments are read-heavy (viral shares → many viewers); the gateway
+  // order (free ones first, metered last) lives in IpfsGateways.
   getAttachmentUrls(cid: string): string[] {
-    return [PINATA.PUBLIC_GW, ...IPFS_FALLBACKS].map(g => `${g}/${cid}`);
+    return getImageUrls(cid);
   }
 
-  private async fetchProposalFromIPFS(cid: string): Promise<Proposal | null> {
-    const authHeader = PINATA.JWT ? { 'Authorization': `Bearer ${PINATA.JWT}` } : undefined;
-
-    const gateways: Array<{ url: string; headers?: Record<string, string> }> = [
-      // Dedicated gateway — restricted, JWT required, highest reliability
-      ...(authHeader ? [{ url: `${PINATA.DEDICATED_GW}/${cid}`, headers: authHeader }] : []),
-      // Public Pinata gateway — no auth needed, works for all our pinned content
-      { url: `${PINATA.PUBLIC_GW}/${cid}` },
-      // Public IPFS gateways — only work if content has propagated beyond Pinata
-      ...IPFS_FALLBACKS.map(g => ({ url: `${g}/${cid}` })),
-    ];
-
-    for (const { url, headers } of gateways) {
-      try {
-        const response = await this.fetchWithTimeout(url, headers ? { headers } : {}, 8000);
-        if (!response.ok) continue;
-        const data = await response.json();
-        if (data?.id && data?.title) return data as Proposal;
-      } catch {
-        continue;
-      }
-    }
-    return null;
+  // expectedId comes from the on-chain anchor, so a gateway can't swap in a
+  // different proposal. Old anchors without a proposalId only get the shape check.
+  private async fetchProposalFromIPFS(cid: string, expectedId?: string): Promise<Proposal | null> {
+    return fetchIpfsJson<Proposal>(cid, data =>
+      !!(data?.id && data?.title) && (!expectedId || data.id === expectedId)
+    );
   }
 
   // ── Blockfrost Helpers ────────────────────────────────────────────────────

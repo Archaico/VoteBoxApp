@@ -5,6 +5,7 @@ import NetInfo from '@react-native-community/netinfo';
 import { cidRegistryService } from './CIDRegistryService';
 import { discordService } from './DiscordService';
 import { notificationService } from './NotificationService';
+import { fetchIpfsJson } from './IpfsGateways';
 
 export interface Comment {
   id: string;
@@ -21,19 +22,6 @@ const PINATA = {
   UPLOAD_URL: 'https://api.pinata.cloud/pinning/pinJSONToIPFS',
   JWT:        process.env.EXPO_PUBLIC_PINATA_JWT ?? '',
 };
-
-// Public fallback gateways (no auth, may have propagation delay)
-const IPFS_GATEWAYS = [
-  'https://ipfs.io/ipfs',
-  'https://dweb.link/ipfs',
-];
-
-// AbortSignal.timeout() is not available in Hermes — use AbortController instead
-function fetchWithTimeout(url: string, options: RequestInit = {}, ms = 8000): Promise<Response> {
-  const controller = new AbortController();
-  const id = setTimeout(() => controller.abort(), ms);
-  return fetch(url, { ...options, signal: controller.signal }).finally(() => clearTimeout(id));
-}
 
 // ─── DiscussionService ────────────────────────────────────────────────────────
 
@@ -266,43 +254,21 @@ class DiscussionService {
   // ── Internals ───────────────────────────────────────────────────────────────
 
   private async fetchCommentsFromIPFS(cid: string): Promise<Comment[] | null> {
-    // Authenticated Pinata fetch — immediate, no propagation delay
-    if (PINATA.JWT) {
-      try {
-        const response = await fetchWithTimeout(
-          `https://gateway.pinata.cloud/ipfs/${cid}`,
-          { headers: { 'Authorization': `Bearer ${PINATA.JWT}` } }
-        );
-        if (response.ok) {
-          const data = await response.json();
-          const comments: Comment[] = Array.isArray(data) ? data : (data.comments || []);
-          if (Array.isArray(comments) && comments.length > 0) {
-            console.log(`[DiscussionService] Fetched ${comments.length} comments from Pinata`);
-            return comments;
-          }
-        }
-      } catch {}
-    }
+    const toComments = (data: any): Comment[] =>
+      Array.isArray(data) ? data : (data?.comments || []);
 
-    // Public gateway fallbacks
-    for (const gateway of IPFS_GATEWAYS) {
-      try {
-        const response = await fetchWithTimeout(`${gateway}/${cid}`);
-        if (!response.ok) continue;
-        const data = await response.json();
-        const comments: Comment[] = Array.isArray(data) ? data : (data.comments || []);
-        if (Array.isArray(comments) && comments.length > 0) {
-          console.log(`[DiscussionService] Fetched ${comments.length} comments from ${gateway}`);
-          return comments;
-        }
-      } catch {
-        console.warn(`[DiscussionService] Gateway failed: ${gateway}`);
-        continue;
-      }
-    }
+    const data = await fetchIpfsJson<any>(cid, d => {
+      const comments = toComments(d);
+      return Array.isArray(comments) && comments.length > 0;
+    });
 
-    console.warn('[DiscussionService] All IPFS gateways failed');
-    return null;
+    if (!data) {
+      console.warn('[DiscussionService] All IPFS gateways failed');
+      return null;
+    }
+    const comments = toComments(data);
+    console.log(`[DiscussionService] Fetched ${comments.length} comments from IPFS`);
+    return comments;
   }
 }
 
