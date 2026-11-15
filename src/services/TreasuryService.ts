@@ -292,12 +292,20 @@ class TreasuryService {
   // inspected across calls, so a repeat call usually costs one request.
   // Returns the tx hash, or null if none matches yet. The match still has to
   // pass verifyPaymentTransaction before anything is published.
+  //
+  // Also matches a "stale" payment: a wallet app left open in the background
+  // can resend the previous payment link, so the creator pays their last
+  // proposal's amount instead of this one's. A payment of exactly an amount
+  // this device published with before, from that same wallet, can only be
+  // theirs, so it counts too.
   async findPaymentByExactAmount(exactLovelace: number, sinceMs: number, checked: Set<string>): Promise<string | null> {
     const res = await this.blockfrostFetch(
       `/addresses/${TREASURY_CONFIG.FOUNDATION_WALLET}/transactions?order=desc&count=25`
     );
     if (!res.ok) return null;
     const txs: Array<{ tx_hash: string; block_time: number }> = await res.json();
+    const previousPayments = (await this.getTransactionLog())
+      .filter(t => t.type === 'proposal_fee' && t.paidLovelace && t.creatorAddress);
 
     // Allow for a phone clock that runs a little fast.
     const sinceSec = sinceMs / 1000 - 120;
@@ -319,8 +327,21 @@ class TreasuryService {
         .reduce((sum: number, o: any) =>
           sum + parseInt(o.amount.find((a: any) => a.unit === 'lovelace')?.quantity ?? '0'), 0);
       if (paid === exactLovelace) return tx.tx_hash;
+
+      const payer = this.payerOf(utxos);
+      if (previousPayments.some(t => t.paidLovelace === paid && t.creatorAddress === payer)) {
+        return tx.tx_hash;
+      }
     }
     return null;
+  }
+
+  // The wallet that sent a payment: its first regular input. Collateral and
+  // reference inputs aren't spent from the sender's own funds.
+  private payerOf(utxos: any): string | undefined {
+    return (utxos.inputs ?? [])
+      .find((i: any) => !i.collateral && !i.reference && i.address !== TREASURY_CONFIG.FOUNDATION_WALLET)
+      ?.address;
   }
 
   // Has this payment already been used to publish a proposal — on any device?
@@ -395,6 +416,14 @@ class TreasuryService {
         return { ok: false, reason: 'network_error', detail: `Blockfrost /utxos → ${utxosResponse.status}` };
       }
       const utxos = await utxosResponse.json();
+
+      // The Foundation's own transactions (proposal anchors, payouts) send
+      // change back to the Foundation wallet, so they'd pass the amount check
+      // below. The published screen even offers an anchor's ID for copying.
+      if ((utxos.inputs ?? []).some((i: any) => i.address === TREASURY_CONFIG.FOUNDATION_WALLET)) {
+        return { ok: false, reason: 'wrong_recipient', detail: 'Sent from the Foundation wallet' };
+      }
+
       const paidLovelace: number = (utxos.outputs ?? [])
         .filter((o: any) => o.address === TREASURY_CONFIG.FOUNDATION_WALLET)
         .reduce((sum: number, o: any) =>
@@ -414,13 +443,8 @@ class TreasuryService {
         return { ok: false, reason: 'already_used' };
       }
 
-      // The paying wallet becomes the proposal's creator. Skip collateral and
-      // reference inputs, which aren't spent from the sender's own funds.
-      const payerAddress: string | undefined = (utxos.inputs ?? [])
-        .find((i: any) => !i.collateral && !i.reference && i.address !== TREASURY_CONFIG.FOUNDATION_WALLET)
-        ?.address;
-
-      return { ok: true, paidLovelace, payerAddress };
+      // The paying wallet becomes the proposal's creator.
+      return { ok: true, paidLovelace, payerAddress: this.payerOf(utxos) };
     } catch (error) {
       console.error('[Treasury] Payment verification failed:', error);
       return { ok: false, reason: 'network_error', detail: error instanceof Error ? error.message : String(error) };
